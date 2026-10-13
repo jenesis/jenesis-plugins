@@ -25,7 +25,9 @@ working *on* this repository.
 | `plugins/codenarc/`   | `build.jenesis.plugin.codenarc`   | CodeNarc, checking Groovy sources against a rule set                 |
 | `plugins/detekt/`     | `build.jenesis.plugin.detekt`     | detekt, checking Kotlin sources against a `detekt.yml`               |
 | `plugins/ktlint/`     | `build.jenesis.plugin.ktlint`     | ktlint, checking or formatting Kotlin sources (`@check`, `@format`)  |
+| `plugins/openapi/`    | `build.jenesis.plugin.openapi`    | OpenAPI Generator, generating Java sources from a specification      |
 | `plugins/pmd/`        | `build.jenesis.plugin.pmd`        | PMD, checking Java sources against a `pmd.xml` rule set              |
+| `plugins/protoc/`     | `build.jenesis.plugin.protoc`     | protoc, generating Java sources from Protocol Buffers definitions    |
 | `plugins/scalafmt/`   | `build.jenesis.plugin.scalafmt`   | scalafmt, checking or formatting Scala sources (`@check`, `@format`) |
 | `plugins/scalastyle/` | `build.jenesis.plugin.scalastyle` | Scalastyle, checking Scala sources against a `scalastyle-config.xml` |
 | `plugins/spotbugs/`   | `build.jenesis.plugin.spotbugs`   | SpotBugs, analysing compiled classes                                 |
