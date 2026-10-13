@@ -35,6 +35,13 @@ rule there applies here as well; this file adds what is particular to the plugin
 
 ## Tests
 
+- `it/` per plugin builds an example project through `ExampleProject` of the shared `testing/` module: it installs
+  the plugin and `build.jenesis` into a local module repository, writes the project's files - a
+  `jenesis.plugins.properties` naming the plugin, its `plugin-<name>.properties`, the sources - and runs
+  `jenesis-make` in process with a selector that narrows the build to the plugin's hook point where that suffices. It
+  proves that the published plugin loads and runs, not what the tool finds, which `tests/` covers.
+- CI builds each plugin in a job of its own, `+plugins+<tool>+sources`, `+plugins+<tool>+tests` and
+  `+plugins+<tool>+it`, so a new folder under `plugins/` joins the matrix by itself.
 - `tests/` per plugin, on JUnit Jupiter with AssertJ. A test method is a sentence in `snake_case` stating the
   behaviour it proves; a test of the factory proves what the plugin does with each thing it is handed.
 - A `*RunTest` pins the tool's closure in a `versions.properties` it writes, and resolves under strict pinning.

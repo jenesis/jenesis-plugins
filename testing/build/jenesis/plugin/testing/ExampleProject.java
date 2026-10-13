@@ -57,8 +57,7 @@ public record ExampleProject(Path root, Path repository) {
         List<String> arguments = new ArrayList<>(List.of(
                 "-Djenesis.make.root=" + root,
                 "-Djenesis.module.local=" + repository,
-                "-Djenesis.palette.colors=none",
-                "-Djenesis.project.target=" + root.resolve("target")));
+                "-Djenesis.palette.colors=none"));
         arguments.addAll(List.of(selectors));
         int code = new MakeTool().run(new PrintWriter(out, true),
                 new PrintWriter(err, true),

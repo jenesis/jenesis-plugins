@@ -58,8 +58,10 @@ A plugin that offers more than one provider names each, and the line picks one, 
 
 ## Layout
 
-One folder per plugin under `plugins/`, each with `sources/` (the plugin module) and `tests/` (its
-`@jenesis.test` module). The build tool is the `build/.upstream` git submodule, and `build/jenesis` links into it:
+One folder per plugin under `plugins/`, each with `sources/` (the plugin module), `tests/` (its
+`@jenesis.test` module) and `it/`, a test module that builds a small example project with a Jenesis build of its
+own, which loads the plugin from a local module repository as a project that names it would. `testing/` holds what
+those example tests share. The build tool is the `build/.upstream` git submodule, and `build/jenesis` links into it:
 
 ```bash
 git submodule update --init --depth 1
