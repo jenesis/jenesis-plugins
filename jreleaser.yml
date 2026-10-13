@@ -33,10 +33,24 @@ files:
   artifacts:
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.antlr/{{projectVersion}}/build.jenesis.plugin.antlr-{{projectVersion}}.jar'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.antlr/{{projectVersion}}/build.jenesis.plugin.antlr-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.avro/{{projectVersion}}/build.jenesis.plugin.avro-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.avro/{{projectVersion}}/build.jenesis.plugin.avro-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.checkstyle/{{projectVersion}}/build.jenesis.plugin.checkstyle-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.checkstyle/{{projectVersion}}/build.jenesis.plugin.checkstyle-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.codenarc/{{projectVersion}}/build.jenesis.plugin.codenarc-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.codenarc/{{projectVersion}}/build.jenesis.plugin.codenarc-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.detekt/{{projectVersion}}/build.jenesis.plugin.detekt-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.detekt/{{projectVersion}}/build.jenesis.plugin.detekt-{{projectVersion}}.pom'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.pmd/{{projectVersion}}/build.jenesis.plugin.pmd-{{projectVersion}}.jar'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.pmd/{{projectVersion}}/build.jenesis.plugin.pmd-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.scalastyle/{{projectVersion}}/build.jenesis.plugin.scalastyle-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.scalastyle/{{projectVersion}}/build.jenesis.plugin.scalastyle-{{projectVersion}}.pom'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.spotbugs/{{projectVersion}}/build.jenesis.plugin.spotbugs-{{projectVersion}}.jar'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.spotbugs/{{projectVersion}}/build.jenesis.plugin.spotbugs-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.wsimport/{{projectVersion}}/build.jenesis.plugin.wsimport-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.wsimport/{{projectVersion}}/build.jenesis.plugin.wsimport-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.xjc/{{projectVersion}}/build.jenesis.plugin.xjc-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.xjc/{{projectVersion}}/build.jenesis.plugin.xjc-{{projectVersion}}.pom'
 
 deploy:
   maven:

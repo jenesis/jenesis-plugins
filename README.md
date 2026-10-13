@@ -17,11 +17,18 @@ working *on* this repository.
 
 ## The plugins
 
-| Folder              | Module                          | Runs                                                     |
-|---------------------|---------------------------------|----------------------------------------------------------|
-| `plugins/antlr/`    | `build.jenesis.plugin.antlr`    | ANTLR, generating a lexer and parser from `.g4` grammars |
-| `plugins/pmd/`      | `build.jenesis.plugin.pmd`      | PMD, checking Java sources against a `pmd.xml` rule set  |
-| `plugins/spotbugs/` | `build.jenesis.plugin.spotbugs` | SpotBugs, analysing compiled classes                     |
+| Folder                | Module                            | Runs                                                                 |
+|-----------------------|-----------------------------------|----------------------------------------------------------------------|
+| `plugins/antlr/`      | `build.jenesis.plugin.antlr`      | ANTLR, generating a lexer and parser from `.g4` grammars             |
+| `plugins/avro/`       | `build.jenesis.plugin.avro`       | Avro, generating Java sources from schemas and protocols             |
+| `plugins/checkstyle/` | `build.jenesis.plugin.checkstyle` | Checkstyle, checking Java sources against a `checkstyle.xml`         |
+| `plugins/codenarc/`   | `build.jenesis.plugin.codenarc`   | CodeNarc, checking Groovy sources against a rule set                 |
+| `plugins/detekt/`     | `build.jenesis.plugin.detekt`     | detekt, checking Kotlin sources against a `detekt.yml`               |
+| `plugins/pmd/`        | `build.jenesis.plugin.pmd`        | PMD, checking Java sources against a `pmd.xml` rule set              |
+| `plugins/scalastyle/` | `build.jenesis.plugin.scalastyle` | Scalastyle, checking Scala sources against a `scalastyle-config.xml` |
+| `plugins/spotbugs/`   | `build.jenesis.plugin.spotbugs`   | SpotBugs, analysing compiled classes                                 |
+| `plugins/wsimport/`   | `build.jenesis.plugin.wsimport`   | wsimport, generating a web service client from WSDL descriptions     |
+| `plugins/xjc/`        | `build.jenesis.plugin.xjc`        | XJC, generating Java sources from XML schemas                        |
 
 Each is published as `build.jenesis:<module>` and, once named in a project, resolved by the build tool like
 any other plugin:
