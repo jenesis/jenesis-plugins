@@ -21,9 +21,28 @@ env:
   MAVEN_REPOSITORY_URI: ${{ vars.MAVEN_REPOSITORY_URI || 'https://repo1.maven.org/maven2/' }}
 
 jobs:
-  build:
+  plugins:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    outputs:
+      plugins: ${{ steps.list.outputs.plugins }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: List the plugins
+        id: list
+        run: echo "plugins=$(ls plugins | jq -R . | jq -cs .)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: plugins
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        plugin: ${{ fromJSON(needs.plugins.outputs.plugins) }}
+    name: build (${{ matrix.plugin }})
 
     steps:
       - name: Check out repository
@@ -37,5 +56,11 @@ jobs:
           distribution: temurin
           java-version: '26'
 
-      - name: Build and test with Jenesis
-        run: java build/jenesis/Make.java
+      - name: Build and test the plugin with Jenesis
+        env:
+          PLUGIN: ${{ matrix.plugin }}
+        run: |
+          java -Djenesis.dependency.pin=strict build/jenesis/Make.java \
+               "+plugins+${PLUGIN}+sources" \
+               "+plugins+${PLUGIN}+tests" \
+               "+plugins+${PLUGIN}+it"
