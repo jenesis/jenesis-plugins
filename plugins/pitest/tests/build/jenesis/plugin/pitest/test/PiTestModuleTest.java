@@ -70,6 +70,22 @@ public class PiTestModuleTest {
     }
 
     @Test
+    public void requires_step_takes_the_launcher_from_the_engine_the_tests_resolved_where_no_pin_names_it() throws IOException {
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/runtime/maven/org.junit.platform/junit-platform-engine/6.1.3", "engine.jar");
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule("pitest", new PiTestModule(Map.of(), Map.of()), "project");
+        executor.execute("pitest/required");
+
+        assertThat(requiresOutput().stringPropertyNames())
+                .as("a test module that pins no JUnit Platform still hands PIT the launcher of the engine it runs")
+                .contains("pitest/classpath/maven/org.junit.platform/junit-platform-launcher/6.1.3");
+    }
+
+    @Test
     public void requires_step_pins_the_launcher_again_when_the_engine_version_changes() throws IOException {
         for (String version : List.of("1.11.0", "1.12.0")) {
             SequencedProperties versions = new SequencedProperties();

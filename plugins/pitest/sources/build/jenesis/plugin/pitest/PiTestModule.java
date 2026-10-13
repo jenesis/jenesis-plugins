@@ -261,9 +261,13 @@ public class PiTestModule implements BuildExecutorModule {
 
     private record Requires(String tool) implements BuildStep {
 
+        private static final Pattern PLATFORM = Pattern.compile(
+                ".*/maven/org\\.junit\\.platform/junit-platform-(?:engine|commons)/([^/]+)");
+
         @Override
         public boolean shouldRun(SequencedMap<String, BuildStepArgument> arguments) {
-            return arguments.values().stream().anyMatch(argument -> argument.hasChanged(Path.of(BuildStep.VERSIONS)));
+            return arguments.values().stream().anyMatch(argument -> argument.hasChanged(Path.of(BuildStep.VERSIONS))
+                    || argument.hasChanged(Path.of(BuildStep.DEPENDENCIES)));
         }
 
         @Override
@@ -283,25 +287,35 @@ public class PiTestModule implements BuildExecutorModule {
         }
 
         private static String junitPlatformVersion(SequencedMap<String, BuildStepArgument> arguments) throws IOException {
+            String resolved = null;
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
                 }
                 Path versions = argument.folder().resolve(BuildStep.VERSIONS);
-                if (!Files.isRegularFile(versions)) {
-                    continue;
+                if (Files.isRegularFile(versions)) {
+                    SequencedProperties properties = SequencedProperties.ofFiles(versions);
+                    for (String key : properties.stringPropertyNames()) {
+                        if (key.endsWith("/org.junit.platform/junit-platform-engine")
+                                || key.endsWith("/org.junit.platform/junit-platform-commons")) {
+                            String value = properties.getProperty(key);
+                            int space = value.indexOf(' ');
+                            return space < 0 ? value : value.substring(0, space);
+                        }
+                    }
                 }
-                SequencedProperties properties = SequencedProperties.ofFiles(versions);
-                for (String key : properties.stringPropertyNames()) {
-                    if (key.endsWith("/org.junit.platform/junit-platform-engine")
-                            || key.endsWith("/org.junit.platform/junit-platform-commons")) {
-                        String value = properties.getProperty(key);
-                        int space = value.indexOf(' ');
-                        return space < 0 ? value : value.substring(0, space);
+                Path index = argument.folder().resolve(BuildStep.DEPENDENCIES);
+                if (resolved == null && Files.isRegularFile(index)) {
+                    for (String key : SequencedProperties.ofFiles(index).stringPropertyNames()) {
+                        Matcher matcher = PLATFORM.matcher(key);
+                        if (matcher.matches()) {
+                            resolved = matcher.group(1);
+                            break;
+                        }
                     }
                 }
             }
-            return null;
+            return resolved;
         }
     }
 

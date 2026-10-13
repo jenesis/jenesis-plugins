@@ -26,4 +26,4 @@ Any other value is refused.
 
 It runs in each test module where its `plugin-pitest.properties` is found, and reads no file. PIT runs the tests
 with the JUnit Platform launcher of the version the test module pins for `org.junit.platform/junit-platform-engine`
-or `junit-platform-commons`, as `pin` writes it, so a test module that pins neither gives PIT no launcher.
+or `junit-platform-commons`, or else of the version its tests resolved.

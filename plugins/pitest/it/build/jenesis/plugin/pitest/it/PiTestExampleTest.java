@@ -32,7 +32,6 @@ public class PiTestExampleTest {
                 .write("tests/module-info.java", """
                         /**
                          * @jenesis.test example
-                         * @jenesis.pin org.junit.platform/junit-platform-engine 6.1.3
                          */
                         module example.test {
                             requires example;
