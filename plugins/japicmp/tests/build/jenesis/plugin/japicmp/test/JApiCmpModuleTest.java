@@ -20,6 +20,28 @@ public class JApiCmpModuleTest {
     private Path root, project;
 
     @Test
+    public void compares_no_api_of_a_test_module() throws IOException {
+        SequencedProperties module = new SequencedProperties();
+        module.setProperty("test", "main_artifact");
+        module.store(project.resolve(BuildStep.MODULE));
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                BuildExecutorCache.nop(),
+                false,
+                false,
+                0);
+        executor.addSource("project", project);
+        executor.addModule("japicmp", module().baseline("com.example/library/1.2.3"), "project");
+
+        assertThat(executor.execute().sequencedKeySet())
+                .as("the tests of a module have no release of their own to be compatible with")
+                .noneMatch(key -> key.startsWith("japicmp/"));
+    }
+
+    @Test
     public void requires_step_emits_the_japicmp_coordinate_and_the_declared_baseline() throws IOException {
         execute(module().baseline("com.example/library/1.2.3"));
 

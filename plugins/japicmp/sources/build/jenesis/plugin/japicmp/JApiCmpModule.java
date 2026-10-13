@@ -11,6 +11,7 @@ import build.jenesis.Environment;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
+import build.jenesis.SequencedProperties;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.ProcessBuildStep;
 import build.jenesis.step.ProcessHandler;
@@ -192,7 +193,11 @@ public class JApiCmpModule implements BuildExecutorModule {
     }
 
     @Override
-    public void accept(BuildExecutor buildExecutor, SequencedMap<String, Path> inherited) {
+    public void accept(BuildExecutor buildExecutor, SequencedMap<String, Path> inherited) throws IOException {
+        Path described = BuildStep.locate(new LinkedHashSet<>(inherited.values()), BuildStep.MODULE);
+        if (described != null && SequencedProperties.ofFiles(described).getProperty("test") != null) {
+            return;
+        }
         buildExecutor.addStep(REQUIRED,
                 new Baseline(tool, baseline, List.of(MAVEN_GROUP + "/" + MAVEN_ARTIFACT), "japicmp.properties"),
                 inherited.sequencedKeySet());

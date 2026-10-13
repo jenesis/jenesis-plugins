@@ -20,6 +20,28 @@ public class RevapiModuleTest {
     private Path root, project;
 
     @Test
+    public void compares_no_api_of_a_test_module() throws IOException {
+        SequencedProperties module = new SequencedProperties();
+        module.setProperty("test", "main_artifact");
+        module.store(project.resolve(BuildStep.MODULE));
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                BuildExecutorCache.nop(),
+                false,
+                false,
+                0);
+        executor.addSource("project", project);
+        executor.addModule("revapi", new RevapiModule(Map.of(), Map.of()).baseline("org.example/library/1.0.0"), "project");
+
+        assertThat(executor.execute().sequencedKeySet())
+                .as("the tests of a module have no release of their own to be compatible with")
+                .noneMatch(key -> key.startsWith("revapi/"));
+    }
+
+    @Test
     public void requires_the_revapi_extensions_and_the_baseline_it_names() throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
