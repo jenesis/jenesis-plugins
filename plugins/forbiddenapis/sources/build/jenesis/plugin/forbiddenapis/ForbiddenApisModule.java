@@ -264,7 +264,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                       List<String> warn,
                       boolean allowMissingClasses,
                       boolean ignoreSignaturesOfMissingClasses) {
-            super("forbiddenapis", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("forbiddenapis", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.group = group;
             this.strict = strict;

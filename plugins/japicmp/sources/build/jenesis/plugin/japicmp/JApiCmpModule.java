@@ -245,7 +245,7 @@ public class JApiCmpModule implements BuildExecutorModule {
                         boolean onlyModified,
                         boolean semanticVersioning,
                         List<Failure> errorOn) {
-            super("japicmp", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("japicmp", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.group = group;
             this.access = access;

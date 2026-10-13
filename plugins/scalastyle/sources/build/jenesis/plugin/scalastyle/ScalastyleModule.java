@@ -137,7 +137,7 @@ public class ScalastyleModule implements BuildExecutorModule {
                       String tool,
                       String configFile,
                       boolean strict) {
-            super("scalastyle", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("scalastyle", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;

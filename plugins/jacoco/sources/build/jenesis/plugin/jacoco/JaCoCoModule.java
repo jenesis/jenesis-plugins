@@ -169,7 +169,7 @@ public class JaCoCoModule implements BuildExecutorModule {
                        boolean classes,
                        LinkedHashMap<Counter, Double> minimum,
                        LinkedHashMap<Counter, Long> maximumMissed) {
-            super("jacoco", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("jacoco", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.classes = classes;
             this.minimum = minimum;

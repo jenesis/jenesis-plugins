@@ -136,7 +136,7 @@ public class AvroModule implements BuildExecutorModule {
                         String kind,
                         String extension,
                         List<String> arguments) {
-            super("avro", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("avro", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.kind = kind;
             this.extension = extension;

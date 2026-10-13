@@ -152,7 +152,7 @@ public class PmdModule implements BuildExecutorModule {
                       String configFile,
                       boolean strict,
                       int priority) {
-            super("pmd", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("pmd", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;

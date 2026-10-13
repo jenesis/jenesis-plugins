@@ -149,7 +149,7 @@ public class WsImportModule implements BuildExecutorModule {
                          String packageName,
                          String location,
                          List<String> arguments) {
-            super("wsimport", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("wsimport", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.packageName = packageName;
             this.location = location;

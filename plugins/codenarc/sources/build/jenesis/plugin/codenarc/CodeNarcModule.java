@@ -138,7 +138,7 @@ public class CodeNarcModule implements BuildExecutorModule {
                       String tool,
                       String configFile,
                       boolean strict) {
-            super("codenarc", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("codenarc", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;

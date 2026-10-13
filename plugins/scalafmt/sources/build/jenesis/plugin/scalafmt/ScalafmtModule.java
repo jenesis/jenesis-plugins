@@ -137,7 +137,7 @@ public class ScalafmtModule implements BuildExecutorModule {
                       String tool,
                       String configFile,
                       boolean strict) {
-            super("scalafmt", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("scalafmt", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;

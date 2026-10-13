@@ -137,7 +137,7 @@ public class DetektModule implements BuildExecutorModule {
                       String tool,
                       String configFile,
                       boolean strict) {
-            super("detekt", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("detekt", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;

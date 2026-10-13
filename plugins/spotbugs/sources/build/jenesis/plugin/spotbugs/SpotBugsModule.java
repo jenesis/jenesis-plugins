@@ -147,7 +147,7 @@ public class SpotBugsModule implements BuildExecutorModule {
                       String group,
                       String configFile,
                       boolean strict) {
-            super("spotbugs", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("spotbugs", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.group = group;
             this.configFile = configFile;

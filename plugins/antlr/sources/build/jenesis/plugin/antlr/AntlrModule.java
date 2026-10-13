@@ -133,7 +133,7 @@ public class AntlrModule implements BuildExecutorModule {
                          String tool,
                          String packageName,
                          List<String> arguments) {
-            super("antlr", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("antlr", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.packageName = packageName;
             this.arguments = arguments;

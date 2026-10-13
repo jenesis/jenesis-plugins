@@ -162,7 +162,7 @@ public class OpenApiModule implements BuildExecutorModule {
                          String generator,
                          String packageName,
                          List<String> arguments) {
-            super("openapi", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("openapi", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.generator = generator;
             this.packageName = packageName;

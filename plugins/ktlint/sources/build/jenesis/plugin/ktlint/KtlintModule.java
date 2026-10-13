@@ -126,7 +126,7 @@ public class KtlintModule implements BuildExecutorModule {
         private Check(ProcessBuildStep.Terms terms,
                       String tool,
                       boolean strict) {
-            super("ktlint", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("ktlint", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.strict = strict;
         }

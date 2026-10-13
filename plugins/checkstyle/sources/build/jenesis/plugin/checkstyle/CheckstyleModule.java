@@ -153,7 +153,7 @@ public class CheckstyleModule implements BuildExecutorModule {
                       String configFile,
                       boolean strict,
                       SequencedMap<String, String> expansions) {
-            super("checkstyle", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("checkstyle", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;

@@ -142,7 +142,7 @@ public class RevapiModule implements BuildExecutorModule {
                         String group,
                         Severity severity,
                         boolean strict) {
-            super("revapi", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("revapi", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.group = group;
             this.severity = severity;

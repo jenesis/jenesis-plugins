@@ -135,7 +135,7 @@ public class XjcModule implements BuildExecutorModule {
                          String tool,
                          String packageName,
                          List<String> arguments) {
-            super("xjc", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
+            super("xjc", ProcessHandler.OfProcess.ofJavaMain(), terms);
             this.tool = tool;
             this.packageName = packageName;
             this.arguments = arguments;
