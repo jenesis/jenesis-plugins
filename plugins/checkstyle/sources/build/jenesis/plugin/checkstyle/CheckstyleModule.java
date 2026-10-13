@@ -24,7 +24,7 @@ public class CheckstyleModule implements BuildExecutorModule {
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
     private static final String PROPERTIES = "checkstyle.properties", CONFIG_LOC_KEY = "config_loc";
-    private static final String SETTING = "source.checkstyle";
+    static final String SETTING = "source.checkstyle";
     private static final String REPORT = BuildStep.REPORTS + "checkstyle/checkstyle-report.xml";
     private static final String MAVEN_GROUP = "com.puppycrawl.tools", MAVEN_ARTIFACT = "checkstyle";
 

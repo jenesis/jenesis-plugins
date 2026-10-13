@@ -21,7 +21,7 @@ public class RevapiModule implements BuildExecutorModule {
 
     public static final String COMPARE = "compare", CONFIGURATION = "revapi.properties", ANALYSIS = "revapi.json";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    private static final String SETTING = "artifact.revapi", REPORT = BuildStep.REPORTS + "revapi/revapi.json";
+    static final String SETTING = "artifact.revapi", REPORT = BuildStep.REPORTS + "revapi/revapi.json";
     private static final String MAVEN_GROUP = "org.revapi";
     private static final List<String> EXTENSIONS = List.of("revapi-java", "revapi-basic-features", "revapi-reporter-json");
     private static final String LAUNCHER = "RevapiCheck.java", SOURCE = "RevapiCheck.source";

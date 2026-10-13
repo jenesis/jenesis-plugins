@@ -60,4 +60,26 @@ public class KtlintFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("unknown");
     }
+
+    @Test
+    public void wires_nothing_when_its_setting_says_ignore() throws IOException {
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                BuildExecutorCache.nop(),
+                false,
+                false,
+                0);
+        executor.addSource("project", project);
+        executor.addModule("ktlint", new KtlintFactory().create(new Environment(Map.of("source.ktlint", "ignore")),
+                new LinkedHashMap<>(),
+                new Semaphore(1),
+                "ktlint",
+                Map.of(),
+                Map.of()), "project");
+
+        assertThat(executor.execute().sequencedKeySet()).noneMatch(key -> key.startsWith("ktlint/"));
+    }
 }

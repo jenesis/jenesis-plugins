@@ -6,6 +6,7 @@ import build.jenesis.BuildModuleFactory;
 import build.jenesis.Environment;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
+import build.jenesis.project.Enforcement;
 
 public class ScalastyleFactory implements BuildModuleFactory {
 
@@ -20,6 +21,9 @@ public class ScalastyleFactory implements BuildModuleFactory {
             throw new IllegalArgumentException("The Scalastyle plugin takes no values, but was handed "
                     + properties.sequencedKeySet()
                     + ": set jenesis.source.scalastyle instead");
+        }
+        if (Enforcement.ofEnvironment(environment, ScalastyleModule.SETTING) == Enforcement.IGNORE) {
+            return (_, _) -> { };
         }
         return ScalastyleModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)

@@ -22,7 +22,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    private static final String SETTING = "validator.forbiddenapis";
+    static final String SETTING = "validator.forbiddenapis";
     private static final String REPORT = BuildStep.REPORTS + "forbiddenapis/forbiddenapis.txt";
     private static final String MAVEN_GROUP = "de.thetaphi", MAVEN_ARTIFACT = "forbiddenapis";
     private static final Set<String> VERSIONED = Set.of("jdk-unsafe", "jdk-deprecated", "jdk-internal");

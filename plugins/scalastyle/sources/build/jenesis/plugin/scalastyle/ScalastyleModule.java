@@ -23,7 +23,7 @@ public class ScalastyleModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    private static final String SETTING = "source.scalastyle";
+    static final String SETTING = "source.scalastyle";
     private static final String REPORT = BuildStep.REPORTS + "scalastyle/scalastyle-report.xml";
     private static final String MAVEN_GROUP = "com.beautiful-scala", MAVEN_ARTIFACT = "scalastyle_2.13";
 

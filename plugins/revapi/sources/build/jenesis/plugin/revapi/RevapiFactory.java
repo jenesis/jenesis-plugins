@@ -6,6 +6,7 @@ import build.jenesis.BuildModuleFactory;
 import build.jenesis.Environment;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
+import build.jenesis.project.Enforcement;
 
 public class RevapiFactory implements BuildModuleFactory {
 
@@ -29,6 +30,9 @@ public class RevapiFactory implements BuildModuleFactory {
                         + ">, and reads revapi's own configuration from a " + RevapiModule.ANALYSIS
                         + " it is handed as @analysis/" + RevapiModule.ANALYSIS + "=<file>");
             }
+        }
+        if (Enforcement.ofEnvironment(environment, RevapiModule.SETTING) == Enforcement.IGNORE) {
+            return (_, _) -> { };
         }
         RevapiModule module = RevapiModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)

@@ -60,4 +60,26 @@ public class CodeNarcFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("unknown");
     }
+
+    @Test
+    public void wires_nothing_when_its_setting_says_ignore() throws IOException {
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                BuildExecutorCache.nop(),
+                false,
+                false,
+                0);
+        executor.addSource("project", project);
+        executor.addModule("codenarc", new CodeNarcFactory().create(new Environment(Map.of("source.codenarc", "ignore")),
+                new LinkedHashMap<>(),
+                new Semaphore(1),
+                "codenarc",
+                Map.of(),
+                Map.of()), "project");
+
+        assertThat(executor.execute().sequencedKeySet()).noneMatch(key -> key.startsWith("codenarc/"));
+    }
 }

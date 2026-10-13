@@ -23,7 +23,7 @@ public class CodeNarcModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    private static final String SETTING = "source.codenarc";
+    static final String SETTING = "source.codenarc";
     private static final String REPORT = BuildStep.REPORTS + "codenarc/codenarc-report.xml";
 
     private final Dependencies dependencies;

@@ -161,4 +161,26 @@ public class ForbiddenApisFactoryTest {
                 false,
                 0);
     }
+
+    @Test
+    public void wires_nothing_when_its_setting_says_ignore() throws IOException {
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                BuildExecutorCache.nop(),
+                false,
+                false,
+                0);
+        executor.addSource("project", project);
+        executor.addModule("forbiddenapis", new ForbiddenApisFactory().create(new Environment(Map.of("validator.forbiddenapis", "ignore")),
+                new LinkedHashMap<>(Map.of("bundled", "jdk-unsafe")),
+                new Semaphore(1),
+                "forbiddenapis",
+                Map.of(),
+                Map.of()), "project");
+
+        assertThat(executor.execute().sequencedKeySet()).noneMatch(key -> key.startsWith("forbiddenapis/"));
+    }
 }
