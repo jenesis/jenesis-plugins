@@ -5,13 +5,12 @@
 > ### [Jenesis](https://jenesis.build) - a modern Java build tool
 > _Java-native config, plugin-free, with `module-info.java` treated as a feature, not an afterthought._
 
-**The plugins of the Jenesis build tool that run a tool it has to download anyway.** Each plugin is a Java
-module that provides a `build.jenesis.BuildModuleFactory`: the build that loads it hands it its settings, the
-resolved values of the `plugin-<name>.properties` that switched it on, its process permits, the dependency group to
-resolve its tool in, and its repositories and resolvers, and the plugin adds the steps that resolve the tool and run
-it. What the JDK
-ships stays built into the build tool; what needs a download lives here, so the tool itself stays small and
-nothing is fetched that a project does not use.
+**The plugins of the Jenesis build tool that run a tool it has to download anyway.** Each plugin is a Java module
+that provides a `build.jenesis.BuildModuleFactory`, or an `ObservabilityFactory` for one that observes the tests:
+the build that loads it hands it its settings, the resolved values of the `plugin-<name>.properties` that switched
+it on, its process permits, the dependency group to resolve its tool in, and its repositories and resolvers, and the
+plugin adds the steps that resolve the tool and run it. What the JDK ships stays built into the build tool; what
+needs a download lives here, so the tool itself stays small and nothing is fetched that a project does not use.
 
 📖 **The user documentation lives at [jenesis.build](https://jenesis.build).** What follows is for people
 working *on* this repository.
@@ -28,6 +27,7 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`codenarc`](plugins/codenarc/) | Checks the Groovy sources of a module with CodeNarc. |
 | [`detekt`](plugins/detekt/) | Checks the Kotlin sources of a module with detekt. |
 | [`eclipse`](plugins/eclipse/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Eclipse formatter. |
+| [`jacoco`](plugins/jacoco/) | Measures the code coverage of a module's tests with the JaCoCo agent and reports it, failing the build where a limit is not met. |
 | [`japicmp`](plugins/japicmp/) | Compares the API of a module with a released baseline using japicmp. |
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |

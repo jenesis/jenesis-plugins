@@ -20,6 +20,9 @@ rule there applies here as well; this file adds what is particular to the plugin
 - A plugin is `plugins/<tool>/sources/module-info.java`, module `build.jenesis.plugin.<tool>`, which `requires
   build.jenesis`, exports its package and `provides build.jenesis.BuildModuleFactory`. Its tests are
   `plugins/<tool>/tests/`, the `@jenesis.test build.jenesis.plugin.<tool>` module.
+- A plugin that observes the tests, as JaCoCo does, provides a `build.jenesis.ObservabilityFactory` instead and is
+  named at the hook point `observe`: its `Observation` pairs the `ObservabilityEngine` that joins the tests' JVM, named
+  after the group it was handed, with the module that reports over what it recorded.
 - The module is the build tool's module of the same tool, moved: the same steps, the same folder conventions,
   the same settings. Its `ofEnvironment` reads every setting, its pinning included, from the `Environment` it
   is given, and every setting is a wither of its own.
