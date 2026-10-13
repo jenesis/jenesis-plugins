@@ -29,6 +29,7 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`eclipse`](plugins/eclipse/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Eclipse formatter. |
 | [`jacoco`](plugins/jacoco/) | Measures the code coverage of a module's tests with the JaCoCo agent and reports it, failing the build where a limit is not met. |
 | [`japicmp`](plugins/japicmp/) | Compares the API of a module with a released baseline using japicmp. |
+| [`jreleaser`](plugins/jreleaser/) | Releases what the build staged with JReleaser, run in the build's own JVM rather than as a command. |
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |
 | [`pmd`](plugins/pmd/) | Checks the Java sources of a module with PMD. |
