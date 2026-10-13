@@ -6,7 +6,8 @@
 > _Java-native config, plugin-free, with `module-info.java` treated as a feature, not an afterthought._
 
 **The plugins of the Jenesis build tool that run a tool it has to download anyway.** Each plugin is a Java module
-that provides a `build.jenesis.BuildModuleFactory`, or an `ObservabilityFactory` for one that observes the tests:
+that provides a `build.jenesis.BuildModuleFactory`, an `ObservabilityFactory` for one that observes the tests, or a
+`LanguageFactory` for one that compiles a language:
 the build that loads it hands it its settings, the resolved values of the `plugin-<name>.properties` that switched
 it on, its process permits, the dependency group to resolve its tool in, and its repositories and resolvers, and the
 plugin adds the steps that resolve the tool and run it. What the JDK ships stays built into the build tool; what
@@ -29,9 +30,12 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`eclipse`](plugins/eclipse/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Eclipse formatter. |
 | [`forbiddenapis`](plugins/forbiddenapis/) | Checks the compiled classes of a module with forbiddenapis against bundled signatures and signatures files of the project. |
 | [`googlejavaformat`](plugins/googlejavaformat/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with google-java-format. |
+| [`groovy`](plugins/groovy/) | Compiles the Groovy sources of a module with groovyc, after javac and against the classes it wrote, and documents them with Groovydoc. |
 | [`jacoco`](plugins/jacoco/) | Measures the code coverage of a module's tests with the JaCoCo agent and reports it, failing the build where a limit is not met. |
 | [`japicmp`](plugins/japicmp/) | Compares the API of a module with a released baseline using japicmp. |
 | [`jreleaser`](plugins/jreleaser/) | Releases what the build staged with JReleaser, run in the build's own JVM rather than as a command. |
+| [`kotlin`](plugins/kotlin/) | Compiles the Kotlin sources of a module with kotlinc ahead of javac and documents them with Dokka. |
+| [`ksp`](plugins/ksp/) | Runs Kotlin Symbol Processing over the Kotlin and Java sources of a module with the symbol processors the module names. |
 | [`ktfmt`](plugins/ktfmt/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Kotlin sources of a module with ktfmt. |
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |
@@ -40,6 +44,7 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`pmd`](plugins/pmd/) | Checks the Java sources of a module with PMD. |
 | [`protoc`](plugins/protoc/) | Generates Java sources from Protocol Buffers definitions (`.proto`). |
 | [`revapi`](plugins/revapi/) | Analyses the API of a module against a released baseline with revapi. |
+| [`scala`](plugins/scala/) | Compiles the Scala sources of a module with the Scala 3 compiler before javac, jointly with its Java sources, and documents them with Scaladoc. |
 | [`scalafmt`](plugins/scalafmt/) | Checks the layout of the Scala sources of a module with scalafmt (`@check`), or verifies and rewrites it (`@format`). |
 | [`scalastyle`](plugins/scalastyle/) | Checks the Scala sources of a module with Scalastyle. |
 | [`spotbugs`](plugins/spotbugs/) | Analyses the compiled classes of a module with SpotBugs. |
