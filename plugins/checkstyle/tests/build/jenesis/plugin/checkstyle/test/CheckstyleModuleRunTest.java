@@ -229,7 +229,7 @@ public class CheckstyleModuleRunTest {
     }
 
     @Test
-    public void expands_the_properties_of_a_checkstyle_properties_beside_the_configuration() throws IOException {
+    public void expands_the_properties_it_is_handed_in_the_configuration() throws IOException {
         Files.writeString(project.resolve("checkstyle.xml"), """
                 <?xml version="1.0"?>
                 <!DOCTYPE module PUBLIC
@@ -244,12 +244,12 @@ public class CheckstyleModuleRunTest {
                     </module>
                 </module>
                 """);
-        Files.writeString(project.resolve("checkstyle.properties"), "type.format=^[a-z][a-zA-Z0-9]*$\n");
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule(
                 "checkstyle",
                 new CheckstyleModule(Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)), Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))).pinning(Pinning.STRICT)
+                        .expansions(new LinkedHashMap<>(Map.of("type.format", "^[a-z][a-zA-Z0-9]*$")))
                         .strict(true),
                 "project");
         executor.execute();
@@ -258,22 +258,6 @@ public class CheckstyleModuleRunTest {
         assertThat(report).content()
                 .as("the format the properties name accepts a type name starting in lower case")
                 .doesNotContain("<error");
-    }
-
-    @Test
-    public void refuses_a_checkstyle_properties_that_sets_config_loc() throws IOException {
-        Files.writeString(project.resolve("checkstyle.properties"), "config_loc=elsewhere\n");
-        BuildExecutor executor = newExecutor();
-        executor.addSource("project", project);
-        executor.addModule(
-                "checkstyle",
-                new CheckstyleModule(Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)), Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))).pinning(Pinning.STRICT),
-                "project");
-
-        assertThatThrownBy(executor::execute)
-                .rootCause()
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("sets config_loc, which the build sets to the folder of checkstyle.xml");
     }
 
     private BuildExecutor newExecutor() throws IOException {

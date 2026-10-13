@@ -34,7 +34,6 @@ public class CheckstyleFactoryTest {
         executor.addSource("project", project);
         executor.addModule("checkstyle", new CheckstyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("checkstyle.xml"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -51,15 +50,24 @@ public class CheckstyleFactoryTest {
     }
 
     @Test
-    public void refuses_values_since_its_settings_configure_it() {
+    public void takes_its_values_as_the_properties_the_configuration_expands() {
+        assertThat(new CheckstyleFactory().create(Environment.NONE,
+                new LinkedHashMap<>(Map.of("checkstyle.severity", "warning")),
+                new Semaphore(1),
+                "checkstyle",
+                Map.of(),
+                Map.of())).isNotNull();
+    }
+
+    @Test
+    public void refuses_a_value_for_config_loc_which_the_build_sets() {
         assertThatThrownBy(() -> new CheckstyleFactory().create(Environment.NONE,
-                new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("checkstyle.xml"),
+                new LinkedHashMap<>(Map.of("config_loc", "elsewhere")),
                 new Semaphore(1),
                 "checkstyle",
                 Map.of(),
                 Map.of()))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("unknown");
+                .hasMessageContaining("config_loc");
     }
 }

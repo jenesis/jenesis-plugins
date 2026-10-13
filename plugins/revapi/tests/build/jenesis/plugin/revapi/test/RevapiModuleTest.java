@@ -43,16 +43,4 @@ public class RevapiModuleTest {
                 "revapi/baseline/maven/org.example/library/1.0.0");
     }
 
-    @Test
-    public void takes_revapi_s_own_configuration_as_a_json_array() {
-        new RevapiModule(Map.of(), Map.of())
-                .analysis("[{\"extension\": \"revapi.differences\", \"configuration\": {}}]");
-    }
-
-    @Test
-    public void refuses_an_analysis_that_is_no_json_array() {
-        assertThatThrownBy(() -> new RevapiModule(Map.of(), Map.of()).analysis("{\"revapi\": {}}"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("is no JSON array");
-    }
 }

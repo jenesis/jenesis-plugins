@@ -14,7 +14,6 @@ public class ScalafmtFormatFactory implements BuildModuleFactory {
     @Override
     public BuildExecutorModule create(Environment environment,
                                       SequencedMap<String, String> properties,
-                                      Path configuration,
                                       Semaphore permits,
                                       String group,
                                       Map<String, Repository> repositories,

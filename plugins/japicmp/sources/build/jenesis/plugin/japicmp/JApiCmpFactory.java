@@ -28,12 +28,11 @@ public class JApiCmpFactory implements BuildModuleFactory {
     @Override
     public BuildExecutorModule create(Environment environment,
                                       SequencedMap<String, String> properties,
-                                      Path configuration,
                                       Semaphore permits,
                                       String group,
                                       Map<String, Repository> repositories,
                                       Map<String, Resolver> resolvers) {
-        String origin = configuration == null ? "The japicmp plugin" : configuration.toString();
+        String origin = "The japicmp plugin";
         SequencedProperties values = new SequencedProperties();
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             if (!KEYS.contains(entry.getKey())) {

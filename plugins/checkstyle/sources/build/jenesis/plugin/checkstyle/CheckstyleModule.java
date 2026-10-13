@@ -27,13 +27,13 @@ public class CheckstyleModule implements BuildExecutorModule {
     private static final String SETTING = "source.checkstyle";
     private static final String REPORT = BuildStep.REPORTS + "checkstyle/checkstyle-report.xml";
     private static final String MAVEN_GROUP = "com.puppycrawl.tools", MAVEN_ARTIFACT = "checkstyle";
-    private static final Pattern CONFIG_LOC = Pattern.compile("\\$\\{config_loc}/([^\"'<>${}\\s]+)");
 
     private final Dependencies dependencies;
     private final Pinning pinning;
     private final String tool;
     private final String configFile;
     private final boolean strict;
+    private final SequencedMap<String, String> expansions;
     private final ProcessBuildStep.Terms terms;
 
     public CheckstyleModule(Map<String, Repository> repositories,
@@ -43,6 +43,7 @@ public class CheckstyleModule implements BuildExecutorModule {
              "checkstyle",
              "checkstyle.xml",
              false,
+             Collections.emptySortedMap(),
              new ProcessBuildStep.Terms());
     }
 
@@ -54,6 +55,7 @@ public class CheckstyleModule implements BuildExecutorModule {
                 "checkstyle",
                 "checkstyle.xml",
                 Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                Collections.emptySortedMap(),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "checkstyle"));
     }
 
@@ -62,37 +64,47 @@ public class CheckstyleModule implements BuildExecutorModule {
                              String tool,
                              String configFile,
                              boolean strict,
+                             SequencedMap<String, String> expansions,
                              ProcessBuildStep.Terms terms) {
         this.dependencies = dependencies;
         this.pinning = pinning;
         this.tool = tool;
         this.configFile = configFile;
         this.strict = strict;
+        this.expansions = Collections.unmodifiableSequencedMap(new LinkedHashMap<>(expansions));
         this.terms = terms;
     }
 
     public CheckstyleModule pinning(Pinning pinning) {
-        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, terms);
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms);
     }
 
     public CheckstyleModule tool(String tool) {
-        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, terms);
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms);
     }
 
     public CheckstyleModule configFile(String configFile) {
-        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, terms);
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms);
     }
 
     public CheckstyleModule strict(boolean strict) {
-        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, terms);
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms);
+    }
+
+    public CheckstyleModule expansions(SequencedMap<String, String> expansions) {
+        if (expansions.containsKey(CONFIG_LOC_KEY)) {
+            throw new IllegalArgumentException("The expansions set " + CONFIG_LOC_KEY + ", which the build sets to the"
+                    + " folder of the configuration - remove it");
+        }
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms);
     }
 
     public CheckstyleModule printing(BiConsumer<Boolean, String> printing) {
-        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, terms.printing(printing));
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms.printing(printing));
     }
 
     public CheckstyleModule permits(Semaphore permits) {
-        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, terms.permits(permits));
+        return new CheckstyleModule(dependencies, pinning, tool, configFile, strict, expansions, terms.permits(permits));
     }
 
     @Override
@@ -107,7 +119,7 @@ public class CheckstyleModule implements BuildExecutorModule {
         SequencedSet<String> checkInputs = new LinkedHashSet<>();
         checkInputs.add(DEPENDENCIES);
         checkInputs.addAll(inherited.sequencedKeySet());
-        buildExecutor.addStep(CHECK, new Check(terms, tool, configFile, strict), checkInputs);
+        buildExecutor.addStep(CHECK, new Check(terms, tool, configFile, strict, expansions), checkInputs);
     }
 
     private record Requires(String tool) implements BuildStep {
@@ -134,15 +146,18 @@ public class CheckstyleModule implements BuildExecutorModule {
         private final String tool;
         private final String configFile;
         private final boolean strict;
+        private final SequencedMap<String, String> expansions;
 
         private Check(ProcessBuildStep.Terms terms,
                       String tool,
                       String configFile,
-                      boolean strict) {
+                      boolean strict,
+                      SequencedMap<String, String> expansions) {
             super("checkstyle", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
             this.tool = tool;
             this.configFile = configFile;
             this.strict = strict;
+            this.expansions = expansions;
         }
 
         @Override
@@ -236,24 +251,16 @@ public class CheckstyleModule implements BuildExecutorModule {
             files.sort(null);
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
-            SequencedProperties expansions = new SequencedProperties();
-            Path declared = config.resolveSibling(PROPERTIES);
-            if (Files.isRegularFile(declared)) {
-                expansions = SequencedProperties.ofFiles(declared);
-                if (expansions.containsKey(CONFIG_LOC_KEY)) {
-                    throw new IllegalArgumentException(PROPERTIES + " beside " + configFile + " sets "
-                            + CONFIG_LOC_KEY + ", which the build sets to the folder of " + configFile
-                            + " - remove the line");
-                }
-            }
-            expansions.setProperty(CONFIG_LOC_KEY, config.getParent().toString());
-            Path expanded = context.supplement().resolve(PROPERTIES);
-            expansions.store(expanded);
+            SequencedProperties expanded = new SequencedProperties();
+            expanded.putAll(expansions);
+            expanded.setProperty(CONFIG_LOC_KEY, config.getParent().toString());
+            Path expansionFile = context.supplement().resolve(PROPERTIES);
+            expanded.store(expansionFile);
             List<String> commands = new ArrayList<>(List.of(
                     "-cp", String.join(File.pathSeparator, jars),
                     "com.puppycrawl.tools.checkstyle.Main",
                     "-c", config.toString(),
-                    "-p", expanded.toString(),
+                    "-p", expansionFile.toString(),
                     "-f", "xml",
                     "-o", report.toString()));
             commands.addAll(files);

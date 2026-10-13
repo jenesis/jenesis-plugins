@@ -108,7 +108,6 @@ public class AntlrModuleRunTest {
         executor.addModule("antlr",
                 new AntlrFactory().create(new Environment(Map.of("dependency.pin", "strict")),
                         values,
-                        project.resolve(AntlrModule.FOLDER).resolve("Greeting.g4"),
                         new Semaphore(1),
                         "antlr",
                         Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
@@ -125,7 +124,6 @@ public class AntlrModuleRunTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new AntlrFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("visitor", "true")),
-                project.resolve(AntlrModule.FOLDER).resolve("Greeting.g4"),
                 new Semaphore(1),
                 "antlr",
                 Map.of(),

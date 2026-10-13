@@ -34,7 +34,6 @@ public class ScalafmtFormatFactoryTest {
         executor.addSource("project", project);
         executor.addModule("scalafmt", new ScalafmtFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve(".scalafmt.conf"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class ScalafmtFormatFactoryTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new ScalafmtFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve(".scalafmt.conf"),
                 new Semaphore(1),
                 "scalafmt",
                 Map.of(),

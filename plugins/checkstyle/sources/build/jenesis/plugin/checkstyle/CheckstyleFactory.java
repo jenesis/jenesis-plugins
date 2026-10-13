@@ -12,17 +12,12 @@ public class CheckstyleFactory implements BuildModuleFactory {
     @Override
     public BuildExecutorModule create(Environment environment,
                                       SequencedMap<String, String> properties,
-                                      Path configuration,
                                       Semaphore permits,
                                       String group,
                                       Map<String, Repository> repositories,
                                       Map<String, Resolver> resolvers) {
-        if (!properties.isEmpty()) {
-            throw new IllegalArgumentException("The Checkstyle plugin takes no values, but was handed "
-                    + properties.sequencedKeySet()
-                    + ": set jenesis.source.checkstyle instead");
-        }
         return CheckstyleModule.ofEnvironment(environment, repositories, resolvers)
+                .expansions(properties)
                 .permits(permits)
                 .tool(group);
     }

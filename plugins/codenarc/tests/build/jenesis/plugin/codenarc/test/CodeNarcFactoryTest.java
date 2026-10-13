@@ -34,7 +34,6 @@ public class CodeNarcFactoryTest {
         executor.addSource("project", project);
         executor.addModule("codenarc", new CodeNarcFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("codenarc.xml"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class CodeNarcFactoryTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new CodeNarcFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("codenarc.xml"),
                 new Semaphore(1),
                 "codenarc",
                 Map.of(),

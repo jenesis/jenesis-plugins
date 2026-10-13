@@ -13,10 +13,10 @@ public class EclipseJavaFormatExampleTest {
     private Path folder;
 
     @Test
-    public void rewrites_the_java_sources_with_the_profile_beside_its_values() throws IOException {
+    public void rewrites_the_java_sources_with_the_profile_it_binds() throws IOException {
         ExampleProject project = ExampleProject.of(folder, EclipseJavaFormatFactory.class)
                 .write("jenesis.plugins.properties", "eclipse+format=build.jenesis.plugin.eclipse\n")
-                .write("build.jenesis/plugin-eclipse.properties", "profile=formatter.xml\n")
+                .write("build.jenesis/plugin-eclipse.properties", "@profile/eclipse-formatter.xml=../build.jenesis/formatter.xml\n")
                 .write("build.jenesis/formatter.xml", """
                         <?xml version="1.0" encoding="UTF-8" standalone="no"?>
                         <profiles version="23">

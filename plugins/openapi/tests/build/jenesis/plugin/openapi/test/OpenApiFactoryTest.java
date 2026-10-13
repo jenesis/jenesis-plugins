@@ -34,7 +34,6 @@ public class OpenApiFactoryTest {
         executor.addSource("project", project);
         executor.addModule("openapi", new OpenApiFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("openapi/"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class OpenApiFactoryTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new OpenApiFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("openapi/"),
                 new Semaphore(1),
                 "openapi",
                 Map.of(),

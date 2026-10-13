@@ -34,7 +34,6 @@ public class AvroFactoryTest {
         executor.addSource("project", project);
         executor.addModule("avro", new AvroFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("avro/"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class AvroFactoryTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new AvroFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("avro/"),
                 new Semaphore(1),
                 "avro",
                 Map.of(),

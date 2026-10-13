@@ -34,7 +34,6 @@ public class ProtocFactoryTest {
         executor.addSource("project", project);
         executor.addModule("protoc", new ProtocFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("protoc/"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class ProtocFactoryTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new ProtocFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("protoc/"),
                 new Semaphore(1),
                 "protoc",
                 Map.of(),

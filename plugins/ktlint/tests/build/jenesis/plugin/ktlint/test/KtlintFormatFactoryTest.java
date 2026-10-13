@@ -34,7 +34,6 @@ public class KtlintFormatFactoryTest {
         executor.addSource("project", project);
         executor.addModule("ktlint", new KtlintFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve(".editorconfig"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class KtlintFormatFactoryTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new KtlintFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve(".editorconfig"),
                 new Semaphore(1),
                 "ktlint",
                 Map.of(),

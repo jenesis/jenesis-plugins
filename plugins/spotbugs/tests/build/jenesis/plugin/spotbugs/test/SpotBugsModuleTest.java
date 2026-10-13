@@ -38,7 +38,6 @@ public class SpotBugsModuleTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new SpotBugsFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("effort", "max")),
-                project.resolve("spotbugs-exclude.xml"),
                 new Semaphore(1),
                 "spotbugs",
                 Map.of(),
@@ -54,7 +53,6 @@ public class SpotBugsModuleTest {
         executor.addSource("project", project);
         executor.addModule("spotbugs", new SpotBugsFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("spotbugs.xml"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),

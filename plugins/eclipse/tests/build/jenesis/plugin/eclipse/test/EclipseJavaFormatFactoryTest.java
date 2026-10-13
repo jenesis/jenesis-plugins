@@ -10,46 +10,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class EclipseJavaFormatFactoryTest {
 
-    @TempDir
-    private Path project;
-
     @Test
-    public void resolves_the_profile_beside_the_file_that_activates_it() throws IOException {
-        Path configuration = Files.writeString(project.resolve("javaformat.properties"), "profile=profile.xml\n");
-        Files.writeString(project.resolve("profile.xml"), "<profiles/>");
-
-        assertThat(create(configuration, Map.of("profile", "profile.xml"))).isNotNull();
+    public void creates_a_formatter_that_reads_its_profile_from_what_the_project_binds() {
+        assertThat(create(Map.of())).isNotNull();
     }
 
     @Test
-    public void refuses_a_profile_outside_the_folder_of_the_file_that_activates_it() {
-        Path configuration = project.resolve("javaformat.properties");
-
-        assertThatThrownBy(() -> create(configuration, Map.of("profile", "../profile.xml")))
+    public void refuses_a_profile_named_as_a_value_since_a_file_is_bound() {
+        assertThatThrownBy(() -> create(Map.of("profile", "profile.xml")))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("not beside or below");
+                .hasMessageContaining("@profile/eclipse-formatter.xml=<file>");
     }
 
-    @Test
-    public void refuses_a_profile_that_is_no_file() {
-        Path configuration = project.resolve("javaformat.properties");
-
-        assertThatThrownBy(() -> create(configuration, Map.of("profile", "missing.xml")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("is no file");
-    }
-
-    @Test
-    public void refuses_a_value_it_does_not_know() {
-        assertThatThrownBy(() -> create(project.resolve("javaformat.properties"), Map.of("style", "aosp")))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("no value style");
-    }
-
-    private static Object create(Path configuration, Map<String, String> values) {
+    private static Object create(Map<String, String> values) {
         return new EclipseJavaFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                configuration,
                 new Semaphore(1),
                 "eclipse-java-format",
                 Map.of(),

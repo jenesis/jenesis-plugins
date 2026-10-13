@@ -62,7 +62,6 @@ public class JApiCmpFactoryTest {
     private build.jenesis.BuildExecutorModule create(Map<String, String> values, String group) {
         return new JApiCmpFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                project.resolve("japicmp.properties"),
                 new Semaphore(1),
                 group,
                 Map.of(),

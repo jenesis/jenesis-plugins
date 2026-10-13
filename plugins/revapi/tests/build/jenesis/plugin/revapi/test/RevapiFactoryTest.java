@@ -46,17 +46,10 @@ public class RevapiFactoryTest {
     }
 
     @Test
-    public void reads_its_own_configuration_beside_the_file_that_activates_it() throws IOException {
-        Files.writeString(project.resolve("analysis.json"), "[]");
-
-        assertThat(create(Map.of("configuration", "analysis.json"), "revapi")).isNotNull();
-    }
-
-    @Test
-    public void refuses_a_configuration_outside_the_folder_of_the_file_that_activates_it() {
-        assertThatThrownBy(() -> create(Map.of("configuration", "../analysis.json"), "revapi"))
+    public void refuses_a_configuration_named_as_a_value_since_a_file_is_bound() {
+        assertThatThrownBy(() -> create(Map.of("configuration", "analysis.json"), "revapi"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("not beside or below");
+                .hasMessageContaining("@analysis/revapi.json=<file>");
     }
 
     @Test
@@ -73,10 +66,9 @@ public class RevapiFactoryTest {
                 .hasMessageContaining("names unknown");
     }
 
-    private BuildExecutorModule create(Map<String, String> values, String group) throws IOException {
+    private BuildExecutorModule create(Map<String, String> values, String group) {
         return new RevapiFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                project.resolve("revapi.properties"),
                 new Semaphore(1),
                 group,
                 Map.of(),

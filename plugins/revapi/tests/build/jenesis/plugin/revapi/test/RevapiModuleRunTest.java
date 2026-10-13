@@ -65,10 +65,11 @@ public class RevapiModuleRunTest {
     public void ignores_a_difference_that_revapi_s_own_configuration_ignores() throws IOException {
         build();
 
-        newExecutor(module().analysis("""
+        Files.writeString(project.resolve("revapi.json"), """
                 [{"extension": "revapi.differences", "configuration": {"ignore": true, "differences": [
                     {"code": "java.class.removed", "justification": "The demo removes them."}]}}]
-                """)).execute();
+                """);
+        newExecutor(module()).execute();
 
         assertThat(root.resolve("revapi").resolve("compare").resolve("output")
                 .resolve("reports").resolve("revapi").resolve("revapi.json"))

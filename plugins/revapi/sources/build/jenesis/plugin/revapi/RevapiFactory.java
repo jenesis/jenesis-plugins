@@ -9,54 +9,33 @@ import build.jenesis.Resolver;
 
 public class RevapiFactory implements BuildModuleFactory {
 
-    private static final String BASELINE = "baseline", SEVERITY = "severity", ANALYSIS = "configuration";
+    private static final String BASELINE = "baseline", SEVERITY = "severity";
 
     @Override
     public BuildExecutorModule create(Environment environment,
                                       SequencedMap<String, String> properties,
-                                      Path configuration,
                                       Semaphore permits,
                                       String group,
                                       Map<String, Repository> repositories,
-                                      Map<String, Resolver> resolvers) throws IOException {
-        String origin = configuration == null ? "The revapi plugin" : configuration.toString();
+                                      Map<String, Resolver> resolvers) {
+        String origin = "The revapi plugin";
         for (String key : properties.sequencedKeySet()) {
-            if (!key.equals(BASELINE) && !key.equals(SEVERITY) && !key.equals(ANALYSIS)) {
+            if (!key.equals(BASELINE) && !key.equals(SEVERITY)) {
                 throw new IllegalArgumentException(origin + " names " + key + ", but takes " + BASELINE
                         + "=<groupId>/<artifactId>[/<version>], " + SEVERITY + "=<"
                         + String.join("|", Arrays.stream(RevapiModule.Severity.values())
                                 .map(RevapiFactory::spelt)
                                 .toList())
-                        + "> and " + ANALYSIS + "=<a JSON file of revapi's own configuration beside it>");
+                        + ">, and reads revapi's own configuration from a " + RevapiModule.ANALYSIS
+                        + " it is handed as @analysis/" + RevapiModule.ANALYSIS + "=<file>");
             }
         }
         RevapiModule module = RevapiModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
                 .tool(group);
-        String severity = value(properties, SEVERITY), name = value(properties, ANALYSIS);
+        String severity = value(properties, SEVERITY);
         if (severity != null) {
             module = module.severity(severity(origin, severity));
-        }
-        if (name != null) {
-            if (configuration == null) {
-                throw new IllegalStateException("The revapi plugin names the configuration " + name
-                        + " but was activated by no file to resolve it against - activate it by the file beside it");
-            }
-            Path sibling = Path.of(name).normalize();
-            if (sibling.isAbsolute() || sibling.startsWith("..")) {
-                throw new IllegalArgumentException(origin + " names the configuration " + name
-                        + ", which is not beside or below it - place the file in its folder");
-            }
-            Path resolved = configuration.resolveSibling(sibling);
-            if (!Files.isRegularFile(resolved)) {
-                throw new IllegalArgumentException(origin + " names the configuration " + name
-                        + ", which does not exist beside it");
-            }
-            try {
-                module = module.analysis(Files.readString(resolved));
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(resolved + ": " + e.getMessage());
-            }
         }
         return module.baseline(value(properties, BASELINE));
     }

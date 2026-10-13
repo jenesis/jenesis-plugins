@@ -34,7 +34,6 @@ public class WsImportFactoryTest {
         executor.addSource("project", project);
         executor.addModule("wsimport", new WsImportFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("wsimport/"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class WsImportFactoryTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new WsImportFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("wsimport/"),
                 new Semaphore(1),
                 "wsimport",
                 Map.of(),

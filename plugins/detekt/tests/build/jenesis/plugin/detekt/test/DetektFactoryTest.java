@@ -34,7 +34,6 @@ public class DetektFactoryTest {
         executor.addSource("project", project);
         executor.addModule("detekt", new DetektFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("detekt.yml"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class DetektFactoryTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new DetektFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("detekt.yml"),
                 new Semaphore(1),
                 "detekt",
                 Map.of(),

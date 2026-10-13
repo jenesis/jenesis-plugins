@@ -34,7 +34,6 @@ public class ScalastyleFactoryTest {
         executor.addSource("project", project);
         executor.addModule("scalastyle", new ScalastyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("scalastyle-config.xml"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class ScalastyleFactoryTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new ScalastyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("scalastyle-config.xml"),
                 new Semaphore(1),
                 "scalastyle",
                 Map.of(),

@@ -42,4 +42,38 @@ public class CheckstyleExampleTest {
                 .as("the plugin runs through the build that loads it and writes what its tool produces")
                 .content().contains("badName");
     }
+
+    @Test
+    public void expands_its_values_in_a_configuration_shared_outside_the_project() throws IOException {
+        Files.writeString(Files.createDirectories(folder.resolve("shared")).resolve("company.xml"), """
+                <?xml version="1.0"?>
+                <!DOCTYPE module PUBLIC
+                    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+                    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+                <module name="Checker">
+                    <property name="severity" value="${checkstyle.severity}"/>
+                    <module name="TreeWalker">
+                        <module name="TypeName"/>
+                    </module>
+                </module>
+                """);
+        ExampleProject project = ExampleProject.of(folder, CheckstyleFactory.class)
+                .write("jenesis.plugins.properties", "checkstyle+check=build.jenesis.plugin.checkstyle\n")
+                .write("build.jenesis/plugin-checkstyle.properties", """
+                        @rules/checkstyle.xml=../../shared/company.xml
+                        checkstyle.severity=@severity/warning
+                        """)
+                .write("sources/module-info.java", "module example {}\n")
+                .write("sources/example/badName.java", """
+                        package example;
+                        public class badName {
+                        }
+                        """);
+
+        project.make("+sources/produce/assemble/check");
+
+        assertThat(project.find("checkstyle-report.xml"))
+                .as("the shared configuration reports at the severity the project resolves for it")
+                .content().contains("severity=\"warning\"");
+    }
 }

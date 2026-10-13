@@ -19,7 +19,7 @@ import build.jenesis.step.ProcessHandler;
 
 public class RevapiModule implements BuildExecutorModule {
 
-    public static final String COMPARE = "compare", CONFIGURATION = "revapi.properties";
+    public static final String COMPARE = "compare", CONFIGURATION = "revapi.properties", ANALYSIS = "revapi.json";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
     private static final String SETTING = "artifact.revapi", REPORT = BuildStep.REPORTS + "revapi/revapi.json";
     private static final String MAVEN_GROUP = "org.revapi";
@@ -32,7 +32,6 @@ public class RevapiModule implements BuildExecutorModule {
     private final String group;
     private final String baseline;
     private final Severity severity;
-    private final String analysis;
     private final boolean strict;
     private final ProcessBuildStep.Terms terms;
 
@@ -44,7 +43,6 @@ public class RevapiModule implements BuildExecutorModule {
                 "main",
                 null,
                 Severity.POTENTIALLY_BREAKING,
-                null,
                 false,
                 new ProcessBuildStep.Terms());
     }
@@ -58,7 +56,6 @@ public class RevapiModule implements BuildExecutorModule {
                 "main",
                 null,
                 Severity.POTENTIALLY_BREAKING,
-                null,
                 Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
                 ProcessBuildStep.Terms.ofEnvironment(environment, "revapi"));
     }
@@ -69,7 +66,6 @@ public class RevapiModule implements BuildExecutorModule {
                          String group,
                          String baseline,
                          Severity severity,
-                         String analysis,
                          boolean strict,
                          ProcessBuildStep.Terms terms) {
         this.dependencies = dependencies;
@@ -78,50 +74,41 @@ public class RevapiModule implements BuildExecutorModule {
         this.group = group;
         this.baseline = baseline;
         this.severity = severity;
-        this.analysis = analysis;
         this.strict = strict;
         this.terms = terms;
     }
 
     public RevapiModule pinning(Pinning pinning) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict, terms);
     }
 
     public RevapiModule tool(String tool) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict, terms);
     }
 
     public RevapiModule group(String group) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict, terms);
     }
 
     public RevapiModule baseline(String baseline) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict, terms);
     }
 
     public RevapiModule severity(Severity severity) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
-    }
-
-    public RevapiModule analysis(String analysis) {
-        if (analysis != null && !(Json.parse(analysis) instanceof List<?>)) {
-            throw new IllegalArgumentException("The revapi analysis configuration is no JSON array - write revapi's"
-                    + " configuration as an array of {\"extension\": ..., \"configuration\": ...} objects");
-        }
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict, terms);
     }
 
     public RevapiModule strict(boolean strict) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict, terms);
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict, terms);
     }
 
     public RevapiModule printing(BiConsumer<Boolean, String> printing) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict,
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict,
                 terms.printing(printing));
     }
 
     public RevapiModule permits(Semaphore permits) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, analysis, strict,
+        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict,
                 terms.permits(permits));
     }
 
@@ -140,7 +127,7 @@ public class RevapiModule implements BuildExecutorModule {
         SequencedSet<String> compareInputs = new LinkedHashSet<>();
         compareInputs.add(DEPENDENCIES);
         compareInputs.addAll(inherited.sequencedKeySet());
-        buildExecutor.addStep(COMPARE, new Compare(terms, tool, group, severity, analysis, strict), compareInputs);
+        buildExecutor.addStep(COMPARE, new Compare(terms, tool, group, severity, strict), compareInputs);
     }
 
     private static class Compare extends ProcessBuildStep {
@@ -148,20 +135,17 @@ public class RevapiModule implements BuildExecutorModule {
         private final String tool;
         private final String group;
         private final Severity severity;
-        private final String analysis;
         private final boolean strict;
 
         private Compare(ProcessBuildStep.Terms terms,
                         String tool,
                         String group,
                         Severity severity,
-                        String analysis,
                         boolean strict) {
             super("revapi", ProcessHandler.OfProcess.ofJavaHome("bin/java"), terms);
             this.tool = tool;
             this.group = group;
             this.severity = severity;
-            this.analysis = analysis;
             this.strict = strict;
         }
 
@@ -186,7 +170,7 @@ public class RevapiModule implements BuildExecutorModule {
                                                      SequencedMap<String, SequencedMap<String, String>> properties)
                 throws IOException {
             List<String> jars = new ArrayList<>(), baselines = new ArrayList<>(), support = new ArrayList<>();
-            Path artifact = null;
+            Path artifact = null, analysis = null;
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
@@ -199,6 +183,10 @@ public class RevapiModule implements BuildExecutorModule {
                 }
                 for (Path jar : Dependencies.select(argument.folder(), group, "compile")) {
                     support.add(jar.toString());
+                }
+                Path candidate = argument.folder().resolve(ANALYSIS);
+                if (Files.isRegularFile(candidate)) {
+                    analysis = candidate;
                 }
                 Path artifacts = argument.folder().resolve(BuildStep.ARTIFACTS);
                 if (Files.isDirectory(artifacts)) {
@@ -228,9 +216,11 @@ public class RevapiModule implements BuildExecutorModule {
                 }
                 Files.copy(in, launcher, StandardCopyOption.REPLACE_EXISTING);
             }
-            String configuration = analysis == null
-                    ? "-"
-                    : Files.writeString(context.supplement().resolve("revapi-configuration.json"), analysis).toString();
+            if (analysis != null && !(Json.parse(Files.readString(analysis)) instanceof List<?>)) {
+                throw new IllegalArgumentException(analysis + " is no JSON array - write revapi's configuration as an"
+                        + " array of {\"extension\": ..., \"configuration\": ...} objects");
+            }
+            String configuration = analysis == null ? "-" : analysis.toString();
             List<String> commands = new ArrayList<>(List.of(
                     "-cp", String.join(File.pathSeparator, jars),
                     launcher.toString(),

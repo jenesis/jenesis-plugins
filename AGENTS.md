@@ -29,9 +29,15 @@ rule there applies here as well; this file adds what is particular to the plugin
   build says. It resolves the tool with the repositories and resolvers it was handed, never with its own.
 - A value of `plugin-<name>.properties` the plugin does not take is refused with an
   `IllegalArgumentException` that names it and what would be valid; a plugin configured by settings alone
-  takes no values.
+  takes no values. A value arrives resolved, and never as a path: a file the plugin reads is one the project binds
+  as `@<input>[/<target>]=<path>`, which the plugin finds among its arguments by the name its tool gives it
+  (`pmd.xml`, `eclipse-formatter.xml`, `revapi.json`), so it reads nothing a line does not name.
 - The plugin compiles against a published `build.jenesis`, pinned in its descriptor, never against the
   vendored engine that runs the build: a plugin needs a release of the tool that carries the API it uses.
+
+- Every plugin folder carries a short `README.md`: one sentence on what it does, the line naming it and an example
+  `plugin-<name>.properties`, a table of the values it takes, and the file it reads. The root `README.md` lists
+  every plugin with that sentence and a link to its folder; a new plugin is added to both.
 
 ## Tests
 

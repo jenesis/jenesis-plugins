@@ -34,7 +34,6 @@ public class XjcFactoryTest {
         executor.addSource("project", project);
         executor.addModule("xjc", new XjcFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                project.resolve("xjc/"),
                 new Semaphore(1),
                 "quality",
                 Map.of(),
@@ -54,7 +53,6 @@ public class XjcFactoryTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new XjcFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                project.resolve("xjc/"),
                 new Semaphore(1),
                 "xjc",
                 Map.of(),

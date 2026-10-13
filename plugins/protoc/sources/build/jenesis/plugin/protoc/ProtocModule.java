@@ -86,7 +86,7 @@ public class ProtocModule implements BuildExecutorModule {
             system = "linux";
         } else {
             throw new IllegalArgumentException("No protoc executable is published for operating system: " + name
-                    + " (name one with classifier=<protoc classifier> in protoc.properties)");
+                    + " (name one with classifier=<protoc classifier> in plugin-protoc.properties)");
         }
         String architecture = System.getProperty("os.arch", "").toLowerCase(Locale.ROOT);
         String chipset = switch (architecture) {
@@ -94,7 +94,7 @@ public class ProtocModule implements BuildExecutorModule {
             case "aarch64", "arm64" -> "aarch_64";
             case "x86", "i386", "i486", "i586", "i686" -> "x86_32";
             default -> throw new IllegalArgumentException("No protoc executable is published for architecture: "
-                    + architecture + " (name one with classifier=<protoc classifier> in protoc.properties)");
+                    + architecture + " (name one with classifier=<protoc classifier> in plugin-protoc.properties)");
         };
         return system + "-" + chipset;
     }
