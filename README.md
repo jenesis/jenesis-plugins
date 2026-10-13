@@ -17,23 +17,25 @@ working *on* this repository.
 
 ## The plugins
 
-| Folder                | Module                            | Runs                                                                 |
-|-----------------------|-----------------------------------|----------------------------------------------------------------------|
-| `plugins/antlr/`      | `build.jenesis.plugin.antlr`      | ANTLR, generating a lexer and parser from `.g4` grammars             |
-| `plugins/avro/`       | `build.jenesis.plugin.avro`       | Avro, generating Java sources from schemas and protocols             |
-| `plugins/checkstyle/` | `build.jenesis.plugin.checkstyle` | Checkstyle, checking Java sources against a `checkstyle.xml`         |
-| `plugins/codenarc/`   | `build.jenesis.plugin.codenarc`   | CodeNarc, checking Groovy sources against a rule set                 |
-| `plugins/detekt/`     | `build.jenesis.plugin.detekt`     | detekt, checking Kotlin sources against a `detekt.yml`               |
-| `plugins/japicmp/`    | `build.jenesis.plugin.japicmp`    | japicmp, comparing the API of a module with its released baseline    |
-| `plugins/ktlint/`     | `build.jenesis.plugin.ktlint`     | ktlint, checking or formatting Kotlin sources (`@check`, `@format`)  |
-| `plugins/openapi/`    | `build.jenesis.plugin.openapi`    | OpenAPI Generator, generating Java sources from a specification      |
-| `plugins/pmd/`        | `build.jenesis.plugin.pmd`        | PMD, checking Java sources against a `pmd.xml` rule set              |
-| `plugins/protoc/`     | `build.jenesis.plugin.protoc`     | protoc, generating Java sources from Protocol Buffers definitions    |
-| `plugins/scalafmt/`   | `build.jenesis.plugin.scalafmt`   | scalafmt, checking or formatting Scala sources (`@check`, `@format`) |
-| `plugins/scalastyle/` | `build.jenesis.plugin.scalastyle` | Scalastyle, checking Scala sources against a `scalastyle-config.xml` |
-| `plugins/spotbugs/`   | `build.jenesis.plugin.spotbugs`   | SpotBugs, analysing compiled classes                                 |
-| `plugins/wsimport/`   | `build.jenesis.plugin.wsimport`   | wsimport, generating a web service client from WSDL descriptions     |
-| `plugins/xjc/`        | `build.jenesis.plugin.xjc`        | XJC, generating Java sources from XML schemas                        |
+| Folder                | Module                            | Runs                                                                    |
+|-----------------------|-----------------------------------|-------------------------------------------------------------------------|
+| `plugins/antlr/`      | `build.jenesis.plugin.antlr`      | ANTLR, generating a lexer and parser from `.g4` grammars                |
+| `plugins/avro/`       | `build.jenesis.plugin.avro`       | Avro, generating Java sources from schemas and protocols                |
+| `plugins/checkstyle/` | `build.jenesis.plugin.checkstyle` | Checkstyle, checking Java sources against a `checkstyle.xml`            |
+| `plugins/codenarc/`   | `build.jenesis.plugin.codenarc`   | CodeNarc, checking Groovy sources against a rule set                    |
+| `plugins/detekt/`     | `build.jenesis.plugin.detekt`     | detekt, checking Kotlin sources against a `detekt.yml`                  |
+| `plugins/eclipse/`    | `build.jenesis.plugin.eclipse`    | the Eclipse formatter, formatting Java sources with an exported profile |
+| `plugins/japicmp/`    | `build.jenesis.plugin.japicmp`    | japicmp, comparing the API of a module with its released baseline       |
+| `plugins/ktlint/`     | `build.jenesis.plugin.ktlint`     | ktlint, checking or formatting Kotlin sources (`@check`, `@format`)     |
+| `plugins/openapi/`    | `build.jenesis.plugin.openapi`    | OpenAPI Generator, generating Java sources from a specification         |
+| `plugins/pmd/`        | `build.jenesis.plugin.pmd`        | PMD, checking Java sources against a `pmd.xml` rule set                 |
+| `plugins/protoc/`     | `build.jenesis.plugin.protoc`     | protoc, generating Java sources from Protocol Buffers definitions       |
+| `plugins/revapi/`     | `build.jenesis.plugin.revapi`     | revapi, analysing the API of a module against its released baseline     |
+| `plugins/scalafmt/`   | `build.jenesis.plugin.scalafmt`   | scalafmt, checking or formatting Scala sources (`@check`, `@format`)    |
+| `plugins/scalastyle/` | `build.jenesis.plugin.scalastyle` | Scalastyle, checking Scala sources against a `scalastyle-config.xml`    |
+| `plugins/spotbugs/`   | `build.jenesis.plugin.spotbugs`   | SpotBugs, analysing compiled classes                                    |
+| `plugins/wsimport/`   | `build.jenesis.plugin.wsimport`   | wsimport, generating a web service client from WSDL descriptions        |
+| `plugins/xjc/`        | `build.jenesis.plugin.xjc`        | XJC, generating Java sources from XML schemas                           |
 
 Each is published as `build.jenesis:<module>` and, once named in a project, resolved by the build tool like
 any other plugin:
