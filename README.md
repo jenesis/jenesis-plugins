@@ -27,6 +27,7 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`codenarc`](plugins/codenarc/) | Checks the Groovy sources of a module with CodeNarc. |
 | [`detekt`](plugins/detekt/) | Checks the Kotlin sources of a module with detekt. |
 | [`eclipse`](plugins/eclipse/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Eclipse formatter. |
+| [`forbiddenapis`](plugins/forbiddenapis/) | Checks the compiled classes of a module with forbiddenapis against bundled signatures and signatures files of the project. |
 | [`googlejavaformat`](plugins/googlejavaformat/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with google-java-format. |
 | [`jacoco`](plugins/jacoco/) | Measures the code coverage of a module's tests with the JaCoCo agent and reports it, failing the build where a limit is not met. |
 | [`japicmp`](plugins/japicmp/) | Compares the API of a module with a released baseline using japicmp. |
@@ -35,6 +36,7 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |
 | [`palantir`](plugins/palantir/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with Palantir Java Format. |
+| [`pitest`](plugins/pitest/) | Runs PIT mutation testing over the code a test module tests, reporting which mutants its tests kill. |
 | [`pmd`](plugins/pmd/) | Checks the Java sources of a module with PMD. |
 | [`protoc`](plugins/protoc/) | Generates Java sources from Protocol Buffers definitions (`.proto`). |
 | [`revapi`](plugins/revapi/) | Analyses the API of a module against a released baseline with revapi. |
