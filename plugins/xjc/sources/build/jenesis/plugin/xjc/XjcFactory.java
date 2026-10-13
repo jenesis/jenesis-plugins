@@ -24,8 +24,7 @@ public class XjcFactory implements BuildModuleFactory {
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             if (!KEYS.contains(entry.getKey())) {
                 throw new IllegalArgumentException("The XJC plugin takes no value " + entry.getKey()
-                        + ": name package, the package of the generated sources, or arguments, those handed to the"
-                        + " tool");
+                        + ": name package, the package of the generated sources, or arguments, those handed to the tool");
             }
             values.setProperty(entry.getKey(), entry.getValue());
         }

@@ -24,7 +24,9 @@ working *on* this repository.
 | `plugins/checkstyle/` | `build.jenesis.plugin.checkstyle` | Checkstyle, checking Java sources against a `checkstyle.xml`         |
 | `plugins/codenarc/`   | `build.jenesis.plugin.codenarc`   | CodeNarc, checking Groovy sources against a rule set                 |
 | `plugins/detekt/`     | `build.jenesis.plugin.detekt`     | detekt, checking Kotlin sources against a `detekt.yml`               |
+| `plugins/ktlint/`     | `build.jenesis.plugin.ktlint`     | ktlint, checking or formatting Kotlin sources (`@check`, `@format`)  |
 | `plugins/pmd/`        | `build.jenesis.plugin.pmd`        | PMD, checking Java sources against a `pmd.xml` rule set              |
+| `plugins/scalafmt/`   | `build.jenesis.plugin.scalafmt`   | scalafmt, checking or formatting Scala sources (`@check`, `@format`) |
 | `plugins/scalastyle/` | `build.jenesis.plugin.scalastyle` | Scalastyle, checking Scala sources against a `scalastyle-config.xml` |
 | `plugins/spotbugs/`   | `build.jenesis.plugin.spotbugs`   | SpotBugs, analysing compiled classes                                 |
 | `plugins/wsimport/`   | `build.jenesis.plugin.wsimport`   | wsimport, generating a web service client from WSDL descriptions     |
@@ -45,7 +47,8 @@ arguments=-visitor
 @grammars/antlr=../grammar
 ```
 
-A plugin resolves its tool in the group named after it - `antlr` above - so the tool is pinned as
+A plugin that offers more than one provider names each, and the line picks one, as
+`ktlint+check=build.jenesis.plugin.ktlint@check`. A plugin resolves its tool in the group named after it - `antlr` above - so the tool is pinned as
 `antlr/maven/…` beside the project's own pins.
 
 ## Layout

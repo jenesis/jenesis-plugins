@@ -51,6 +51,10 @@ files:
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.wsimport/{{projectVersion}}/build.jenesis.plugin.wsimport-{{projectVersion}}.pom'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.xjc/{{projectVersion}}/build.jenesis.plugin.xjc-{{projectVersion}}.jar'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.xjc/{{projectVersion}}/build.jenesis.plugin.xjc-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.ktlint/{{projectVersion}}/build.jenesis.plugin.ktlint-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.ktlint/{{projectVersion}}/build.jenesis.plugin.ktlint-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.scalafmt/{{projectVersion}}/build.jenesis.plugin.scalafmt-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.scalafmt/{{projectVersion}}/build.jenesis.plugin.scalafmt-{{projectVersion}}.pom'
 
 deploy:
   maven:
