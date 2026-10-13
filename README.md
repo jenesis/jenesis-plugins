@@ -24,6 +24,7 @@ working *on* this repository.
 | `plugins/checkstyle/` | `build.jenesis.plugin.checkstyle` | Checkstyle, checking Java sources against a `checkstyle.xml`         |
 | `plugins/codenarc/`   | `build.jenesis.plugin.codenarc`   | CodeNarc, checking Groovy sources against a rule set                 |
 | `plugins/detekt/`     | `build.jenesis.plugin.detekt`     | detekt, checking Kotlin sources against a `detekt.yml`               |
+| `plugins/japicmp/`    | `build.jenesis.plugin.japicmp`    | japicmp, comparing the API of a module with its released baseline    |
 | `plugins/ktlint/`     | `build.jenesis.plugin.ktlint`     | ktlint, checking or formatting Kotlin sources (`@check`, `@format`)  |
 | `plugins/openapi/`    | `build.jenesis.plugin.openapi`    | OpenAPI Generator, generating Java sources from a specification      |
 | `plugins/pmd/`        | `build.jenesis.plugin.pmd`        | PMD, checking Java sources against a `pmd.xml` rule set              |

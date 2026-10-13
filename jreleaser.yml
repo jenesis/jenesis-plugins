@@ -59,6 +59,8 @@ files:
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.openapi/{{projectVersion}}/build.jenesis.plugin.openapi-{{projectVersion}}.pom'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.protoc/{{projectVersion}}/build.jenesis.plugin.protoc-{{projectVersion}}.jar'
     - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.protoc/{{projectVersion}}/build.jenesis.plugin.protoc-{{projectVersion}}.pom'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.japicmp/{{projectVersion}}/build.jenesis.plugin.japicmp-{{projectVersion}}.jar'
+    - path: 'target/stage/maven/output/build/jenesis/build.jenesis.plugin.japicmp/{{projectVersion}}/build.jenesis.plugin.japicmp-{{projectVersion}}.pom'
 
 deploy:
   maven:
