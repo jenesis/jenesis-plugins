@@ -17,11 +17,11 @@ working *on* this repository.
 
 ## The plugins
 
-| Folder      | Module                          | Runs                                                    |
-|-------------|---------------------------------|---------------------------------------------------------|
-| `antlr/`    | `build.jenesis.plugin.antlr`    | ANTLR, generating a lexer and parser from `.g4` grammars |
-| `pmd/`      | `build.jenesis.plugin.pmd`      | PMD, checking Java sources against a `pmd.xml` rule set  |
-| `spotbugs/` | `build.jenesis.plugin.spotbugs` | SpotBugs, analysing compiled classes                     |
+| Folder              | Module                          | Runs                                                     |
+|---------------------|---------------------------------|----------------------------------------------------------|
+| `plugins/antlr/`    | `build.jenesis.plugin.antlr`    | ANTLR, generating a lexer and parser from `.g4` grammars |
+| `plugins/pmd/`      | `build.jenesis.plugin.pmd`      | PMD, checking Java sources against a `pmd.xml` rule set  |
+| `plugins/spotbugs/` | `build.jenesis.plugin.spotbugs` | SpotBugs, analysing compiled classes                     |
 
 Each is published as `build.jenesis:<module>` and, once named in a project, resolved by the build tool like
 any other plugin:
@@ -43,8 +43,8 @@ A plugin resolves its tool in the group named after it - `antlr` above - so the 
 
 ## Layout
 
-One folder per plugin, each with `sources/` (the plugin module) and `tests/` (its `@jenesis.test` module).
-The build tool is the `build/.upstream` git submodule, and `build/jenesis` links into it:
+One folder per plugin under `plugins/`, each with `sources/` (the plugin module) and `tests/` (its
+`@jenesis.test` module). The build tool is the `build/.upstream` git submodule, and `build/jenesis` links into it:
 
 ```bash
 git submodule update --init --depth 1

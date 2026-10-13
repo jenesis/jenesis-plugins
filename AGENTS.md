@@ -1,8 +1,8 @@
 # AGENTS.md
 
-The plugins of the Jenesis build tool that run a tool the build has to download anyway: one folder per plugin,
-each a module that provides a `build.jenesis.BuildModuleFactory`. `README.md` covers the plugins, the layout and
-releasing. The build tool's own `AGENTS.md` (under `build/.upstream`) states how its code is written, and every
+The plugins of the Jenesis build tool that run a tool the build has to download anyway: one folder per plugin
+under `plugins/`, each a module that provides a `build.jenesis.BuildModuleFactory`. `README.md` covers the
+plugins, the layout and releasing. The build tool's own `AGENTS.md` (under `build/.upstream`) states how its code is written, and every
 rule there applies here as well; this file adds what is particular to the plugins.
 
 ## Build & test
@@ -17,9 +17,9 @@ rule there applies here as well; this file adds what is particular to the plugin
 
 ## How a plugin is written
 
-- A plugin is `<tool>/sources/module-info.java`, module `build.jenesis.plugin.<tool>`, which `requires
+- A plugin is `plugins/<tool>/sources/module-info.java`, module `build.jenesis.plugin.<tool>`, which `requires
   build.jenesis`, exports its package and `provides build.jenesis.BuildModuleFactory`. Its tests are
-  `<tool>/tests/`, the `@jenesis.test build.jenesis.plugin.<tool>` module.
+  `plugins/<tool>/tests/`, the `@jenesis.test build.jenesis.plugin.<tool>` module.
 - The module is the build tool's module of the same tool, moved: the same steps, the same folder conventions,
   the same settings. Its `ofEnvironment` reads every setting, its pinning included, from the `Environment` it
   is given, and every setting is a wither of its own.
