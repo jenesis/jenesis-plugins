@@ -1,0 +1,30 @@
+target/
+*.hprof
+# Everything the tool writes: the resolved artifacts, the caches, the compiled
+# engine and its stamp. Nothing tracked lives here - the vendored engine is the
+# build/.upstream submodule - so the whole folder is safe to delete.
+.jenesis/
+
+### IntelliJ IDEA ###
+.idea/*
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### Agent specification ###
+.claude/
