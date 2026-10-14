@@ -131,6 +131,9 @@ public class KotlinCompilerModuleRunTest {
                 .as("the overlay is compiled for its own release")
                 .isEqualTo(61);
         assertThat(classes.resolveSibling("manifest.mf")).content().contains("Multi-Release: true");
+        assertThat(classes.resolve("META-INF/versions/17/META-INF"))
+                .as("Kotlin reads a module's mapping from the root of the jar alone, so an overlay carries none")
+                .doesNotExist();
     }
 
     @Test
@@ -307,6 +310,9 @@ public class KotlinCompilerModuleRunTest {
                 .as("the overlay is compiled for its own release")
                 .isEqualTo(61);
         assertThat(classes.resolveSibling("manifest.mf")).content().contains("Multi-Release: true");
+        assertThat(classes.resolve("META-INF/versions/17/META-INF"))
+                .as("Kotlin reads a module's mapping from the root of the jar alone, so an overlay carries none")
+                .doesNotExist();
         assertThat(root.resolve("kotlin/compiled/supplement/command-17"))
                 .as("the overlay is compiled in the Kotlin daemon rather than in a JVM of its own")
                 .content()

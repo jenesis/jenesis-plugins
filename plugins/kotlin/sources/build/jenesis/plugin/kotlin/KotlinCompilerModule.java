@@ -404,6 +404,19 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                                     + tail("Output", output)
                                     + tail("Error", error));
                         }
+                        Path metadata = target.resolve("META-INF");
+                        if (Files.isDirectory(metadata)) {
+                            try (DirectoryStream<Path> modules = Files.newDirectoryStream(metadata, "*.kotlin_module")) {
+                                for (Path module : modules) {
+                                    Files.delete(module);
+                                }
+                            }
+                            try (Stream<Path> remaining = Files.list(metadata)) {
+                                if (remaining.findAny().isEmpty()) {
+                                    Files.delete(metadata);
+                                }
+                            }
+                        }
                         return CompletableFuture.<Void>completedFuture(null);
                     } catch (IOException | InterruptedException e) {
                         return CompletableFuture.<Void>failedFuture(e);
