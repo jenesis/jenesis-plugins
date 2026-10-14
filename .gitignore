@@ -1,4 +1,5 @@
 target/
+target-*/
 *.hprof
 # Everything the tool writes: the resolved artifacts, the caches, the compiled
 # engine and its stamp. Nothing tracked lives here - the vendored engine is the
