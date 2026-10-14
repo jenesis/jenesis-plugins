@@ -33,5 +33,7 @@ configuration, named in camel case after a `jenesis` prefix: `{{ jenesisStageMav
 `target/stage/maven/output`. A `JRELEASER_*` value, the version among them, is handed to JReleaser
 as its settings file, which then stands in for `~/.jreleaser/config.properties`; JReleaser still reads its `JRELEASER_*`
 environment variables. Its output lands in the step's own folder, never in the project.
-JReleaser resolves in the group named after the plugin, `jreleaser/…`, and `pin` pins it in
-`jenesis.plugins.pin.properties`.
+JReleaser resolves in the group named after the plugin, `jreleaser/…`, and only when the project releases, so `pin`
+does not resolve it. A line `jreleaser/maven/org.jreleaser/jreleaser-tool-provider=<version> SHA-256/<hex>` in
+`jenesis.plugins.pin.properties` pins it, with the SHA-256 of the jar a release resolved, and `pin` keeps that line
+when it rewrites the file.
