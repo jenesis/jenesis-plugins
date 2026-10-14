@@ -34,7 +34,7 @@ public class KspModule implements BuildExecutorModule {
                      Map<String, Resolver> resolvers) {
         this(new Dependencies(repositories, resolvers),
              null,
-             "ksp-runtime",
+             "ksp:runtime",
              "ksp",
              "main",
              Collections.emptyNavigableMap(),
@@ -46,7 +46,7 @@ public class KspModule implements BuildExecutorModule {
                                           Map<String, Resolver> resolvers) {
         return new KspModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
-                "ksp-runtime",
+                "ksp:runtime",
                 "ksp",
                 "main",
                 Collections.emptyNavigableMap(),

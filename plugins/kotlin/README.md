@@ -43,4 +43,4 @@ for release `<N>`, and lets the tests of a module see its `internal` declaration
 `process-kotlinc.properties` reach kotlinc, a `-J` line its JVM, and the build places the resources of the module.
 `-Djenesis.kotlin.incremental=true` compiles incrementally through the Kotlin Build Tools API of Kotlin 2.3 or newer,
 in a JVM the build keeps warm for the next compilation, which a `-J` line configures. The compiler resolves in the group named after the plugin, `kotlin/…`, and Dokka, which runs on a
-Kotlin of its own, in `kotlin-dokka/…`.
+Kotlin of its own, in `kotlin:dokka/…`.

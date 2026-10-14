@@ -31,7 +31,7 @@ public class ScalaLanguageRunTest {
 
     @Test
     public void compiles_scala_before_javac_and_documents_it_beside_java() throws IOException {
-        ScalaPins.write(project, "scala", "scala-zinc", "scala-scaladoc");
+        ScalaPins.write(project, "scala", "scala:zinc", "scala:scaladoc");
         Path sample = Files.createDirectories(project.resolve(BuildStep.SOURCES + "sample"));
         Files.writeString(sample.resolve("Greeter.java"), """
                 package sample;

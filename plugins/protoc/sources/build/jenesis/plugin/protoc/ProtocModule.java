@@ -145,7 +145,7 @@ public class ProtocModule implements BuildExecutorModule {
         for (String plugin : plugins.keySet()) {
             String step = DEPENDENCIES + "-" + plugin;
             buildExecutor.addModule(step,
-                    dependencies.pinning(pinning).group(tool + "-" + plugin),
+                    dependencies.pinning(pinning).group(tool + ":" + plugin),
                     resolveInputs);
             generateInputs.add(step);
         }
@@ -174,7 +174,7 @@ public class ProtocModule implements BuildExecutorModule {
                     + "/exe/" + classifier
                     + "/RELEASE", "");
             plugins.forEach((plugin, coordinate) -> requires.setProperty(tool
-                    + "-" + plugin
+                    + ":" + plugin
                     + "/runtime/maven/" + coordinate
                     + "/exe/" + classifier
                     + "/RELEASE", ""));
@@ -224,7 +224,7 @@ public class ProtocModule implements BuildExecutorModule {
                     executable = resolved;
                 }
                 for (String plugin : plugins) {
-                    for (Path resolved : Dependencies.select(input.folder(), tool + "-" + plugin, "runtime")) {
+                    for (Path resolved : Dependencies.select(input.folder(), tool + ":" + plugin, "runtime")) {
                         Path previous = located.putIfAbsent(plugin, resolved);
                         if (previous != null) {
                             throw new IllegalStateException("Resolved more than one executable for protoc plugin "

@@ -97,11 +97,11 @@ public class KspExampleTest {
                                 </dependency>
                             </dependencies>
                             <!--jenesis.pin
-                            ksp-runtime/maven/com.google.devtools.ksp/symbol-processing-aa-embeddable 2.3.12 SHA-256/862f0042fc2467cdcf7752e15880f97396a29e2469741dc6453f37584f1b4c69
-                            ksp-runtime/maven/com.google.devtools.ksp/symbol-processing-api 2.3.12 SHA-256/fc7d11cea3bcd873589c8914ad6320bdc877bce14cc7c2f717394646af56bd37
-                            ksp-runtime/maven/com.google.devtools.ksp/symbol-processing-common-deps 2.3.12 SHA-256/30510a4364e02880ce2fbf0c4f0ef564dead3818eef4fc0500cbcee23fc362af
-                            ksp-runtime/maven/org.jetbrains.kotlin/kotlin-stdlib 2.3.20 SHA-256/0ae12504a5040ebaf37703908483420d1a5624dd1d93f357665f8c77c848a01e
-                            ksp-runtime/maven/org.jetbrains/annotations 13.0 SHA-256/ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478
+                            ksp:runtime/maven/com.google.devtools.ksp/symbol-processing-aa-embeddable 2.3.12 SHA-256/862f0042fc2467cdcf7752e15880f97396a29e2469741dc6453f37584f1b4c69
+                            ksp:runtime/maven/com.google.devtools.ksp/symbol-processing-api 2.3.12 SHA-256/fc7d11cea3bcd873589c8914ad6320bdc877bce14cc7c2f717394646af56bd37
+                            ksp:runtime/maven/com.google.devtools.ksp/symbol-processing-common-deps 2.3.12 SHA-256/30510a4364e02880ce2fbf0c4f0ef564dead3818eef4fc0500cbcee23fc362af
+                            ksp:runtime/maven/org.jetbrains.kotlin/kotlin-stdlib 2.3.20 SHA-256/0ae12504a5040ebaf37703908483420d1a5624dd1d93f357665f8c77c848a01e
+                            ksp:runtime/maven/org.jetbrains/annotations 13.0 SHA-256/ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478
                             ksp/maven/com.google.auto.service/auto-service-annotations 1.0 SHA-256/44752893119fdaf01b4c5ee74e46e5dab86f2dcda18114c562f877355c6ed26e
                             ksp/maven/com.google.code.findbugs/jsr305 3.0.2 SHA-256/766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7
                             ksp/maven/com.google.errorprone/error_prone_annotations 2.5.1 SHA-256/ff80626baaf12a09342befd4e84cba9d50662f5fcd7f7a9b3490a6b7cf87e66c

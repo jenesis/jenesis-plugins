@@ -30,6 +30,12 @@ rule there applies here as well; this file adds what is particular to the plugin
   permits it was handed (`permits(permits)`), so the tool runs within the loading build's limit of concurrent
   processes, and the group it was handed (`tool(group)`), so the tool is resolved and pinned where the loading
   build says. It resolves the tool with the repositories and resolvers it was handed, never with its own.
+- Everything a plugin resolves is pinned under the group it was handed. A plugin that resolves more than its tool,
+  in a group of its own so that two closures do not negotiate one version, names that group `<group>:<purpose>` -
+  `kotlin:dokka`, `scala:zinc`, `protoc:grpc-java` - so its pins sort with the plugin's and no name of a group can
+  be taken by another plugin. A hyphen never joins them, as a plugin may be named `kotlin-dokka` itself. A
+  `.properties` file is a key with a `:` escaped, `kotlin\:dokka/maven/…`, as `pin` writes it, so a test that writes
+  its pins by hand escapes it too.
 - A value of `plugin-<name>.properties` the plugin does not take is refused with an
   `IllegalArgumentException` that names it and what would be valid; a plugin configured by settings alone
   takes no values. A value arrives resolved, and never as a path: a file the plugin reads is one the project binds

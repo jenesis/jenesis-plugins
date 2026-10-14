@@ -26,9 +26,9 @@ public class ScalaFactory implements LanguageFactory {
                 ScalaCompilerModule.ofEnvironment(environment, repositories, resolvers)
                         .permits(permits)
                         .tool(group)
-                        .zinc(group + "-zinc"),
+                        .zinc(group + ":zinc"),
                 ScalaDocumentationModule.ofEnvironment(environment, repositories, resolvers)
                         .permits(permits)
-                        .tool(group + "-scaladoc"));
+                        .tool(group + ":scaladoc"));
     }
 }

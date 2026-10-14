@@ -54,14 +54,14 @@ public class ScalaFactoryTest {
         assertThat(required(create(new Environment(Map.of("scala.incremental", "true")), Map.of()).compiler()))
                 .containsExactlyInAnyOrder("language/runtime/maven/org.scala-lang/scala3-compiler_3/RELEASE",
                         "language/runtime/maven/org.scala-lang/scala3-sbt-bridge/RELEASE",
-                        "language-zinc/runtime/maven/org.scala-sbt/zinc_2.13/RELEASE");
+                        "language:zinc/runtime/maven/org.scala-sbt/zinc_2.13/RELEASE");
     }
 
     @Test
     public void resolves_scaladoc_in_a_group_beside_the_compiler() throws IOException {
         assertThat(required(create(Environment.NONE, Map.of()).documentation()))
                 .as("Scaladoc follows a Scala release of its own, so it is pinned apart from the compiler")
-                .contains("language-scaladoc/runtime/maven/org.scala-lang/scaladoc_3/RELEASE");
+                .contains("language:scaladoc/runtime/maven/org.scala-lang/scaladoc_3/RELEASE");
     }
 
     private static Language create(Environment environment, Map<String, String> values) throws IOException {

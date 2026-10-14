@@ -24,4 +24,4 @@ The compiler reads the `.scala` sources and, for their symbols, the `.java` sour
 
 It reads nothing a project binds. The compiler resolves as `org.scala-lang:scala3-compiler_3` in the group named
 after the plugin, `scala/…`, with its `scala3-sbt-bridge` there too when compiling incrementally, Zinc as
-`org.scala-sbt:zinc_2.13` in `scala-zinc/…`, and Scaladoc as `org.scala-lang:scaladoc_3` in `scala-scaladoc/…`.
+`org.scala-sbt:zinc_2.13` in `scala:zinc/…`, and Scaladoc as `org.scala-lang:scaladoc_3` in `scala:scaladoc/…`.

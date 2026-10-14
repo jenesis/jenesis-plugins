@@ -71,7 +71,7 @@ public class KotlinFactory implements LanguageFactory {
                         repositories,
                         resolvers)
                 .permits(permits)
-                .tool(group + "-dokka");
+                .tool(group + ":dokka");
         String moduleName = values.value(MODULE_NAME);
         if (moduleName != null) {
             documentation = documentation.moduleName(moduleName);

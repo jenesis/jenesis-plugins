@@ -130,9 +130,9 @@ final class ScalaPins {
 
     static void write(Path folder, String compiler, String zinc, String scaladoc) throws IOException {
         SequencedProperties versions = new SequencedProperties();
-        versions.load(new StringReader(COMPILER.replaceAll("(?m)^scalac/", compiler + "/")
-                + ZINC.replaceAll("(?m)^zinc/", zinc + "/")
-                + SCALADOC.replaceAll("(?m)^scaladoc/", scaladoc + "/")));
+        versions.load(new StringReader(COMPILER.replaceAll("(?m)^scalac/", Matcher.quoteReplacement(compiler.replace(":", "\\:") + "/"))
+                + ZINC.replaceAll("(?m)^zinc/", Matcher.quoteReplacement(zinc.replace(":", "\\:") + "/"))
+                + SCALADOC.replaceAll("(?m)^scaladoc/", Matcher.quoteReplacement(scaladoc.replace(":", "\\:") + "/"))));
         versions.store(folder.resolve(BuildStep.VERSIONS));
     }
 }

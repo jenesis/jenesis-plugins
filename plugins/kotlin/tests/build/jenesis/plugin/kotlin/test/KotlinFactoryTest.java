@@ -53,7 +53,7 @@ public class KotlinFactoryTest {
                 .containsExactly("kotlin/runtime/maven/org.jetbrains.kotlin/kotlin-compiler-embeddable/RELEASE");
         assertThat(required(language.documentation(), "dokka", "dokka"))
                 .as("Dokka runs on a Kotlin of its own, so it is pinned apart from the compiler")
-                .contains("kotlin-dokka/runtime/maven/org.jetbrains.dokka/dokka-cli/RELEASE");
+                .contains("kotlin:dokka/runtime/maven/org.jetbrains.dokka/dokka-cli/RELEASE");
     }
 
     @Test

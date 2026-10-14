@@ -45,6 +45,6 @@ public class KspFactoryTest {
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
                 .as("KSP resolves apart from the processors, which bring a Kotlin standard library of their own")
-                .containsExactly("symbols-runtime/runtime/maven/com.google.devtools.ksp/symbol-processing-aa-embeddable/RELEASE");
+                .containsExactly("symbols:runtime/runtime/maven/com.google.devtools.ksp/symbol-processing-aa-embeddable/RELEASE");
     }
 }

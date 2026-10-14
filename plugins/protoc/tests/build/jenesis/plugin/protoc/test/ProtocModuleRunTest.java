@@ -25,11 +25,11 @@ public class ProtocModuleRunTest {
             protoc/maven/com.google.protobuf/protoc/exe/osx-x86_64 4.32.1 SHA-256/58671447f9b871f4832108bad560c9fae3e32e0484bb24febcb15e67da15dc4d
             protoc/maven/com.google.protobuf/protoc/exe/osx-aarch_64 4.32.1 SHA-256/e3b836d8497998d009a7aabd1e6171d8f8cdcd5052f8c4b874a873c21fa6b1c2
             protoc/maven/com.google.protobuf/protoc/exe/windows-x86_64 4.32.1 SHA-256/cd1136e75dab5bab146c981736f3cb8c4ac98b717a0f4fbc0a65a82f6c883b16
-            protoc-grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/linux-x86_64 1.83.1 SHA-256/db4044e78391d5a23439143c8147f07ba5877675587b4d48f3b68fbee3893589
-            protoc-grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/linux-aarch_64 1.83.1 SHA-256/5af5544369bd8557111abfbed21453bb6fa867bf32a25f2ffe5f72366e705cef
-            protoc-grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/osx-x86_64 1.83.1 SHA-256/372e13b25cb058ea6e3ab6cb54ba1458d5d2bbe1cfdcd37bc57e82b872656e21
-            protoc-grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/osx-aarch_64 1.83.1 SHA-256/372e13b25cb058ea6e3ab6cb54ba1458d5d2bbe1cfdcd37bc57e82b872656e21
-            protoc-grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/windows-x86_64 1.83.1 SHA-256/f4654b0b8e1faedf897f4abcd754c5250cb48afe07d595e56efc9fb478736c73
+            protoc\\:grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/linux-x86_64 1.83.1 SHA-256/db4044e78391d5a23439143c8147f07ba5877675587b4d48f3b68fbee3893589
+            protoc\\:grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/linux-aarch_64 1.83.1 SHA-256/5af5544369bd8557111abfbed21453bb6fa867bf32a25f2ffe5f72366e705cef
+            protoc\\:grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/osx-x86_64 1.83.1 SHA-256/372e13b25cb058ea6e3ab6cb54ba1458d5d2bbe1cfdcd37bc57e82b872656e21
+            protoc\\:grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/osx-aarch_64 1.83.1 SHA-256/372e13b25cb058ea6e3ab6cb54ba1458d5d2bbe1cfdcd37bc57e82b872656e21
+            protoc\\:grpc-java/maven/io.grpc/protoc-gen-grpc-java/exe/windows-x86_64 1.83.1 SHA-256/f4654b0b8e1faedf897f4abcd754c5250cb48afe07d595e56efc9fb478736c73
             """;
     private static final String GRPC_VERSION = "1.83.1";
     private static final String DEFINITION = """
