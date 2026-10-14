@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -85,7 +86,7 @@ public class XjcModule implements BuildExecutorModule {
         return new XjcModule(dependencies, pinning, tool, packageName, arguments, terms.printing(printing));
     }
 
-    public XjcModule permits(Semaphore permits) {
+    public XjcModule permits(Permits permits) {
         return new XjcModule(dependencies, pinning, tool, packageName, arguments, terms.permits(permits));
     }
 

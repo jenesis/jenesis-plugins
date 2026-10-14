@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -84,7 +85,7 @@ public class ScalafmtFormatModule implements BuildExecutorModule {
         return new ScalafmtFormatModule(dependencies, pinning, group, configFile, verify, terms.printing(printing));
     }
 
-    public ScalafmtFormatModule permits(Semaphore permits) {
+    public ScalafmtFormatModule permits(Permits permits) {
         return new ScalafmtFormatModule(dependencies, pinning, group, configFile, verify, terms.permits(permits));
     }
 

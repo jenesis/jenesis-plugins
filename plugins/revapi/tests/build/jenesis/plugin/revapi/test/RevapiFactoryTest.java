@@ -10,6 +10,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.revapi.RevapiFactory;
 
@@ -69,7 +70,7 @@ public class RevapiFactoryTest {
     private BuildExecutorModule create(Map<String, String> values, String group) {
         return new RevapiFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 group,
                 Map.of(),
                 Map.of());
@@ -89,7 +90,7 @@ public class RevapiFactoryTest {
         executor.addSource("project", project);
         executor.addModule("revapi", new RevapiFactory().create(new Environment(Map.of("artifact.revapi", "ignore")),
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "revapi",
                 Map.of(),
                 Map.of()), "project");

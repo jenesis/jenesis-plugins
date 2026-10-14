@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.checkstyle.CheckstyleFactory;
 
@@ -34,7 +35,7 @@ public class CheckstyleFactoryTest {
         executor.addSource("project", project);
         executor.addModule("checkstyle", new CheckstyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "quality",
                 Map.of(),
                 Map.of()), "project");
@@ -53,7 +54,7 @@ public class CheckstyleFactoryTest {
     public void takes_its_values_as_the_properties_the_configuration_expands() {
         assertThat(new CheckstyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("checkstyle.severity", "warning")),
-                new Semaphore(1),
+                Permits.of(1),
                 "checkstyle",
                 Map.of(),
                 Map.of())).isNotNull();
@@ -63,7 +64,7 @@ public class CheckstyleFactoryTest {
     public void refuses_a_value_for_config_loc_which_the_build_sets() {
         assertThatThrownBy(() -> new CheckstyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("config_loc", "elsewhere")),
-                new Semaphore(1),
+                Permits.of(1),
                 "checkstyle",
                 Map.of(),
                 Map.of()))
@@ -85,7 +86,7 @@ public class CheckstyleFactoryTest {
         executor.addSource("project", project);
         executor.addModule("checkstyle", new CheckstyleFactory().create(new Environment(Map.of("source.checkstyle", "ignore")),
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "checkstyle",
                 Map.of(),
                 Map.of()), "project");

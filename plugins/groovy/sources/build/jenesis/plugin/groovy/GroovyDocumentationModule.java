@@ -7,6 +7,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -107,7 +108,7 @@ public class GroovyDocumentationModule implements BuildExecutorModule {
         return new GroovyDocumentationModule(resolvers, dependencies, pinning, tool, group, includeJava, timestamped, factory, terms.printing(printing));
     }
 
-    public GroovyDocumentationModule permits(Semaphore permits) {
+    public GroovyDocumentationModule permits(Permits permits) {
         return new GroovyDocumentationModule(resolvers, dependencies, pinning, tool, group, includeJava, timestamped, factory, terms.permits(permits));
     }
 

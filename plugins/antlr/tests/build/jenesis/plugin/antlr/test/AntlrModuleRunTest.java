@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.SequencedProperties;
 import build.jenesis.maven.MavenDefaultRepository;
@@ -108,7 +109,7 @@ public class AntlrModuleRunTest {
         executor.addModule("antlr",
                 new AntlrFactory().create(new Environment(Map.of("dependency.pin", "strict")),
                         values,
-                        new Semaphore(1),
+                        Permits.of(1),
                         "antlr",
                         Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
                         Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))),
@@ -124,7 +125,7 @@ public class AntlrModuleRunTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new AntlrFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("visitor", "true")),
-                new Semaphore(1),
+                Permits.of(1),
                 "antlr",
                 Map.of(),
                 Map.of()))

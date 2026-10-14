@@ -4,6 +4,7 @@ import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.Environment;
 import build.jenesis.Observation;
+import build.jenesis.Permits;
 import build.jenesis.plugin.jacoco.JaCoCo;
 import build.jenesis.plugin.jacoco.JaCoCoFactory;
 
@@ -46,7 +47,7 @@ public class JaCoCoFactoryTest {
     private static Observation create(Map<String, String> values) throws IOException {
         return new JaCoCoFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "coverage",
                 Map.of(),
                 Map.of());

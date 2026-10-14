@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.spotbugs.SpotBugsFactory;
 import build.jenesis.plugin.spotbugs.SpotBugsModule;
@@ -38,7 +39,7 @@ public class SpotBugsModuleTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new SpotBugsFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("effort", "max")),
-                new Semaphore(1),
+                Permits.of(1),
                 "spotbugs",
                 Map.of(),
                 Map.of()))
@@ -53,7 +54,7 @@ public class SpotBugsModuleTest {
         executor.addSource("project", project);
         executor.addModule("spotbugs", new SpotBugsFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "quality",
                 Map.of(),
                 Map.of()), "project");

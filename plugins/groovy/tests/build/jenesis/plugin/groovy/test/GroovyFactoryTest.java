@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.groovy.GroovyCompilerModule;
@@ -88,7 +89,7 @@ public class GroovyFactoryTest {
     private static Language create(Map<String, String> values, Map<String, Resolver> resolvers) throws IOException {
         return new GroovyFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "lang",
                 Map.of(),
                 resolvers);

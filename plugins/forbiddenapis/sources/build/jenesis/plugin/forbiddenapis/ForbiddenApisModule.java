@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -183,7 +184,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                 terms.printing(printing));
     }
 
-    public ForbiddenApisModule permits(Semaphore permits) {
+    public ForbiddenApisModule permits(Permits permits) {
         return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
                 includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses,
                 terms.permits(permits));

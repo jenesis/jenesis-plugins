@@ -11,6 +11,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.RepositoryItem;
 import build.jenesis.Resolver;
@@ -131,7 +132,7 @@ public class PiTestFactoryTest {
                                               Map<String, Resolver> resolvers) {
         return new PiTestFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 group,
                 repositories,
                 resolvers);

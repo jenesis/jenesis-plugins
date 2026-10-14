@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -75,7 +76,7 @@ public class KtlintFormatModule implements BuildExecutorModule {
         return new KtlintFormatModule(dependencies, pinning, group, verify, terms.printing(printing));
     }
 
-    public KtlintFormatModule permits(Semaphore permits) {
+    public KtlintFormatModule permits(Permits permits) {
         return new KtlintFormatModule(dependencies, pinning, group, verify, terms.permits(permits));
     }
 

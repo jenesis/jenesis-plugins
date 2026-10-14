@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -112,7 +113,7 @@ public class KspModuleRunTest {
         executor.addModule("ksp",
                 new KspFactory().create(new Environment(Map.of("dependency.pin", "strict")),
                         values,
-                        new Semaphore(1),
+                        Permits.of(1),
                         "ksp",
                         REPOSITORIES,
                         RESOLVERS),

@@ -11,6 +11,7 @@ import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
 import build.jenesis.Json;
+import build.jenesis.Permits;
 import build.jenesis.RepositoryItem;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
@@ -144,7 +145,7 @@ public class KotlinFactoryTest {
         Path jar = Files.exists(root.resolve("tool.jar")) ? root.resolve("tool.jar") : Files.createFile(root.resolve("tool.jar"));
         return new KotlinFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "kotlin",
                 Map.of("maven", (_, _, _) -> Optional.of(RepositoryItem.ofFile(jar))),
                 Map.of("maven", Resolver.identity()));

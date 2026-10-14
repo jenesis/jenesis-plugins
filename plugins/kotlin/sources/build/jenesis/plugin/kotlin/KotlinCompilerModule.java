@@ -9,6 +9,7 @@ import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
 import build.jenesis.PathPlacement;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -121,7 +122,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
         return new KotlinCompilerModule(resolvers, dependencies, pinning, includeResources, incremental, tool, group, factory, terms.printing(printing));
     }
 
-    public KotlinCompilerModule permits(Semaphore permits) {
+    public KotlinCompilerModule permits(Permits permits) {
         return new KotlinCompilerModule(resolvers, dependencies, pinning, includeResources, incremental, tool, group, factory, terms.permits(permits));
     }
 

@@ -11,6 +11,7 @@ import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
 import build.jenesis.Observation;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.maven.MavenDefaultRepository;
@@ -60,7 +61,7 @@ public class ScalaLanguageRunTest {
         Map<String, Resolver> resolvers = Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE));
         Language language = new ScalaFactory().create(new Environment(Map.of("dependency.pin", "strict")),
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "scala",
                 repositories,
                 resolvers);

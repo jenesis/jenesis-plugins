@@ -10,6 +10,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.scala.ScalaFactory;
@@ -67,7 +68,7 @@ public class ScalaFactoryTest {
     private static Language create(Environment environment, Map<String, String> values) throws IOException {
         return new ScalaFactory().create(environment,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "language",
                 Map.of(),
                 Map.of("maven", (_, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(),

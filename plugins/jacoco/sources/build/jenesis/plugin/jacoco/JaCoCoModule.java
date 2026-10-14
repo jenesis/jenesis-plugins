@@ -9,6 +9,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -119,7 +120,7 @@ public class JaCoCoModule implements BuildExecutorModule {
         return new JaCoCoModule(dependencies, pinning, tool, classes, minimum, maximumMissed, terms.printing(printing));
     }
 
-    public JaCoCoModule permits(Semaphore permits) {
+    public JaCoCoModule permits(Permits permits) {
         return new JaCoCoModule(dependencies, pinning, tool, classes, minimum, maximumMissed, terms.permits(permits));
     }
 

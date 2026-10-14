@@ -5,6 +5,7 @@ import module org.junit.jupiter.api;
 import build.jenesis.BuildExecutor;
 import build.jenesis.BuildExecutorModule;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Resolver;
 import build.jenesis.plugin.jreleaser.JReleaserFactory;
 
@@ -20,7 +21,7 @@ public class JReleaserFactoryTest {
     public void runs_the_command_and_settings_it_is_handed_for_real_when_the_release_publishes() throws IOException {
         BuildExecutorModule module = new JReleaserFactory().create(new Environment(Map.of("release.publish", "true")),
                 new LinkedHashMap<>(Map.of("command", "deploy", "JRELEASER_GITHUB_TOKEN", "secret")),
-                new Semaphore(1),
+                Permits.of(1),
                 "plugin-jreleaser",
                 Map.of("maven", FakeTool.of(tool).repository()),
                 Map.of("maven", Resolver.identity()));
@@ -58,7 +59,7 @@ public class JReleaserFactoryTest {
     private static BuildExecutorModule create(Map<String, String> values) {
         return new JReleaserFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "plugin-jreleaser",
                 Map.of(),
                 Map.of());

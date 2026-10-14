@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -30,7 +31,7 @@ public class JReleaserModule implements BuildExecutorModule {
     private final String command;
     private final boolean publish;
     private final SequencedMap<String, String> settings;
-    private final Semaphore permits;
+    private final Permits permits;
     private final Consumer<String> out;
     private final Consumer<String> err;
 
@@ -67,7 +68,7 @@ public class JReleaserModule implements BuildExecutorModule {
                             String command,
                             boolean publish,
                             SequencedMap<String, String> settings,
-                            Semaphore permits,
+                            Permits permits,
                             Consumer<String> out,
                             Consumer<String> err) {
         this.dependencies = dependencies;
@@ -112,7 +113,7 @@ public class JReleaserModule implements BuildExecutorModule {
                 Collections.unmodifiableSequencedMap(new LinkedHashMap<>(settings)), permits, out, err);
     }
 
-    public JReleaserModule permits(Semaphore permits) {
+    public JReleaserModule permits(Permits permits) {
         return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
@@ -159,7 +160,7 @@ public class JReleaserModule implements BuildExecutorModule {
         private final String command;
         private final boolean publish;
         private final LinkedHashMap<String, String> settings;
-        private final transient Semaphore permits;
+        private final transient Permits permits;
         private final transient Consumer<String> out;
         private final transient Consumer<String> err;
 
@@ -167,7 +168,7 @@ public class JReleaserModule implements BuildExecutorModule {
                         String command,
                         boolean publish,
                         LinkedHashMap<String, String> settings,
-                        Semaphore permits,
+                        Permits permits,
                         Consumer<String> out,
                         Consumer<String> err) {
             this.tool = tool;
@@ -282,7 +283,12 @@ public class JReleaserModule implements BuildExecutorModule {
                 Thread thread = Thread.currentThread();
                 ClassLoader previous = thread.getContextClassLoader();
                 if (permits != null) {
-                    permits.acquireUninterruptibly();
+                    try {
+                        permits.acquire();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        throw new InterruptedIOException("Interrupted while waiting to run JReleaser");
+                    }
                 }
                 thread.setContextClassLoader(loader);
                 try {

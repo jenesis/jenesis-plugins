@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -93,7 +94,7 @@ public class KspModule implements BuildExecutorModule {
         return new KspModule(dependencies, pinning, tool, processors, group, options, terms.printing(printing));
     }
 
-    public KspModule permits(Semaphore permits) {
+    public KspModule permits(Permits permits) {
         return new KspModule(dependencies, pinning, tool, processors, group, options, terms.permits(permits));
     }
 

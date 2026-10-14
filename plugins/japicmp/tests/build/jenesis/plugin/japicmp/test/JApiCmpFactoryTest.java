@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.japicmp.JApiCmpFactory;
 
@@ -62,7 +63,7 @@ public class JApiCmpFactoryTest {
     private build.jenesis.BuildExecutorModule create(Map<String, String> values, String group) {
         return new JApiCmpFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 group,
                 Map.of(),
                 Map.of());

@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.scalastyle.ScalastyleFactory;
 
@@ -34,7 +35,7 @@ public class ScalastyleFactoryTest {
         executor.addSource("project", project);
         executor.addModule("scalastyle", new ScalastyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "quality",
                 Map.of(),
                 Map.of()), "project");
@@ -53,7 +54,7 @@ public class ScalastyleFactoryTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new ScalastyleFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                new Semaphore(1),
+                Permits.of(1),
                 "scalastyle",
                 Map.of(),
                 Map.of()))
@@ -75,7 +76,7 @@ public class ScalastyleFactoryTest {
         executor.addSource("project", project);
         executor.addModule("scalastyle", new ScalastyleFactory().create(new Environment(Map.of("source.scalastyle", "ignore")),
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "scalastyle",
                 Map.of(),
                 Map.of()), "project");

@@ -2,6 +2,7 @@ package build.jenesis.plugin.scala;
 
 import module java.base;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.project.Language;
@@ -12,7 +13,7 @@ public class ScalaFactory implements LanguageFactory {
     @Override
     public Language create(Environment environment,
                            SequencedMap<String, String> properties,
-                           Semaphore permits,
+                           Permits permits,
                            String group,
                            Map<String, Repository> repositories,
                            Map<String, Resolver> resolvers) {

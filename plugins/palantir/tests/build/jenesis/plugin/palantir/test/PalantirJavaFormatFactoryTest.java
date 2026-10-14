@@ -10,6 +10,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.palantir.PalantirJavaFormatFactory;
 
@@ -77,7 +78,7 @@ public class PalantirJavaFormatFactoryTest {
     private static BuildExecutorModule create(Map<String, String> values) {
         return new PalantirJavaFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "quality",
                 Map.of(),
                 Map.of());

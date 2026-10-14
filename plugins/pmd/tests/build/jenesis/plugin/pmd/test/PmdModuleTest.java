@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.pmd.PmdFactory;
 import build.jenesis.plugin.pmd.PmdModule;
@@ -46,7 +47,7 @@ public class PmdModuleTest {
     public void creates_the_module_from_the_settings_of_the_build_that_loads_it() {
         assertThatThrownBy(() -> new PmdFactory().create(new Environment(Map.of("pmd.priority", "0")),
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "pmd",
                 Map.of(),
                 Map.of()))
@@ -58,7 +59,7 @@ public class PmdModuleTest {
     public void refuses_values_since_its_settings_configure_it() {
         assertThatThrownBy(() -> new PmdFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("priority", "3")),
-                new Semaphore(1),
+                Permits.of(1),
                 "pmd",
                 Map.of(),
                 Map.of()))
@@ -73,7 +74,7 @@ public class PmdModuleTest {
         executor.addSource("project", project);
         executor.addModule("pmd", new PmdFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "quality",
                 Map.of(),
                 Map.of()), "project");

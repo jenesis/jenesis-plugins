@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -104,7 +105,7 @@ public class OpenApiModule implements BuildExecutorModule {
         return new OpenApiModule(dependencies, pinning, tool, generator, packageName, sourceFolder, arguments, terms.printing(printing));
     }
 
-    public OpenApiModule permits(Semaphore permits) {
+    public OpenApiModule permits(Permits permits) {
         return new OpenApiModule(dependencies, pinning, tool, generator, packageName, sourceFolder, arguments, terms.permits(permits));
     }
 

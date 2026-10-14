@@ -4,6 +4,7 @@ import module java.base;
 import build.jenesis.Environment;
 import build.jenesis.ObservabilityFactory;
 import build.jenesis.Observation;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 
@@ -14,7 +15,7 @@ public class JaCoCoFactory implements ObservabilityFactory {
     @Override
     public Observation create(Environment environment,
                               SequencedMap<String, String> properties,
-                              Semaphore permits,
+                              Permits permits,
                               String group,
                               Map<String, Repository> repositories,
                               Map<String, Resolver> resolvers) {

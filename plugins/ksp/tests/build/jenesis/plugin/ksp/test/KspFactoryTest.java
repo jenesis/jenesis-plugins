@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.ksp.KspFactory;
 
@@ -33,7 +34,7 @@ public class KspFactoryTest {
         executor.addSource("project", project);
         executor.addModule("ksp", new KspFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("moshi.generated", "javax.annotation.processing.Generated")),
-                new Semaphore(1),
+                Permits.of(1),
                 "symbols",
                 Map.of(),
                 Map.of()), "project");

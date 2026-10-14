@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -89,7 +90,7 @@ public class ScalastyleModule implements BuildExecutorModule {
         return new ScalastyleModule(dependencies, pinning, tool, configFile, strict, terms.printing(printing));
     }
 
-    public ScalastyleModule permits(Semaphore permits) {
+    public ScalastyleModule permits(Permits permits) {
         return new ScalastyleModule(dependencies, pinning, tool, configFile, strict, terms.permits(permits));
     }
 

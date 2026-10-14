@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.Environment;
 import build.jenesis.Json;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -108,7 +109,7 @@ public class RevapiModule implements BuildExecutorModule {
                 terms.printing(printing));
     }
 
-    public RevapiModule permits(Semaphore permits) {
+    public RevapiModule permits(Permits permits) {
         return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict,
                 terms.permits(permits));
     }

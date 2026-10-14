@@ -3,6 +3,7 @@ package build.jenesis.plugin.eclipse.test;
 import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.plugin.eclipse.EclipseJavaFormatFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +26,7 @@ public class EclipseJavaFormatFactoryTest {
     private static Object create(Map<String, String> values) {
         return new EclipseJavaFormatFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 "eclipse-java-format",
                 Map.of(),
                 Map.of());

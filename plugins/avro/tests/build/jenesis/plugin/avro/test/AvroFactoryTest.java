@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.avro.AvroFactory;
 
@@ -34,7 +35,7 @@ public class AvroFactoryTest {
         executor.addSource("project", project);
         executor.addModule("avro", new AvroFactory().create(Environment.NONE,
                 new LinkedHashMap<>(),
-                new Semaphore(1),
+                Permits.of(1),
                 "quality",
                 Map.of(),
                 Map.of()), "project");
@@ -53,7 +54,7 @@ public class AvroFactoryTest {
     public void refuses_a_value_it_does_not_know() {
         assertThatThrownBy(() -> new AvroFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("unknown", "value")),
-                new Semaphore(1),
+                Permits.of(1),
                 "avro",
                 Map.of(),
                 Map.of()))

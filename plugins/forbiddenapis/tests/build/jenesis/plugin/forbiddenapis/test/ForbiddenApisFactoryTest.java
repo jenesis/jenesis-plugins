@@ -10,6 +10,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.RepositoryItem;
 import build.jenesis.Resolver;
@@ -144,7 +145,7 @@ public class ForbiddenApisFactoryTest {
                                               Map<String, Resolver> resolvers) {
         return new ForbiddenApisFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
-                new Semaphore(1),
+                Permits.of(1),
                 group,
                 repositories,
                 resolvers);
@@ -176,7 +177,7 @@ public class ForbiddenApisFactoryTest {
         executor.addSource("project", project);
         executor.addModule("forbiddenapis", new ForbiddenApisFactory().create(new Environment(Map.of("validator.forbiddenapis", "ignore")),
                 new LinkedHashMap<>(Map.of("bundled", "jdk-unsafe")),
-                new Semaphore(1),
+                Permits.of(1),
                 "forbiddenapis",
                 Map.of(),
                 Map.of()), "project");

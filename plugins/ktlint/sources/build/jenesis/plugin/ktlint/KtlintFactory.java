@@ -5,6 +5,7 @@ import build.jenesis.BuildExecutorModule;
 import build.jenesis.BuildModuleFactory;
 import build.jenesis.BuildModuleName;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.project.Enforcement;
@@ -15,7 +16,7 @@ public class KtlintFactory implements BuildModuleFactory {
     @Override
     public BuildExecutorModule create(Environment environment,
                                       SequencedMap<String, String> properties,
-                                      Semaphore permits,
+                                      Permits permits,
                                       String group,
                                       Map<String, Repository> repositories,
                                       Map<String, Resolver> resolvers) {

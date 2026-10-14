@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -95,7 +96,7 @@ public class ScalaDocumentationModule implements BuildExecutorModule {
         return new ScalaDocumentationModule(resolvers, dependencies, pinning, tool, group, factory, terms.printing(printing));
     }
 
-    public ScalaDocumentationModule permits(Semaphore permits) {
+    public ScalaDocumentationModule permits(Permits permits) {
         return new ScalaDocumentationModule(resolvers, dependencies, pinning, tool, group, factory, terms.permits(permits));
     }
 

@@ -9,6 +9,7 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.SequencedProperties;
 import build.jenesis.maven.MavenDefaultRepository;
@@ -146,7 +147,7 @@ public class JApiCmpModuleRunTest {
         executor.addModule("japicmp", new JApiCmpFactory().create(Environment.NONE,
                 new LinkedHashMap<>(Map.of("baseline", BASELINE,
                         "exclude", "org.apiguardian.api.API#since(int,java.lang.String), org.apiguardian.api.Other")),
-                new Semaphore(1),
+                Permits.of(1),
                 "japicmp",
                 Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
                 Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))), "project");

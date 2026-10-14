@@ -9,6 +9,7 @@ import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
 import build.jenesis.Json;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -217,7 +218,7 @@ public class DokkaDocumentationModule implements BuildExecutorModule {
                 externalLinks, customAssets, customStyles, footerMessage);
     }
 
-    public DokkaDocumentationModule permits(Semaphore permits) {
+    public DokkaDocumentationModule permits(Permits permits) {
         return new DokkaDocumentationModule(resolvers, dependencies, pinning, tool, group, within, factory,
                 terms.permits(permits), moduleName, format, includes, documentedVisibilities,
                 suppressObviousFunctions, suppressInheritedMembers, skipEmptyPackages, skipDeprecated,

@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -112,7 +113,7 @@ public class KtfmtFormatModule implements BuildExecutorModule {
                 terms.printing(printing));
     }
 
-    public KtfmtFormatModule permits(Semaphore permits) {
+    public KtfmtFormatModule permits(Permits permits) {
         return new KtfmtFormatModule(dependencies,
                 pinning,
                 group,

@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -97,7 +98,7 @@ public class WsImportModule implements BuildExecutorModule {
         return new WsImportModule(dependencies, pinning, tool, packageName, location, arguments, terms.printing(printing));
     }
 
-    public WsImportModule permits(Semaphore permits) {
+    public WsImportModule permits(Permits permits) {
         return new WsImportModule(dependencies, pinning, tool, packageName, location, arguments, terms.permits(permits));
     }
 

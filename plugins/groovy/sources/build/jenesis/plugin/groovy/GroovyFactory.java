@@ -2,6 +2,7 @@ package build.jenesis.plugin.groovy;
 
 import module java.base;
 import build.jenesis.Environment;
+import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
@@ -15,7 +16,7 @@ public class GroovyFactory implements LanguageFactory {
     @Override
     public Language create(Environment environment,
                            SequencedMap<String, String> properties,
-                           Semaphore permits,
+                           Permits permits,
                            String group,
                            Map<String, Repository> repositories,
                            Map<String, Resolver> resolvers) {
