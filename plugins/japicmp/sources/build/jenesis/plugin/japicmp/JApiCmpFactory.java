@@ -45,7 +45,7 @@ public class JApiCmpFactory implements BuildModuleFactory {
                 .permits(permits)
                 .tool(group);
         String access = values.value("access");
-        List<String> include = values.entries("include"), exclude = values.entries("exclude"),
+        List<String> include = patterns(values.value("include")), exclude = patterns(values.value("exclude")),
                 formats = values.entries("format");
         if (access != null) {
             module = module.access(named(JApiCmpModule.Access.class, origin, "access", access));
@@ -89,5 +89,28 @@ public class JApiCmpFactory implements BuildModuleFactory {
 
     private static String spelt(Enum<?> constant) {
         return constant.name().toLowerCase(Locale.ROOT).replace('_', '-');
+    }
+
+    private static List<String> patterns(String value) {
+        if (value == null) {
+            return null;
+        }
+        List<String> patterns = new ArrayList<>();
+        int depth = 0, start = 0;
+        for (int index = 0; index <= value.length(); index++) {
+            char character = index == value.length() ? ',' : value.charAt(index);
+            if (character == '(') {
+                depth++;
+            } else if (character == ')') {
+                depth--;
+            } else if ((character == ',' || character == ';') && depth == 0) {
+                String pattern = value.substring(start, index).strip();
+                if (!pattern.isEmpty()) {
+                    patterns.add(pattern);
+                }
+                start = index + 1;
+            }
+        }
+        return patterns;
     }
 }

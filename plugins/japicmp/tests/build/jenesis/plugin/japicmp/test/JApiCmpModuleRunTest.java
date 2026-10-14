@@ -13,6 +13,7 @@ import build.jenesis.Pinning;
 import build.jenesis.SequencedProperties;
 import build.jenesis.maven.MavenDefaultRepository;
 import build.jenesis.maven.MavenPomResolver;
+import build.jenesis.plugin.japicmp.JApiCmpFactory;
 import build.jenesis.plugin.japicmp.JApiCmpModule;
 import build.jenesis.step.ProcessBuildStep;
 
@@ -135,6 +136,24 @@ public class JApiCmpModuleRunTest {
                 .contains(" --include-synthetic")
                 .doesNotContain("Xmx256m");
         assertThat(command.substring(0, command.indexOf("japicmp.JApiCmp"))).contains(" -Xmx256m ");
+    }
+
+    @Test
+    public void hands_japicmp_a_method_pattern_whole_although_its_parameters_are_separated_by_a_comma() throws IOException {
+        writeProject(COMPATIBLE);
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule("japicmp", new JApiCmpFactory().create(Environment.NONE,
+                new LinkedHashMap<>(Map.of("baseline", BASELINE,
+                        "exclude", "org.apiguardian.api.API#since(int,java.lang.String), org.apiguardian.api.Other")),
+                new Semaphore(1),
+                "japicmp",
+                Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
+                Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))), "project");
+        executor.execute();
+
+        assertThat(Files.readString(root.resolve("japicmp").resolve("compare").resolve("supplement").resolve("command")))
+                .contains(" -e 'org.apiguardian.api.API#since(int,java.lang.String);org.apiguardian.api.Other'");
     }
 
     private JApiCmpModule module() {

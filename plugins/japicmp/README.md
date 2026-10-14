@@ -17,7 +17,7 @@ format=xml
 |---|---|
 | `baseline` | the release to compare with, as `<groupId>/<artifactId>[/<version>]` |
 | `access` | the least access compared: `public`, `protected`, `package` or `private` |
-| `include`, `exclude` | comma-separated japicmp patterns of what is compared |
+| `include`, `exclude` | japicmp patterns of what is compared, separated by commas or semicolons; a comma between the parentheses of a method belongs to its pattern |
 | `format` | comma-separated report formats: `xml`, `html` |
 | `ignore-missing-classes` | `true` by default |
 | `only-incompatible`, `only-modified`, `semantic-versioning` | flags of japicmp's own |
