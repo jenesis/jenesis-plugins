@@ -55,6 +55,26 @@ public class JReleaserModuleTest {
     }
 
     @Test
+    public void hands_jreleaser_every_property_whose_name_is_as_long_as_the_properties_are_many_less_one() throws IOException {
+        BuildExecutor executor = FakeTool.executor(root);
+        Path folder = FakeTool.project(project, root, "1.2.3");
+        SequencedProperties metadata = SequencedProperties.ofFiles(folder.resolve(BuildStep.METADATA));
+        for (int index = 1; index <= 12; index++) {
+            metadata.setProperty("k" + index, "v" + index);
+        }
+        metadata.store(folder.resolve(BuildStep.METADATA));
+        executor.addSource("project", folder);
+        executor.addModule("jreleaser", new JReleaserModule(Map.of("maven", FakeTool.of(tool).repository()),
+                Map.of("maven", Resolver.identity())), "project");
+        executor.execute("jreleaser/release");
+
+        assertThat(root.resolve("jreleaser/release/output/arguments.txt")).content()
+                .as("fifteen properties and a name of fourteen characters, which JReleaser refuses unless more follow")
+                .contains("--set-property\njenesisVersion=1.2.3")
+                .contains("--set-property\njenesis\n");
+    }
+
+    @Test
     public void hands_jreleaser_its_settings_and_no_settings_file_without_any() throws IOException {
         Path output = release(new JReleaserModule(Map.of("maven", FakeTool.of(tool).repository()),
                 Map.of("maven", Resolver.identity()))

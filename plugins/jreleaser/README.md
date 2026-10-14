@@ -28,7 +28,9 @@ profile's folder keeps every build but a release from running it.
 JReleaser runs in the project's root with the version the build resolved, `-Djenesis.project.version` included. Every
 value of the project's resolved metadata and the folder of every staged tree are template properties of the
 configuration, named in camel case after a `jenesis` prefix: `{{ jenesisStageMaven }}` is the staged Maven tree and
-`{{ jenesisScmUrl }}` the `scm.url` of the metadata. A `JRELEASER_*` value, the version among them, is handed to JReleaser
+`{{ jenesisScmUrl }}` the `scm.url` of the metadata. They apply wherever JReleaser expands a template, which a deployer's
+`stagingRepositories` is not: name the staged Maven tree there relative to the project's root, as
+`target/stage/maven/output`. A `JRELEASER_*` value, the version among them, is handed to JReleaser
 as its settings file, which then stands in for `~/.jreleaser/config.properties`; JReleaser still reads its `JRELEASER_*`
 environment variables. Its output lands in the step's own folder, never in the project.
 JReleaser resolves in the group named after the plugin, `jreleaser/…`, and `pin` pins it in

@@ -246,6 +246,11 @@ public class JReleaserModule implements BuildExecutorModule {
                 commands.add("--set-property");
                 commands.add(key + "=" + value);
             });
+            Set<Integer> lengths = properties.sequencedKeySet().stream().map(String::length).collect(Collectors.toSet());
+            for (int count = properties.size(); lengths.contains(count - 1); count++) {
+                commands.add("--set-property");
+                commands.add(PREFIX);
+            }
             SequencedProperties settled = new SequencedProperties();
             String version = metadata.value("version");
             if (version != null) {
