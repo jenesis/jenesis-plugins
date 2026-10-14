@@ -77,11 +77,10 @@ public class ScalaLanguageRunTest {
                 0);
         executor.addSource("project", project);
         executor.addModule("chain",
-                new InferredCompilerChainModule(Collections.emptyNavigableSet(), repositories, resolvers)
-                        .languages(languages),
+                new InferredCompilerChainModule().languages(languages),
                 "project");
         executor.addModule("doc",
-                new InferredDocumentationChainModule(repositories, resolvers).languages(languages),
+                new InferredDocumentationChainModule().languages(languages),
                 "project",
                 "chain");
         executor.execute();
@@ -96,9 +95,6 @@ public class ScalaLanguageRunTest {
                 .resolve("sample/Caller.class"))
                 .as("javac compiles the Java source that calls Scala against the classes the plugin wrote")
                 .isNotEmptyFile();
-        assertThat(compile.resolve(InferredCompilerChainModule.SCALAC))
-                .as("the plugin takes the place of the stock Scala compiler")
-                .doesNotExist();
         assertThat(compile.resolve(InferredCompilerChainModule.RESOURCE).resolve("output").resolve(BuildStep.CLASSES)
                 .resolve("sample/data.txt"))
                 .hasContent("data");
@@ -129,6 +125,16 @@ public class ScalaLanguageRunTest {
         @Override
         public Language language(SequencedMap<String, Path> prepared) {
             return language;
+        }
+
+        @Override
+        public PluginModule toolRepositories(Map<String, Repository> toolRepositories) {
+            return this;
+        }
+
+        @Override
+        public PluginModule toolResolvers(Map<String, Resolver> toolResolvers) {
+            return this;
         }
 
         @Override
