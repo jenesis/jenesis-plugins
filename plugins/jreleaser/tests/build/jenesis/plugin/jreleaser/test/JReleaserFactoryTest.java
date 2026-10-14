@@ -17,9 +17,9 @@ public class JReleaserFactoryTest {
     private Path root, project, tool;
 
     @Test
-    public void runs_the_command_and_settings_it_is_handed_for_real_when_dry_is_false() throws IOException {
-        BuildExecutorModule module = new JReleaserFactory().create(Environment.NONE,
-                new LinkedHashMap<>(Map.of("command", "deploy", "dry", "false", "JRELEASER_GITHUB_TOKEN", "secret")),
+    public void runs_the_command_and_settings_it_is_handed_for_real_when_the_release_publishes() throws IOException {
+        BuildExecutorModule module = new JReleaserFactory().create(new Environment(Map.of("release.publish", "true")),
+                new LinkedHashMap<>(Map.of("command", "deploy", "JRELEASER_GITHUB_TOKEN", "secret")),
                 new Semaphore(1),
                 "plugin-jreleaser",
                 Map.of("maven", FakeTool.of(tool).repository()),
@@ -48,10 +48,11 @@ public class JReleaserFactoryTest {
     }
 
     @Test
-    public void refuses_a_dry_that_is_no_flag() {
-        assertThatThrownBy(() -> create(Map.of("dry", "maybe")))
+    public void refuses_a_value_that_would_publish_naming_the_setting_that_does() {
+        assertThatThrownBy(() -> create(Map.of("dry", "false")))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("write true or false");
+                .hasMessageContaining("names dry")
+                .hasMessageContaining("-Djenesis.release.publish=true");
     }
 
     private static BuildExecutorModule create(Map<String, String> values) {

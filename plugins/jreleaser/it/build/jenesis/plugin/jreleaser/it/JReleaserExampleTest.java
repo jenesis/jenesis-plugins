@@ -16,9 +16,8 @@ public class JReleaserExampleTest {
     public void runs_jreleaser_in_the_build_with_the_version_the_build_resolved() throws Exception {
         ExampleProject project = ExampleProject.of(folder, JReleaserFactory.class)
                 .write("jenesis.plugins.properties", "jreleaser+release=build.jenesis.plugin.jreleaser\n")
-                .write("build.jenesis/release/plugin-jreleaser.properties", """
+                .write("build.jenesis/plugin-jreleaser.properties", """
                         command=config
-                        dry=false
                         JRELEASER_GITHUB_TOKEN=unused
                         @jreleaser=jreleaser.yml
                         """)
@@ -47,7 +46,7 @@ public class JReleaserExampleTest {
                     .isZero();
         }
 
-        String printed = project.make("-Djenesis.make.profiles=release", "-Djenesis.project.version=1.2.3", "release");
+        String printed = project.make("-Djenesis.release.publish=true", "-Djenesis.project.version=1.2.3", "release");
 
         assertThat(printed)
                 .as("JReleaser runs in the build's JVM, prints through it, and releases the version the build resolved")

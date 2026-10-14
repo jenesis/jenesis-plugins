@@ -79,7 +79,7 @@ public class JReleaserModuleTest {
         Path output = release(new JReleaserModule(Map.of("maven", FakeTool.of(tool).repository()),
                 Map.of("maven", Resolver.identity()))
                 .command("release")
-                .dry(false)
+                .publish(true)
                 .settings(new LinkedHashMap<>(Map.of("JRELEASER_GITHUB_TOKEN", "secret"))), null);
 
         assertThat(output.resolve("arguments.txt")).content()

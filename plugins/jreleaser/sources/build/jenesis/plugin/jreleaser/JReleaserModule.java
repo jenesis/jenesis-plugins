@@ -28,7 +28,7 @@ public class JReleaserModule implements BuildExecutorModule {
     private final Pinning pinning;
     private final String tool;
     private final String command;
-    private final boolean dry;
+    private final boolean publish;
     private final SequencedMap<String, String> settings;
     private final Semaphore permits;
     private final Consumer<String> out;
@@ -40,7 +40,7 @@ public class JReleaserModule implements BuildExecutorModule {
                 null,
                 NAME,
                 "full-release",
-                true,
+                false,
                 Collections.emptyNavigableMap(),
                 null,
                 null,
@@ -54,7 +54,7 @@ public class JReleaserModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 NAME,
                 "full-release",
-                true,
+                environment.flag("release.publish"),
                 Collections.emptyNavigableMap(),
                 null,
                 environment.out(),
@@ -65,7 +65,7 @@ public class JReleaserModule implements BuildExecutorModule {
                             Pinning pinning,
                             String tool,
                             String command,
-                            boolean dry,
+                            boolean publish,
                             SequencedMap<String, String> settings,
                             Semaphore permits,
                             Consumer<String> out,
@@ -74,7 +74,7 @@ public class JReleaserModule implements BuildExecutorModule {
         this.pinning = pinning;
         this.tool = tool;
         this.command = command;
-        this.dry = dry;
+        this.publish = publish;
         this.settings = settings;
         this.permits = permits;
         this.out = out;
@@ -82,11 +82,11 @@ public class JReleaserModule implements BuildExecutorModule {
     }
 
     public JReleaserModule pinning(Pinning pinning) {
-        return new JReleaserModule(dependencies, pinning, tool, command, dry, settings, permits, out, err);
+        return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
     public JReleaserModule tool(String tool) {
-        return new JReleaserModule(dependencies, pinning, tool, command, dry, settings, permits, out, err);
+        return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
     public JReleaserModule command(String command) {
@@ -94,11 +94,11 @@ public class JReleaserModule implements BuildExecutorModule {
             throw new IllegalArgumentException("JReleaser runs no command '" + command + "' - name one of its"
                     + " commands, such as full-release, release, deploy or config");
         }
-        return new JReleaserModule(dependencies, pinning, tool, command.strip(), dry, settings, permits, out, err);
+        return new JReleaserModule(dependencies, pinning, tool, command.strip(), publish, settings, permits, out, err);
     }
 
-    public JReleaserModule dry(boolean dry) {
-        return new JReleaserModule(dependencies, pinning, tool, command, dry, settings, permits, out, err);
+    public JReleaserModule publish(boolean publish) {
+        return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
     public JReleaserModule settings(SequencedMap<String, String> settings) {
@@ -108,20 +108,20 @@ public class JReleaserModule implements BuildExecutorModule {
                         + " JRELEASER_* settings");
             }
         }
-        return new JReleaserModule(dependencies, pinning, tool, command, dry,
+        return new JReleaserModule(dependencies, pinning, tool, command, publish,
                 Collections.unmodifiableSequencedMap(new LinkedHashMap<>(settings)), permits, out, err);
     }
 
     public JReleaserModule permits(Semaphore permits) {
-        return new JReleaserModule(dependencies, pinning, tool, command, dry, settings, permits, out, err);
+        return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
     public JReleaserModule out(Consumer<String> out) {
-        return new JReleaserModule(dependencies, pinning, tool, command, dry, settings, permits, out, err);
+        return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
     public JReleaserModule err(Consumer<String> err) {
-        return new JReleaserModule(dependencies, pinning, tool, command, dry, settings, permits, out, err);
+        return new JReleaserModule(dependencies, pinning, tool, command, publish, settings, permits, out, err);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class JReleaserModule implements BuildExecutorModule {
         releaseInputs.add(DEPENDENCIES);
         releaseInputs.addAll(inherited.sequencedKeySet());
         buildExecutor.addStep(RELEASE,
-                new Release(tool, command, dry, new LinkedHashMap<>(settings), permits, out, err),
+                new Release(tool, command, publish, new LinkedHashMap<>(settings), permits, out, err),
                 releaseInputs);
     }
 
@@ -157,7 +157,7 @@ public class JReleaserModule implements BuildExecutorModule {
 
         private final String tool;
         private final String command;
-        private final boolean dry;
+        private final boolean publish;
         private final LinkedHashMap<String, String> settings;
         private final transient Semaphore permits;
         private final transient Consumer<String> out;
@@ -165,14 +165,14 @@ public class JReleaserModule implements BuildExecutorModule {
 
         private Release(String tool,
                         String command,
-                        boolean dry,
+                        boolean publish,
                         LinkedHashMap<String, String> settings,
                         Semaphore permits,
                         Consumer<String> out,
                         Consumer<String> err) {
             this.tool = tool;
             this.command = command;
-            this.dry = dry;
+            this.publish = publish;
             this.settings = settings;
             this.permits = permits;
             this.out = out;
@@ -232,7 +232,7 @@ public class JReleaserModule implements BuildExecutorModule {
                     "--basedir", Path.of(root.value(ProjectPlugins.ROOT_KEY)).toString(),
                     "--config-file", configuration.toAbsolutePath().toString(),
                     "--output-directory", context.next().toAbsolutePath().toString()));
-            if (dry) {
+            if (!publish) {
                 commands.add("--dry-run");
             }
             SequencedMap<String, String> properties = new TreeMap<>();
