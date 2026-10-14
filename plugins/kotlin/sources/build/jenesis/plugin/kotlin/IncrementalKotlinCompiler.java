@@ -20,8 +20,11 @@ final class IncrementalKotlinCompiler implements ToolProvider {
             SHRUNK = "shrunk-classpath-snapshot.bin";
     private static final ConcurrentMap<List<Path>, Object> TOOLCHAINS = new ConcurrentHashMap<>();
 
-    public static int main(String... arguments) {
-        return new IncrementalKotlinCompiler().run(System.out, System.err, arguments);
+    public static void main(String... arguments) {
+        int code = new IncrementalKotlinCompiler().run(System.out, System.err, arguments);
+        if (code != 0) {
+            throw new IllegalStateException("Kotlin failed to compile with exit code " + code);
+        }
     }
 
     @Override
