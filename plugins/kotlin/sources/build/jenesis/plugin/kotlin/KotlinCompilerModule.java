@@ -218,9 +218,12 @@ public class KotlinCompilerModule implements BuildExecutorModule {
 
         @Override
         protected ProcessHandler handler(BuildStepContext context, List<String> commands) throws IOException {
-            return incremental
-                    ? ProcessHandler.OfTool.of(new IncrementalKotlinCompiler()).apply(commands)
-                    : super.handler(context, commands);
+            return incremental ? warm(commands) : super.handler(context, commands);
+        }
+
+        private ProcessHandler warm(List<String> commands) {
+            ProcessHandler.OfProcess handler = ProcessHandler.OfProcess.ofJavaMain().apply(commands);
+            return terms.warm() ? handler : handler.warm(false);
         }
 
         @Override
@@ -271,13 +274,13 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                         sources.friends(),
                         sources.files()));
             }
-            Daemon daemon = daemon(properties, sources.release(), sources, sources.classpath(), sources.friends());
+            Incremental compilation = incremental(properties, sources.release(), sources, sources.classpath(), sources.friends());
             List<String> configuration = new ArrayList<>(sources.jars());
-            configuration.addAll(daemon.virtualMachine());
-            for (int index = 0; index < daemon.compiler().size(); index++) {
-                configuration.add(index > 0 && daemon.compiler().get(index - 1).equals(IncrementalKotlinCompiler.CLASSPATH)
+            configuration.addAll(compilation.virtualMachine());
+            for (int index = 0; index < compilation.compiler().size(); index++) {
+                configuration.add(index > 0 && compilation.compiler().get(index - 1).equals(IncrementalKotlinCompiler.CLASSPATH)
                         ? ""
-                        : daemon.compiler().get(index));
+                        : compilation.compiler().get(index));
             }
             SequencedProperties listing = new SequencedProperties();
             for (String file : sources.files()) {
@@ -353,7 +356,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             }
             state.store(working.resolve(STATE));
             listing.store(working.resolve(LISTING));
-            return CompletableFuture.completedStage(daemon.commands(sources.jars(), commands, target, sources.files()));
+            return CompletableFuture.completedStage(compilation.commands(sources.jars(), commands, target, sources.files()));
         }
 
         private CompletionStage<Void> compileVersioned(Executor executor,
@@ -384,14 +387,12 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                 friends.addAll(sources.friends());
                 classpath.addAll(sources.classpath());
                 List<String> commands = incremental
-                        ? daemon(properties(arguments), Integer.toString(release), sources, classpath, friends)
+                        ? incremental(properties(arguments), Integer.toString(release), sources, classpath, friends)
                                 .commands(sources.jars(), List.of(), target, files)
                         : command(properties(arguments), target, Integer.toString(release), sources, classpath, friends, files);
                 chain = chain.thenComposeAsync(_ -> {
                     try {
-                        ProcessHandler handler = incremental
-                                ? ProcessHandler.OfTool.of(new IncrementalKotlinCompiler()).apply(commands)
-                                : factory.apply(commands);
+                        ProcessHandler handler = incremental ? warm(commands) : factory.apply(commands);
                         Path output = context.supplement().resolve("output-" + release),
                                 error = context.supplement().resolve("error-" + release);
                         Files.writeString(context.supplement().resolve("command-" + release), shell(handler.commands()));
@@ -551,7 +552,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             return commands;
         }
 
-        private static Daemon daemon(SequencedMap<String, SequencedMap<String, String>> properties,
+        private static Incremental incremental(SequencedMap<String, SequencedMap<String, String>> properties,
                                      String release,
                                      Sources sources,
                                      List<String> classpath,
@@ -561,7 +562,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             if (!options.contains(MODULE_OPTION)) {
                 options.addAll(List.of(MODULE_OPTION, "main"));
             }
-            return new Daemon(virtualMachine, arguments(release, sources, classpath, friends, options));
+            return new Incremental(virtualMachine, arguments(release, sources, classpath, friends, options));
         }
 
         private static List<String> arguments(String release,
@@ -600,17 +601,16 @@ public class KotlinCompilerModule implements BuildExecutorModule {
         }
     }
 
-    private record Daemon(List<String> virtualMachine, List<String> compiler) {
+    private record Incremental(List<String> virtualMachine, List<String> compiler) {
 
         private List<String> commands(List<String> jars, List<String> state, Path target, List<String> files) {
-            List<String> commands = new ArrayList<>();
+            List<String> commands = new ArrayList<>(virtualMachine);
+            commands.addAll(List.of("-cp",
+                    Path.of(URI.create(IncrementalKotlinCompiler.class.getProtectionDomain().getCodeSource().getLocation().toString())).toString(),
+                    IncrementalKotlinCompiler.class.getName()));
             for (String jar : jars) {
                 commands.add(IncrementalKotlinCompiler.TOOL);
                 commands.add(jar);
-            }
-            for (String option : virtualMachine) {
-                commands.add(IncrementalKotlinCompiler.JVM);
-                commands.add(option);
             }
             commands.addAll(state);
             commands.add(IncrementalKotlinCompiler.DESTINATION);

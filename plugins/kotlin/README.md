@@ -41,6 +41,6 @@ custom styles have no value. The compiler is handed the module's dependencies al
 the module declares it, compiles for the release javac compiles for, compiles a source below `META-INF/versions/<N>/`
 for release `<N>`, and lets the tests of a module see its `internal` declarations. The lines of
 `process-kotlinc.properties` reach kotlinc, a `-J` line its JVM, and the build places the resources of the module.
-`-Djenesis.kotlin.incremental=true` compiles incrementally in the Kotlin daemon, through the Kotlin Build Tools API of
-Kotlin 2.3 or newer. The compiler resolves in the group named after the plugin, `kotlin/…`, and Dokka, which runs on a
+`-Djenesis.kotlin.incremental=true` compiles incrementally through the Kotlin Build Tools API of Kotlin 2.3 or newer,
+in a JVM the build keeps warm for the next compilation, which a `-J` line configures. The compiler resolves in the group named after the plugin, `kotlin/…`, and Dokka, which runs on a
 Kotlin of its own, in `kotlin-dokka/…`.

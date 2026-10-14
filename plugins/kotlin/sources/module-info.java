@@ -1,8 +1,8 @@
 /**
  * Jenesis Kotlin plugin
  *
- * Compiles the Kotlin sources of a module with kotlinc ahead of javac, incrementally in the Kotlin daemon where
- * jenesis.kotlin.incremental asks for it, and documents them with Dokka, configured by the dokka values of its
+ * Compiles the Kotlin sources of a module with kotlinc ahead of javac, incrementally in a JVM the build keeps warm
+ * where jenesis.kotlin.incremental asks for it, and documents them with Dokka, configured by the dokka values of its
  * plugin-kotlin.properties, resolving both tools from the repositories of the build that loads the plugin.
  *
  * @jenesis.release 25

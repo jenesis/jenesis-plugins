@@ -11,7 +11,6 @@ final class IncrementalKotlinCompiler implements ToolProvider {
             MODIFIED = "--modified",
             REMOVED = "--removed",
             REBUILD = "--rebuild",
-            JVM = "--jvm",
             DESTINATION = "-d",
             CLASSPATH = "-classpath",
             FRIENDS = "-Xfriend-paths=",
@@ -20,6 +19,10 @@ final class IncrementalKotlinCompiler implements ToolProvider {
             SNAPSHOT = ".snapshot",
             SHRUNK = "shrunk-classpath-snapshot.bin";
     private static final ConcurrentMap<List<Path>, Object> TOOLCHAINS = new ConcurrentHashMap<>();
+
+    public static int main(String... arguments) {
+        return new IncrementalKotlinCompiler().run(System.out, System.err, arguments);
+    }
 
     @Override
     public String name() {
@@ -30,7 +33,7 @@ final class IncrementalKotlinCompiler implements ToolProvider {
     public int run(PrintWriter out, PrintWriter err, String... args) {
         List<Path> jars = new ArrayList<>();
         List<File> modified = new ArrayList<>(), removed = new ArrayList<>();
-        List<String> options = new ArrayList<>(), classpath = new ArrayList<>(), virtualMachine = new ArrayList<>();
+        List<String> options = new ArrayList<>(), classpath = new ArrayList<>();
         List<Path> sources = new ArrayList<>();
         Path working = null, snapshots = null, destination = null;
         boolean rebuild = false;
@@ -42,7 +45,6 @@ final class IncrementalKotlinCompiler implements ToolProvider {
                 case MODIFIED -> modified.add(absolute(args[++index]).toFile());
                 case REMOVED -> removed.add(absolute(args[++index]).toFile());
                 case REBUILD -> rebuild = true;
-                case JVM -> virtualMachine.add(args[++index].substring(1));
                 case DESTINATION -> destination = absolute(args[++index]);
                 case SOURCES -> {
                     while (++index < args.length) {
@@ -95,12 +97,7 @@ final class IncrementalKotlinCompiler implements ToolProvider {
                 default -> null;
             });
             Object jvm = invoke(type(loader, "jvm.JvmPlatformToolchain"), null, "from", toolchains);
-            Object daemon = invoke(type(loader, "KotlinToolchains"), toolchains, "daemonExecutionPolicyBuilder");
-            if (!virtualMachine.isEmpty()) {
-                invoke(type(loader, "ExecutionPolicy$WithDaemon$Builder"), daemon, "set",
-                        type(loader, "ExecutionPolicy$WithDaemon").getField("JVM_ARGUMENTS").get(null), List.copyOf(virtualMachine));
-            }
-            Object policy = invoke(type(loader, "ExecutionPolicy$WithDaemon$Builder"), daemon, "build");
+            Object policy = invoke(type(loader, "KotlinToolchains"), toolchains, "createInProcessExecutionPolicy");
             Class<?> sessionType = type(loader, "KotlinToolchains$BuildSession");
             try (AutoCloseable session = (AutoCloseable) invoke(type(loader, "KotlinToolchains"), toolchains, "createBuildSession")) {
                 Object builder = invoke(type(loader, "jvm.JvmPlatformToolchain"), jvm, "jvmCompilationOperationBuilder", sources, destination);

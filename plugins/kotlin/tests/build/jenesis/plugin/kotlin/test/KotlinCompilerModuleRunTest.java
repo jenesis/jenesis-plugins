@@ -271,7 +271,7 @@ public class KotlinCompilerModuleRunTest {
     }
 
     @Test
-    public void hands_a_jvm_option_to_the_kotlin_daemon_when_compiling_incrementally() throws IOException {
+    public void hands_a_jvm_option_to_the_jvm_that_compiles_incrementally() throws IOException {
         Files.writeString(sources(project).resolve("Sample.kt"), """
                 package sample
                 class Sample
@@ -284,14 +284,15 @@ public class KotlinCompilerModuleRunTest {
 
         List<String> command = Arrays.asList(Files.readString(root.resolve("kotlin/compiled/supplement/command"))
                 .split(" "));
-        assertThat(command.get(command.indexOf("-Xss4m") - 1))
-                .as("a -J line configures the JVM of the Kotlin daemon that compiles the module")
-                .isEqualTo("--jvm");
+        assertThat(command.indexOf("-Xss4m"))
+                .as("a -J line is an option of the JVM that compiles the module, ahead of its class path")
+                .isNotNegative()
+                .isLessThan(command.indexOf("-cp"));
         assertThat(classes.resolve("sample/Sample.class")).isNotEmptyFile();
     }
 
     @Test
-    public void compiles_a_kotlin_source_below_meta_inf_versions_in_the_kotlin_daemon_when_compiling_incrementally() throws IOException {
+    public void compiles_a_kotlin_source_below_meta_inf_versions_incrementally_as_well() throws IOException {
         Files.writeString(sources(project).resolve("Sample.kt"), """
                 package sample
                 class Sample { fun name(): String = "base" }
@@ -314,7 +315,7 @@ public class KotlinCompilerModuleRunTest {
                 .as("Kotlin reads a module's mapping from the root of the jar alone, so an overlay carries none")
                 .doesNotExist();
         assertThat(root.resolve("kotlin/compiled/supplement/command-17"))
-                .as("the overlay is compiled in the Kotlin daemon rather than in a JVM of its own")
+                .as("the overlay is compiled through the build tools API, as the module is, rather than by kotlinc's own main class")
                 .content()
                 .contains("--tool")
                 .doesNotContain("K2JVMCompiler");
