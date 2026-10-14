@@ -6,9 +6,11 @@ import build.jenesis.MakeTool;
 
 public record ExampleProject(Path root, Path repository) {
 
-    public static ExampleProject of(Path folder, Class<?> plugin) throws IOException {
+    public static ExampleProject of(Path folder, Class<?>... plugins) throws IOException {
         Path repository = folder.resolve("repository");
-        install(repository, plugin);
+        for (Class<?> plugin : plugins) {
+            install(repository, plugin);
+        }
         install(repository, BuildExecutor.class);
         return new ExampleProject(Files.createDirectories(folder.resolve("project")), repository);
     }

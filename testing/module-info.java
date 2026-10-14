@@ -1,8 +1,8 @@
 /**
  * @jenesis.release 25
  * @jenesis.test abstract
- * @jenesis.pin build.jenesis 0.16.0 SHA-256/1040b44171cc040da654969e21e63e5a7c5487d7bc5adeb5b53f155c5110be6d
- * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/1040b44171cc040da654969e21e63e5a7c5487d7bc5adeb5b53f155c5110be6d
+ * @jenesis.pin build.jenesis 0.16.0 SHA-256/43d1ea28d2f6014050e60291b6f23da41c550507d50341d38d8b2ea6a770037c
+ * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/43d1ea28d2f6014050e60291b6f23da41c550507d50341d38d8b2ea6a770037c
  */
 module build.jenesis.plugin.testing {
 

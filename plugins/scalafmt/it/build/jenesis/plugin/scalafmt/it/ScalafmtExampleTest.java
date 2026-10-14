@@ -2,6 +2,7 @@ package build.jenesis.plugin.scalafmt.it;
 
 import module java.base;
 import module org.junit.jupiter.api;
+import build.jenesis.plugin.scala.ScalaFactory;
 import build.jenesis.plugin.scalafmt.ScalafmtFactory;
 import build.jenesis.plugin.testing.ExampleProject;
 
@@ -14,8 +15,8 @@ public class ScalafmtExampleTest {
 
     @Test
     public void reports_on_the_scala_sources_as_the_configuration_a_project_binds_says() throws IOException {
-        ExampleProject project = ExampleProject.of(folder, ScalafmtFactory.class)
-                .write("jenesis.plugins.properties", "scalafmt+check=build.jenesis.plugin.scalafmt@check\n")
+        ExampleProject project = ExampleProject.of(folder, ScalafmtFactory.class, ScalaFactory.class)
+                .write("jenesis.plugins.properties", "scala+language=build.jenesis.plugin.scala\nscalafmt+check=build.jenesis.plugin.scalafmt@check\n")
                 .write("build.jenesis/plugin-scalafmt.properties", "@rules=../.scalafmt.conf\n")
                 .write(".scalafmt.conf", """
                         version = "3.8.3"
@@ -25,14 +26,16 @@ public class ScalafmtExampleTest {
                         /**
                          * @jenesis.pin scalafmt/maven/org.scalameta/scalafmt-cli_2.13 3.8.3
                          */
-                        module example {}
+                        module example {
+                            requires scala.library;
+                        }
                         """)
                 .write("sources/sample/Sample.scala", """
                         package sample
                         class Sample {   def  f( ) :Int=42 }
                         """);
 
-        String output = project.make("+sources/produce/assemble/check");
+        String output = project.make("build/::/verify-module-sources/check");
 
         assertThat(output)
                 .as("the plugin runs through the build that loads it and reports what scalafmt finds")

@@ -3,6 +3,7 @@ package build.jenesis.plugin.codenarc.it;
 import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.plugin.codenarc.CodeNarcFactory;
+import build.jenesis.plugin.groovy.GroovyFactory;
 import build.jenesis.plugin.testing.ExampleProject;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,15 +15,15 @@ public class CodeNarcExampleTest {
 
     @Test
     public void reports_on_the_groovy_sources_with_the_rule_set_a_project_binds() throws IOException {
-        ExampleProject project = ExampleProject.of(folder, CodeNarcFactory.class)
-                .write("jenesis.plugins.properties", "codenarc+check=build.jenesis.plugin.codenarc\n")
+        ExampleProject project = ExampleProject.of(folder, CodeNarcFactory.class, GroovyFactory.class)
+                .write("jenesis.plugins.properties", "groovy+language=build.jenesis.plugin.groovy\ncodenarc+check=build.jenesis.plugin.codenarc\n")
                 .write("build.jenesis/plugin-codenarc.properties", "@rules=../codenarc.xml\n")
                 .write("codenarc.xml", """
                         <ruleset xmlns="http://codenarc.org/ruleset/1.0">
                             <rule class="org.codenarc.rule.basic.EmptyIfStatementRule"/>
                         </ruleset>
                         """)
-                .write("sources/module-info.java", "module example {}\n")
+                .write("sources/module-info.java", "module example { requires org.apache.groovy; }\n")
                 .write("sources/sample/Sample.groovy", """
                         package sample
                         class Sample {
@@ -32,7 +33,7 @@ public class CodeNarcExampleTest {
                         }
                         """);
 
-        project.make("+sources/produce/assemble/check");
+        project.make("build/::/verify-module-sources/check");
 
         assertThat(project.find("codenarc-report.xml"))
                 .as("the plugin runs through the build that loads it and writes what its tool produces")

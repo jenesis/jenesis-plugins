@@ -36,7 +36,7 @@ public class EclipseJavaFormatExampleTest {
                         }
                         """);
 
-        project.make("-Djenesis.format.rewrite=true", "+sources/produce/assemble/format");
+        project.make("-Djenesis.format.rewrite=true", "build/::/verify-module-sources/format");
 
         assertThat(project.root().resolve("sources/example/Example.java"))
                 .as("the plugin runs through the build that loads it and rewrites the source it formats")

@@ -27,7 +27,7 @@ public class PalantirJavaFormatExampleTest {
                         }
                         """);
 
-        project.make("-Djenesis.format.rewrite=true", "+sources/produce/assemble/format");
+        project.make("-Djenesis.format.rewrite=true", "build/::/verify-module-sources/format");
 
         assertThat(project.root().resolve("sources/example/Example.java"))
                 .as("the plugin runs through the build that loads it, rewrites the source in Palantir style and"

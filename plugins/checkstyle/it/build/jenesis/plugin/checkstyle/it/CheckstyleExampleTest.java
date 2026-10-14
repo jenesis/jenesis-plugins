@@ -36,7 +36,7 @@ public class CheckstyleExampleTest {
                         }
                         """);
 
-        project.make("+sources/produce/assemble/check");
+        project.make("build/::/verify-module-sources/check");
 
         assertThat(project.find("checkstyle-report.xml"))
                 .as("the plugin runs through the build that loads it and writes what its tool produces")
@@ -70,7 +70,7 @@ public class CheckstyleExampleTest {
                         }
                         """);
 
-        project.make("+sources/produce/assemble/check");
+        project.make("build/::/verify-module-sources/check");
 
         assertThat(project.find("checkstyle-report.xml"))
                 .as("the shared configuration reports at the severity the project resolves for it")
