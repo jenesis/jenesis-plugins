@@ -35,8 +35,8 @@ dokka.external-link.coroutines=https://kotlinlang.org/api/kotlinx.coroutines
 
 Any other value is refused.
 
-It runs in every module that holds a `.kt` source, with or without a `plugin-kotlin.properties`, and takes the place of
-the build's own Kotlin compiler and Dokka. It reads nothing a project binds, so Dokka's includes, custom assets and
+It runs in every module that holds a `.kt` source, with or without a `plugin-kotlin.properties`, and a build compiles
+no Kotlin without it. It reads nothing a project binds, so Dokka's includes, custom assets and
 custom styles have no value. The compiler is handed the module's dependencies alone, `kotlin-stdlib` among them where
 the module declares it, compiles for the release javac compiles for, compiles a source below `META-INF/versions/<N>/`
 for release `<N>`, and lets the tests of a module see its `internal` declarations. The lines of

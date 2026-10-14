@@ -19,7 +19,7 @@ include-java=true
 
 Any other value is refused.
 
-It runs in every module that holds a `.groovy` file, in place of the build's own Groovy support, and needs no
+It runs in every module that holds a `.groovy` file, which the build compiles only with this plugin, and needs no
 `plugin-groovy.properties`. It reads nothing a project binds: groovyc compiles the module's `.groovy` sources, and
 Groovydoc documents them at the root of the module's documentation, or in a `groovy/` folder of it beside the Javadoc
 of the module's Java sources. Groovy and Groovydoc resolve in the group named after the plugin, `groovy/…`, and a
