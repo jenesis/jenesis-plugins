@@ -21,7 +21,7 @@ rule there applies here as well; this file adds what is particular to the plugin
   build.jenesis`, exports its package and `provides build.jenesis.BuildModuleFactory`. Its tests are
   `plugins/<tool>/tests/`, the `@jenesis.test build.jenesis.plugin.<tool>` module.
 - A plugin that observes the tests, as JaCoCo does, provides a `build.jenesis.ObservabilityFactory` instead and is
-  named at the hook point `observe`: its `Observation` pairs the `ObservabilityEngine` that joins the tests' JVM, named
+  wired at the hook point `observe`: its `Observation` pairs the `ObservabilityEngine` that joins the tests' JVM, named
   after the group it was handed so that the agent it names resolves in `<group>:agent`, with the module that reports
   over what it recorded.
 - The module is the build tool's module of the same tool, moved: the same steps, the same folder conventions,
@@ -41,17 +41,20 @@ rule there applies here as well; this file adds what is particular to the plugin
   `@jenesis.plugin <group>:tool`, and KSP's processors `@jenesis.plugin ksp:processor`. A `.properties` file is a
   key with a `:` escaped, `kotlin\:dokka/maven/…`, as `pin` writes it, so a test that writes its pins by hand
   escapes it too.
-- A value of `plugin-<name>.properties` the plugin does not take is refused with an
-  `IllegalArgumentException` that names it and what would be valid; a plugin configured by settings alone
-  takes no values. A value arrives resolved, and never as a path: a file the plugin reads is one the project binds
-  as `@<input>[/<target>]=<path>`, which the plugin finds among its arguments by the name its tool gives it
-  (`pmd.xml`, `eclipse-formatter.xml`, `revapi.json`), so it reads nothing a line does not name.
+- A plugin's values are the lines of whichever file the build reads them from - the tool's own `antlr.properties`,
+  the `checkstyle.properties` beside a `checkstyle.xml` - and the factory validates them itself, because the build
+  checks none: it refuses a value it does not take with an `IllegalArgumentException` that names it and what would
+  be valid, and requires every value it needs; a plugin configured by settings alone takes no values. A value
+  arrives resolved, and never as a path: a file the plugin reads is one the build binds - the tool's own file and
+  what it names beside it, or what a line binds as `@<input>[/<target>]=<path>` - which the plugin finds among its
+  arguments by the name its tool gives it (`pmd.xml`, `checkstyle.xml`, `revapi.json`), so it reads nothing the
+  build did not bind.
 - The plugin compiles against a published `build.jenesis`, pinned in its descriptor, never against the
   vendored engine that runs the build: a plugin needs a release of the tool that carries the API it uses.
 
-- Every plugin folder carries a short `README.md`: one sentence on what it does, the line naming it and an example
-  `plugin-<name>.properties`, a table of the values it takes, and the file it reads. The root `README.md` lists
-  every plugin with that sentence and a link to its folder; a new plugin is added to both.
+- Every plugin folder carries a short `README.md`: one sentence on what it does, the file that activates it with an
+  example, a table of the values it takes, the file it reads, and the setting that switches it off. The root
+  `README.md` lists every plugin with that sentence and a link to its folder; a new plugin is added to both.
 
 ## Tests
 

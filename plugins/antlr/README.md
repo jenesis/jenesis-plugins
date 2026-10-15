@@ -3,15 +3,13 @@
 Generates a lexer and parser from ANTLR `.g4` grammars into the sources of a module.
 
 ```properties
-# jenesis.plugins.properties
-antlr+binary/generated=build.jenesis.plugin.antlr
+# build.jenesis/antlr.properties
+package=example.grammar
+@grammars/antlr=../grammar
 ```
 
-```properties
-# build.jenesis/plugin-antlr.properties
-@grammars/antlr=../grammar
-package=example.grammar
-```
+The build discovers the plugin by itself in every module where a configuration folder holds an `antlr.properties`,
+and resolves it there as `build.jenesis.plugin.antlr`. The lines of the file are its values:
 
 | Value | Meaning |
 |---|---|
@@ -20,4 +18,7 @@ package=example.grammar
 
 Any other value is refused.
 
-It reads the `.g4` grammars below an `antlr/` folder of what it is handed; the project binds it with an `@<input>[/<target>]=<path>` line.
+It reads the `.g4` grammars below an `antlr/` folder of what it is handed; the file binds them with an
+`@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
+
+`-Djenesis.generate.antlr=false` switches it off.

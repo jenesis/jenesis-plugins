@@ -3,15 +3,13 @@
 Generates a web service client from WSDL descriptions.
 
 ```properties
-# jenesis.plugins.properties
-wsimport+binary/generated=build.jenesis.plugin.wsimport
+# build.jenesis/wsimport.properties
+package=example.greeter
+@descriptions/wsimport=../wsimport
 ```
 
-```properties
-# build.jenesis/plugin-wsimport.properties
-@descriptions/wsimport=../wsimport
-package=example.greeter
-```
+The build discovers the plugin by itself in every module where a configuration folder holds a `wsimport.properties`,
+and resolves it there as `build.jenesis.plugin.wsimport`. The lines of the file are its values:
 
 | Value | Meaning |
 |---|---|
@@ -21,4 +19,7 @@ package=example.greeter
 
 Any other value is refused.
 
-It reads the descriptions below a `wsimport/` folder of what it is handed; the project binds it with an `@<input>[/<target>]=<path>` line.
+It reads the descriptions below a `wsimport/` folder of what it is handed; the file binds them with an
+`@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
+
+`-Djenesis.generate.wsimport=false` switches it off.

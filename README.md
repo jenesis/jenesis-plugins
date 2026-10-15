@@ -7,10 +7,9 @@
 
 **The plugins of the Jenesis build tool that run a tool it has to download anyway.** Each plugin is a Java module
 that provides a `build.jenesis.BuildModuleFactory`, an `ObservabilityFactory` for one that observes the tests, or a
-`LanguageFactory` for one that compiles a language:
-the build that loads it hands it its settings, the resolved values of the `plugin-<name>.properties` that switched
-it on, its process permits, its name as the group of its own closure, and its repositories and resolvers, and the
-plugin adds the steps that resolve the tool and run it. What the JDK ships stays built into the build tool; what
+`LanguageFactory` for one that compiles a language: the build that discovers it hands it its settings, the resolved
+values of the file that switched it on, its process permits, its name as the group of its own closure, and its
+repositories and resolvers, and the plugin adds the steps that resolve the tool and run it. What the JDK ships stays built into the build tool; what
 needs a download lives here, so the tool itself stays small and nothing is fetched that a project does not use.
 
 📖 **The user documentation lives at [jenesis.build](https://jenesis.build).** What follows is for people
@@ -18,7 +17,8 @@ working *on* this repository.
 
 ## The plugins
 
-Each folder's README names the values its `plugin-<name>.properties` takes and the file it reads.
+Each folder's README names the file that switches the plugin on, the values it takes, the files it reads and the
+setting that switches it off.
 
 | Plugin | What it does |
 |---|---|
@@ -51,47 +51,42 @@ Each folder's README names the values its `plugin-<name>.properties` takes and t
 | [`wsimport`](plugins/wsimport/) | Generates a web service client from WSDL descriptions. |
 | [`xjc`](plugins/xjc/) | Generates Java sources from XML schemas. |
 
-Each is the module `build.jenesis.plugin.<folder>`, published as `build.jenesis:build.jenesis.plugin.<folder>`, and,
-once named in a project, resolved by the build tool like
-any other plugin:
+Each is the module `build.jenesis.plugin.<folder>`, published as `build.jenesis:build.jenesis.plugin.<folder>`. A
+project does not name it: the build tool discovers each plugin by itself, as it discovered the tool when the tool was
+built in, where a configuration folder of a module holds the tool's own file - an `antlr.properties`, a
+`checkstyle.xml`, a `javaformat.properties` naming its formatter - or, for a language, where a module holds a source of
+it. The build resolves the plugin there by its module name and pins it in the group of its name, `antlr` for this
+file:
 
 ```properties
-# jenesis.plugins.properties
-antlr+binary/generated=build.jenesis.plugin.antlr
-```
-
-```properties
-# build.jenesis/plugin-antlr.properties
+# build.jenesis/antlr.properties
 package=demo.grammar
 arguments=-visitor
 @grammars/antlr=../grammar
 ```
 
-A plugin reads a file only where its `plugin-<name>.properties` binds one, and finds it there by the name its tool
-gives it - `pmd.xml`, `checkstyle.xml`, `eclipse-formatter.xml`. A file of another name is bound under that name. A
-path is resolved against the module's own folder, and a file may lie outside the project, so that several projects
-share one configuration:
+A setting of its tool switches a plugin off, as `-Djenesis.generate.antlr=false` does this one; a language plugin has
+none. `jenesis.plugins.properties` and `plugin-<name>.properties` remain for a plugin of the project's own or of a
+third party, and name none of these.
 
-```properties
-# build.jenesis/plugin-checkstyle.properties
-@rules/checkstyle.xml=../../shared/company.xml
-@rules/suppressions.xml=../../shared/suppressions.xml
-checkstyle.severity=warning
-```
+A plugin reads only the files the build binds for it: the tool's own file and what it names beside it - the
+`${config_loc}/<path>` files of a `checkstyle.xml`, the `signatures` of a `forbiddenapis.properties`, the `profile` of
+an Eclipse `javaformat.properties` - and, for a generator, what its file binds with `@<input>[/<target>]=<path>` lines,
+each path resolved against the module's own folder; a folder stays within the project, while a file may lie
+outside it, so that several projects share one. A value is resolved before the plugin sees it, `@<key>` standing
+for `-Djenesis.variable.<key>`, and a plugin refuses a value it does not take, naming those it does. Checkstyle takes
+every line of a `checkstyle.properties` beside its `checkstyle.xml` as a property its configuration expands.
 
-A value is resolved before the plugin sees it, `@<key>` standing for `-Djenesis.variable.<key>`, and a plugin
-refuses a value it does not take, naming those it does. Checkstyle takes every value as a property its configuration
-expands.
-
-A plugin that offers more than one provider names each, and the line picks one, as
-`ktlint+check=build.jenesis.plugin.ktlint@check`. A plugin resolves its tool in a group named after it - `antlr:tool` for the line above - so the tool is pinned as
-`antlr:tool/maven/…` beside the project's own pins, and whatever else it resolves in another `antlr:<purpose>`.
+A plugin that offers more than one provider names each, and the build wires each at its own hook point, as ktlint's
+`@check` at `check` and its `@format` at `format`. A plugin resolves its tool in a group named after it - `antlr:tool`
+for the file above - so the tool is pinned as `antlr:tool/maven/…` beside the project's own pins, and whatever else it
+resolves in another `antlr:<purpose>`.
 
 ## Layout
 
 One folder per plugin under `plugins/`, each with a short `README.md`, `sources/` (the plugin module), `tests/` (its
 `@jenesis.test` module) and `it/`, a test module that builds a small example project with a Jenesis build of its
-own, which loads the plugin from a local module repository as a project that names it would. `testing/` holds what
+own, which loads the plugin from a local module repository as the build of a project would. `testing/` holds what
 those example tests share. The build tool is the `build/.upstream` git submodule, and `build/jenesis` links into it:
 
 ```bash

@@ -3,16 +3,14 @@
 Runs PIT mutation testing over the code a test module tests, reporting which mutants its tests kill.
 
 ```properties
-# jenesis.plugins.properties
-pitest+observed=build.jenesis.plugin.pitest
-```
-
-```properties
-# build.jenesis/plugin-pitest.properties
+# build.jenesis/pitest.properties
 targetClasses=com.example.*
 targetTests=com.example.test.*
 outputFormats=XML,HTML
 ```
+
+The build discovers the plugin by itself in every test module where a configuration folder holds a
+`pitest.properties`, and resolves it there as `build.jenesis.plugin.pitest`. The lines of the file are its values:
 
 | Value | Meaning |
 |---|---|
@@ -24,6 +22,7 @@ outputFormats=XML,HTML
 
 Any other value is refused.
 
-It runs in each test module where its `plugin-pitest.properties` is found, and reads no file. PIT runs the tests
-with the JUnit Platform launcher of the version the test module pins for `org.junit.platform/junit-platform-engine`
-or `junit-platform-commons`, or else of the version its tests resolved.
+It reads no file. PIT runs the tests with the JUnit Platform launcher of the version the test module pins for
+`org.junit.platform/junit-platform-engine` or `junit-platform-commons`, or else of the version its tests resolved.
+
+`-Djenesis.mutate.pitest=false` switches it off.

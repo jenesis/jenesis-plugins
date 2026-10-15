@@ -2,18 +2,19 @@
 
 Checks the layout of the Scala sources of a module with scalafmt (`@check`), or verifies and rewrites it (`@format`).
 
-```properties
-# jenesis.plugins.properties
-scalafmt+check=build.jenesis.plugin.scalafmt@check
+```hocon
+# build.jenesis/.scalafmt.conf
+version = "3.8.3"
+runner.dialect = scala213
 ```
 
-```properties
-# build.jenesis/plugin-scalafmt.properties
-@rules=../.scalafmt.conf
-```
+The build discovers the plugin by itself in every module where a configuration folder holds a `.scalafmt.conf`, and
+resolves it there as `build.jenesis.plugin.scalafmt`, running both of its providers: `@check` at the hook point
+`check` and `@format` at the hook point `format`.
 
 It takes no values.
 
-It reads a `.scalafmt.conf`; the project binds it with an `@<input>[/<target>]=<path>` line.
+It reads the `.scalafmt.conf`, which the build binds for both.
 
-`-Djenesis.source.scalafmt` sets how findings are treated, as for every checker of the build.
+`-Djenesis.source.scalafmt` sets how findings of the check are treated, as for every checker of the build, and
+`-Djenesis.format.scalafmt=false` switches the formatting off.

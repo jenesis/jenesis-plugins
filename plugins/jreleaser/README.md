@@ -2,15 +2,26 @@
 
 Releases what the build staged with JReleaser, run in the build's own JVM rather than as a command.
 
-```properties
-# jenesis.plugins.properties
-jreleaser+release=build.jenesis.plugin.jreleaser
+```yaml
+# jreleaser.yml
+project:
+  name: example
+  description: An example
+  authors: [someone]
+  license: Apache-2.0
+release:
+  github:
+    owner: someone
 ```
 
 ```properties
-# build.jenesis/plugin-jreleaser.properties
-@jreleaser=jreleaser.yml
+# build.jenesis/jreleaser.properties
+JRELEASER_GITHUB_TOKEN=@github.token
 ```
+
+The build discovers the plugin by itself where a `jreleaser.yml`, `.yaml`, `.toml` or `.json` lies at the project's
+root, and resolves it as `build.jenesis.plugin.jreleaser`. The lines of a `jreleaser.properties` in the configuration
+folder, which may be left out, are its values:
 
 | Value | Meaning |
 |---|---|
@@ -24,9 +35,8 @@ Any other value is refused. JReleaser runs with `--dry-run` unless the command l
 java -Djenesis.release.publish=true -Djenesis.project.version=1.2.3 build/jenesis/Make.java release
 ```
 
-It reads the `jreleaser.yml`, `.yaml`, `.toml` or `.json` the project binds with an `@<input>[/<target>]=<path>` line.
-A releaser runs where a configuration folder holds its `plugin-jreleaser.properties`, and every `release` and every
-`pin` runs it, dry unless the command line publishes.
+It reads the JReleaser configuration at the project's root, which the build binds. Every `release` and every `pin`
+runs it, dry unless the command line publishes, and `-Djenesis.release.jreleaser=false` switches it off.
 
 JReleaser runs in the project's root with the version the build resolved, `-Djenesis.project.version` included. Every
 value of the project's resolved metadata and the folder of every staged tree are template properties of the
@@ -38,5 +48,4 @@ as its settings file, which then stands in for `~/.jreleaser/config.properties`;
 environment variables. Its output lands in the step's own folder, never in the project.
 JReleaser resolves in the tool group of the plugin, `jreleaser:tool/…`. `pin` runs last, after a dry release, so it
 resolves JReleaser and writes the line that pins it, `jreleaser\:tool/maven/org.jreleaser/jreleaser-tool-provider=<version>
-SHA-256/<hex>`, into `jenesis.plugins.pin.properties` with the rest. A configuration folder `pin` does not read - a
-profile's it was not given - keeps JReleaser out of that run, and `pin` then keeps the line as it stands.
+SHA-256/<hex>`, into `jenesis.plugins.pin.properties` with the rest.

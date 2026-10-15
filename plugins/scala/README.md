@@ -3,13 +3,8 @@
 Compiles the Scala sources of a module with the Scala 3 compiler before javac, jointly with its Java sources, and
 documents them with Scaladoc.
 
-```properties
-# jenesis.plugins.properties
-scala+language=build.jenesis.plugin.scala
-```
-
-It runs in every module that holds a `.scala` file and needs no `plugin-scala.properties`. It takes no values: a
-`plugin-scala.properties` that names one is refused.
+The build discovers the plugin by itself in every module that holds a `.scala` source, and resolves it there as
+`build.jenesis.plugin.scala`; no file switches it on. It takes no values.
 
 | Setting | Meaning |
 |---|---|

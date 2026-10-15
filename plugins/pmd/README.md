@@ -2,18 +2,18 @@
 
 Checks the Java sources of a module with PMD.
 
-```properties
-# jenesis.plugins.properties
-pmd+check=build.jenesis.plugin.pmd
+```xml
+<!-- build.jenesis/pmd.xml -->
+<ruleset name="example" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+    <rule ref="category/java/bestpractices.xml/SystemPrintln"/>
+</ruleset>
 ```
 
-```properties
-# build.jenesis/plugin-pmd.properties
-@rules=../pmd.xml
-```
+The build discovers the plugin by itself in every module where a configuration folder holds a `pmd.xml`, and resolves
+it there as `build.jenesis.plugin.pmd`.
 
 It takes no values.
 
-It reads a `pmd.xml` rule set; the project binds it with an `@<input>[/<target>]=<path>` line.
+It reads the `pmd.xml` rule set, which the build binds.
 
-`-Djenesis.source.pmd` and `jenesis.pmd.priority` sets how findings are treated, as for every checker of the build.
+`-Djenesis.source.pmd` and `-Djenesis.pmd.priority` set how findings are treated, as for every checker of the build.

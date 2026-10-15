@@ -3,14 +3,12 @@
 Runs Kotlin Symbol Processing over the Kotlin and Java sources of a module with the symbol processors the module names.
 
 ```properties
-# jenesis.plugins.properties
-ksp+binary/generated=build.jenesis.plugin.ksp
-```
-
-```properties
-# build.jenesis/plugin-ksp.properties
+# build.jenesis/ksp.properties
 moshi.generated=javax.annotation.processing.Generated
 ```
+
+The build discovers the plugin by itself in every module where a configuration folder holds a `ksp.properties`, and
+resolves it there as `build.jenesis.plugin.ksp`. The lines of the file are its values:
 
 | Value | Meaning |
 |---|---|
@@ -23,3 +21,5 @@ processor brings a Kotlin standard library of its own.
 
 It reads the sources of the module and resolves their types against the module's dependencies; it binds no file.
 What the processors write is compiled with the module's sources, and the resources they write join its jar.
+
+`-Djenesis.generate.ksp=false` switches it off.

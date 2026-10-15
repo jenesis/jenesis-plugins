@@ -2,18 +2,23 @@
 
 Checks the Scala sources of a module with Scalastyle.
 
-```properties
-# jenesis.plugins.properties
-scalastyle+check=build.jenesis.plugin.scalastyle
+```xml
+<!-- build.jenesis/scalastyle-config.xml -->
+<scalastyle>
+    <name>example</name>
+    <check level="error" class="org.scalastyle.file.FileLineLengthChecker" enabled="true">
+        <parameters>
+            <parameter name="maxLineLength">120</parameter>
+        </parameters>
+    </check>
+</scalastyle>
 ```
 
-```properties
-# build.jenesis/plugin-scalastyle.properties
-@rules=../scalastyle-config.xml
-```
+The build discovers the plugin by itself in every module where a configuration folder holds a `scalastyle-config.xml`,
+and resolves it there as `build.jenesis.plugin.scalastyle`.
 
 It takes no values.
 
-It reads a `scalastyle-config.xml`; the project binds it with an `@<input>[/<target>]=<path>` line.
+It reads the `scalastyle-config.xml`, which the build binds.
 
 `-Djenesis.source.scalastyle` sets how findings are treated, as for every checker of the build.

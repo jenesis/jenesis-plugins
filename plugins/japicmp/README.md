@@ -3,15 +3,13 @@
 Compares the API of a module with a released baseline using japicmp.
 
 ```properties
-# jenesis.plugins.properties
-japicmp+artifact=build.jenesis.plugin.japicmp
-```
-
-```properties
-# build.jenesis/plugin-japicmp.properties
+# build.jenesis/japicmp.properties
 baseline=org.example/library/1.0.0
 format=xml
 ```
+
+The build discovers the plugin by itself in every module but a test module where a configuration folder holds a
+`japicmp.properties`, and resolves it there as `build.jenesis.plugin.japicmp`. The lines of the file are its values:
 
 | Value | Meaning |
 |---|---|
@@ -24,3 +22,5 @@ format=xml
 | `error-on-binary-incompatibility`, `error-on-source-incompatibility`, `error-on-modifications`, `error-on-semantic-incompatibility` | flags that fail the build on such a change |
 
 Any other value is refused.
+
+`-Djenesis.artifact.japicmp=false` switches it off.
