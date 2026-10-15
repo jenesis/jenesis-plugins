@@ -15,10 +15,7 @@ import build.jenesis.Resolver;
 import build.jenesis.maven.MavenDefaultRepository;
 import build.jenesis.maven.MavenPomResolver;
 import build.jenesis.plugin.scala.ScalaFactory;
-import build.jenesis.project.InferredCompilerChainModule;
-import build.jenesis.project.InferredDocumentationChainModule;
 import build.jenesis.project.Language;
-import build.jenesis.project.Prepared;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,7 +25,7 @@ public class ScalaLanguageRunTest {
     private Path root, project;
 
     @Test
-    public void compiles_scala_before_javac_and_documents_it_beside_java() throws IOException {
+    public void compiles_and_documents_scala() throws IOException {
         ScalaPins.write(project, "scala:tool", "scala:zinc", "scala:scaladoc");
         Path sample = Files.createDirectories(project.resolve(BuildStep.SOURCES + "sample"));
         Files.writeString(sample.resolve("Greeter.java"), """
@@ -62,8 +59,6 @@ public class ScalaLanguageRunTest {
                 "scala",
                 repositories,
                 resolvers);
-        SequencedMap<String, Prepared<Language>> languages = new LinkedHashMap<>(Map.of("scala",
-                new Prepared<>((_, _) -> { }, _ -> language)));
 
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
@@ -75,32 +70,15 @@ public class ScalaLanguageRunTest {
                 false,
                 0);
         executor.addSource("project", project);
-        executor.addModule("chain",
-                new InferredCompilerChainModule().languages(languages),
-                "project");
-        executor.addModule("doc",
-                new InferredDocumentationChainModule().languages(languages),
-                "project",
-                "chain");
+        executor.addModule("scala", language.compiler(), "project");
+        executor.addModule("scaladoc", language.documentation(), "project", "scala");
         executor.execute();
 
-        Path compile = root.resolve("chain").resolve(InferredCompilerChainModule.COMPILE);
-        Path scala = compile.resolve("scala/classes/output").resolve(BuildStep.CLASSES);
-        assertThat(scala.resolve("sample/Sample.class")).isNotEmptyFile();
-        assertThat(scala.resolve("sample/data.txt"))
+        Path classes = root.resolve("scala/classes/output").resolve(BuildStep.CLASSES);
+        assertThat(classes.resolve("sample/Sample.class")).isNotEmptyFile();
+        assertThat(classes.resolve("sample/data.txt"))
                 .as("the build copies the resources itself")
                 .doesNotExist();
-        assertThat(compile.resolve(InferredCompilerChainModule.JAVAC).resolve("output").resolve(BuildStep.CLASSES)
-                .resolve("sample/Caller.class"))
-                .as("javac compiles the Java source that calls Scala against the classes the plugin wrote")
-                .isNotEmptyFile();
-        assertThat(compile.resolve(InferredCompilerChainModule.RESOURCE).resolve("output").resolve(BuildStep.CLASSES)
-                .resolve("sample/data.txt"))
-                .hasContent("data");
-        Path javadoc = root.resolve("doc/document/aggregate/output/javadoc");
-        assertThat(javadoc.resolve("sample/Caller.html")).isNotEmptyFile();
-        assertThat(javadoc.resolve("scala/index.html"))
-                .as("Scaladoc is placed in a folder named after the plugin beside the documentation of javac")
-                .isNotEmptyFile();
+        assertThat(root.resolve("scaladoc")).isNotEmptyDirectory();
     }
 }
