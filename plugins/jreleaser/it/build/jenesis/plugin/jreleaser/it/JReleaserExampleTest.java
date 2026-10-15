@@ -15,8 +15,7 @@ public class JReleaserExampleTest {
     @Test
     public void runs_jreleaser_in_the_build_with_the_version_the_build_resolved() throws Exception {
         ExampleProject project = ExampleProject.of(folder, JReleaserFactory.class)
-                .write("jenesis.plugins.properties", "jreleaser+release=build.jenesis.plugin.jreleaser\n")
-                .write("build.jenesis/plugin-jreleaser.properties", """
+                .write("build.jenesis/jreleaser.properties", """
                         command=config
                         JRELEASER_GITHUB_TOKEN=unused
                         @jreleaser=jreleaser.yml

@@ -16,7 +16,7 @@ public class ScalastyleExampleTest {
     @Test
     public void reports_on_the_scala_sources_with_the_configuration_a_project_binds() throws IOException {
         ExampleProject project = ExampleProject.of(folder, ScalastyleFactory.class, ScalaFactory.class)
-                .write("jenesis.plugins.properties", "scala+language=build.jenesis.plugin.scala\nscalastyle+check=build.jenesis.plugin.scalastyle\n")
+                .write("jenesis.plugins.properties", "scalastyle+check=build.jenesis.plugin.scalastyle\n")
                 .write("build.jenesis/plugin-scalastyle.properties", "@rules=../scalastyle-config.xml\n")
                 .write("scalastyle-config.xml", """
                         <scalastyle>

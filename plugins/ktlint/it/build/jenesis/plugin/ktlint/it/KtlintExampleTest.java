@@ -16,7 +16,7 @@ public class KtlintExampleTest {
     @Test
     public void reports_on_the_kotlin_sources_as_the_editorconfig_a_project_binds_says() throws IOException {
         ExampleProject project = ExampleProject.of(folder, KtlintFactory.class, KotlinFactory.class)
-                .write("jenesis.plugins.properties", "kotlin+language=build.jenesis.plugin.kotlin\nktlint+check=build.jenesis.plugin.ktlint@check\n")
+                .write("jenesis.plugins.properties", "ktlint+check=build.jenesis.plugin.ktlint@check\n")
                 .write("build.jenesis/plugin-ktlint.properties", "@rules=../.editorconfig\n")
                 .write(".editorconfig", """
                         root = true

@@ -16,7 +16,7 @@ public class KtlintFormatExampleTest {
     @Test
     public void rewrites_the_kotlin_sources_as_the_editorconfig_a_project_binds_says() throws IOException {
         ExampleProject project = ExampleProject.of(folder, KtlintFormatFactory.class, KotlinFactory.class)
-                .write("jenesis.plugins.properties", "kotlin+language=build.jenesis.plugin.kotlin\nktlint+format=build.jenesis.plugin.ktlint@format\n")
+                .write("jenesis.plugins.properties", "ktlint+format=build.jenesis.plugin.ktlint@format\n")
                 .write("build.jenesis/plugin-ktlint.properties", "@rules=../.editorconfig\n")
                 .write(".editorconfig", """
                         root = true

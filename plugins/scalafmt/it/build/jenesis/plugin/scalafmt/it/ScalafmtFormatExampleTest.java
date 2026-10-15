@@ -16,7 +16,7 @@ public class ScalafmtFormatExampleTest {
     @Test
     public void rewrites_the_scala_sources_as_the_configuration_a_project_binds_says() throws IOException {
         ExampleProject project = ExampleProject.of(folder, ScalafmtFormatFactory.class, ScalaFactory.class)
-                .write("jenesis.plugins.properties", "scala+language=build.jenesis.plugin.scala\nscalafmt+format=build.jenesis.plugin.scalafmt@format\n")
+                .write("jenesis.plugins.properties", "scalafmt+format=build.jenesis.plugin.scalafmt@format\n")
                 .write("build.jenesis/plugin-scalafmt.properties", "@rules=../.scalafmt.conf\n")
                 .write(".scalafmt.conf", """
                         version = "3.8.3"

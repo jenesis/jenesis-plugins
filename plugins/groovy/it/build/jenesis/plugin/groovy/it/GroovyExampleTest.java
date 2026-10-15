@@ -15,7 +15,6 @@ public class GroovyExampleTest {
     @Test
     public void compiles_and_documents_the_groovy_sources_of_a_module_beside_its_java_sources() throws IOException {
         ExampleProject project = ExampleProject.of(folder, GroovyFactory.class)
-                .write("jenesis.plugins.properties", "groovy+language=build.jenesis.plugin.groovy\n")
                 .write("sources/module-info.java", "module example { exports example; }\n")
                 .write("sources/example/Greeter.java", """
                         package example;

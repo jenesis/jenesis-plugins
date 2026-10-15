@@ -16,7 +16,7 @@ public class KtfmtFormatExampleTest {
     @Test
     public void rewrites_the_kotlin_sources_in_the_style_the_project_names() throws IOException {
         ExampleProject project = ExampleProject.of(folder, KtfmtFormatFactory.class, KotlinFactory.class)
-                .write("jenesis.plugins.properties", "kotlin+language=build.jenesis.plugin.kotlin\nktfmt+format=build.jenesis.plugin.ktfmt\n")
+                .write("jenesis.plugins.properties", "ktfmt+format=build.jenesis.plugin.ktfmt\n")
                 .write("build.jenesis/plugin-ktfmt.properties", "style=kotlinlang\n")
                 .write("sources/module-info.java", "module example { requires kotlin.stdlib; }\n")
                 .write("sources/sample/Sample.kt", """

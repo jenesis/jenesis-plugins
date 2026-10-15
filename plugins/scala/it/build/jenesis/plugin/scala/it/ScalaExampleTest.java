@@ -15,7 +15,6 @@ public class ScalaExampleTest {
     @Test
     public void compiles_and_documents_the_scala_sources_of_a_module_that_java_calls() throws IOException {
         ExampleProject project = ExampleProject.of(folder, ScalaFactory.class)
-                .write("jenesis.plugins.properties", "scala+language=build.jenesis.plugin.scala\n")
                 .write("sources/module-info.java", "module example { exports example; }\n")
                 .write("sources/example/Greeting.scala", """
                         package example

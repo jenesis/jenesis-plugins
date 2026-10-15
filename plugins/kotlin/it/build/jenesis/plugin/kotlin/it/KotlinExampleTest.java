@@ -15,8 +15,7 @@ public class KotlinExampleTest {
     @Test
     public void compiles_kotlin_beside_the_java_that_uses_it_and_documents_it_with_dokka() throws IOException {
         ExampleProject project = ExampleProject.of(folder, KotlinFactory.class)
-                .write("jenesis.plugins.properties", "kotlin+language=build.jenesis.plugin.kotlin\n")
-                .write("build.jenesis/plugin-kotlin.properties", "dokka.module-name=Example\n")
+                .write("build.jenesis/dokka.properties", "module-name=Example\n")
                 .write("sources/module-info.java", """
                         module example {
                             requires kotlin.stdlib;

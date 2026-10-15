@@ -16,7 +16,7 @@ public class DetektExampleTest {
     @Test
     public void reports_on_the_kotlin_sources_with_the_configuration_a_project_binds() throws IOException {
         ExampleProject project = ExampleProject.of(folder, DetektFactory.class, KotlinFactory.class)
-                .write("jenesis.plugins.properties", "kotlin+language=build.jenesis.plugin.kotlin\ndetekt+check=build.jenesis.plugin.detekt\n")
+                .write("jenesis.plugins.properties", "detekt+check=build.jenesis.plugin.detekt\n")
                 .write("build.jenesis/plugin-detekt.properties", "@rules=../detekt.yml\n")
                 .write("detekt.yml", """
                         style:

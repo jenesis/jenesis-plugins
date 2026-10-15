@@ -16,7 +16,7 @@ public class CodeNarcExampleTest {
     @Test
     public void reports_on_the_groovy_sources_with_the_rule_set_a_project_binds() throws IOException {
         ExampleProject project = ExampleProject.of(folder, CodeNarcFactory.class, GroovyFactory.class)
-                .write("jenesis.plugins.properties", "groovy+language=build.jenesis.plugin.groovy\ncodenarc+check=build.jenesis.plugin.codenarc\n")
+                .write("jenesis.plugins.properties", "codenarc+check=build.jenesis.plugin.codenarc\n")
                 .write("build.jenesis/plugin-codenarc.properties", "@rules=../codenarc.xml\n")
                 .write("codenarc.xml", """
                         <ruleset xmlns="http://codenarc.org/ruleset/1.0">
