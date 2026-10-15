@@ -231,7 +231,7 @@ public class ScalaCompilerModuleRunTest {
                 class Edited:
                   def value(): String = "first"
                 """);
-        Environment warm = new Environment(Map.of("process.warm", "true"));
+        Environment warm = new Environment(Map.of("process.daemon", "true"));
         compile(warm);
         Files.writeString(sample.resolve("Edited.scala"), """
                 package sample

@@ -174,7 +174,7 @@ public class KspModuleRunTest {
     }
 
     private void generate() throws IOException {
-        Environment warm = new Environment(Map.of("process.warm", "true"));
+        Environment warm = new Environment(Map.of("process.daemon", "true"));
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("libraries", libraries(), "project");

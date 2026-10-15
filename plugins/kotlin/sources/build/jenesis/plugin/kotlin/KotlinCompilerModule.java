@@ -224,7 +224,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
 
         private ProcessHandler warm(List<String> commands) {
             ProcessHandler.OfProcess handler = ProcessHandler.OfProcess.ofJavaMain().apply(commands).shared(true);
-            return terms.warm() ? handler : handler.warm(false);
+            return handler.warm(terms.warm()).aot(terms.aot());
         }
 
         @Override

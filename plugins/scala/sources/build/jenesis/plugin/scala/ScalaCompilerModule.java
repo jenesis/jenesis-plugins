@@ -245,7 +245,7 @@ public class ScalaCompilerModule implements BuildExecutorModule {
                 return super.handler(context, commands);
             }
             ProcessHandler.OfProcess handler = ProcessHandler.OfProcess.ofJavaMain().apply(commands).shared(true);
-            return terms.warm() ? handler : handler.warm(false);
+            return handler.warm(terms.warm()).aot(terms.aot());
         }
 
         @Override
