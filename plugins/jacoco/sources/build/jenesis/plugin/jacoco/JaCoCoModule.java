@@ -276,8 +276,9 @@ public class JaCoCoModule implements BuildExecutorModule {
             }
             Path report = Files.createDirectories(context.next().resolve(BuildStep.REPORTS + "jacoco"));
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "org.jacoco.cli.internal.Main", "report", data.toString()));
+                    "-cp", ProcessHandler.OfProcess.driver(JaCoCoDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    JaCoCoDriver.class.getName(), "report", data.toString()));
             for (String directory : covering) {
                 commands.add("--classfiles");
                 commands.add(directory);

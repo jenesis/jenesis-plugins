@@ -16,6 +16,7 @@ import build.jenesis.SequencedProperties;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.FormatBuildStep;
 import build.jenesis.step.ProcessBuildStep;
+import build.jenesis.step.ProcessHandler;
 
 public class KtfmtFormatModule implements BuildExecutorModule {
 
@@ -182,10 +183,11 @@ public class KtfmtFormatModule implements BuildExecutorModule {
                                        List<String> jars,
                                        Path config,
                                        List<String> files,
-                                       boolean verify) {
+                                       boolean verify) throws IOException {
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "com.facebook.ktfmt.cli.Main",
+                    "-cp", ProcessHandler.OfProcess.driver(KtfmtDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    KtfmtDriver.class.getName(),
                     style.option));
             if (!removeUnusedImports) {
                 commands.add("--do-not-remove-unused-imports");

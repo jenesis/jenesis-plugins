@@ -6,12 +6,21 @@
  * repositories of the build that loads the plugin.
  *
  * @jenesis.release 25
- * @jenesis.pin build.jenesis 0.16.0 SHA-256/a3d9a8a361410748f3f02968ac31e8f432da7055bee68eaa030d87544f2891a3
- * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/a3d9a8a361410748f3f02968ac31e8f432da7055bee68eaa030d87544f2891a3
+ * @jenesis.alias org.jacoco.cli org.jacoco/org.jacoco.cli
+ * @jenesis.pin args4j/args4j 2.0.28 SHA-256/11b029a602e787e2bc08eb3b77eda1a4f5e8b263d22e3c5d6220cd5c51f30b18
+ * @jenesis.pin build.jenesis 0.16.0 SHA-256/d7b8ad68b8233d0771d269cd4e18133f8d51b62d1f6b71d50b3973c1cd9b2f9b
+ * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/d7b8ad68b8233d0771d269cd4e18133f8d51b62d1f6b71d50b3973c1cd9b2f9b
+ * @jenesis.pin org.jacoco/org.jacoco.cli 0.8.15 SHA-256/be5e57a018398b0476e8a3837cc7a0a1e075259ba8a00f349d2b86f854230c23
+ * @jenesis.pin org.jacoco/org.jacoco.core 0.8.15 SHA-256/ade1e0fdb4cd80d8537b57c6edb70a1360c47fdc518c20c65314517479bc4d0d
+ * @jenesis.pin org.jacoco/org.jacoco.report 0.8.15 SHA-256/66a79e36edc77a1ebf6689e76a976e12ab4f1af515cbd09555840fba775714f4
+ * @jenesis.pin org.ow2.asm/asm 9.10.1 SHA-256/ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb
+ * @jenesis.pin org.ow2.asm/asm-commons 9.10.1 SHA-256/6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895
+ * @jenesis.pin org.ow2.asm/asm-tree 9.10.1 SHA-256/3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b
  */
 module build.jenesis.plugin.jacoco {
 
     requires build.jenesis;
+    requires static org.jacoco.cli;
     requires java.xml;
 
     exports build.jenesis.plugin.jacoco;

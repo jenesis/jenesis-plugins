@@ -65,20 +65,50 @@ public class CheckstyleModuleTest {
         Files.writeString(Files.createDirectories(project.resolve(BuildStep.SOURCES + "sample")).resolve("Sample.java"),
                 "package sample; public class Sample { }");
         Path served = Files.createDirectories(root.resolve("served"));
-        jar(served.resolve("checkstyle.jar"), "com.puppycrawl.tools.checkstyle.Main", ClassFile.of().build(
-                ClassDesc.of("com.puppycrawl.tools.checkstyle.Main"),
-                type -> type.withFlags(ClassFile.ACC_PUBLIC).withMethodBody("main",
-                        MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_String.arrayType()),
-                        ClassFile.ACC_PUBLIC | ClassFile.ACC_STATIC,
+        ClassDesc main = ClassDesc.of("com.puppycrawl.tools.checkstyle.Main"),
+                options = ClassDesc.of("com.puppycrawl.tools.checkstyle.Main$CliOptions"),
+                commandLine = ClassDesc.of("picocli.CommandLine"),
+                parseResult = ClassDesc.of("picocli.CommandLine$ParseResult");
+        jar(served.resolve("checkstyle.jar"), Map.of(
+                main, ClassFile.of().build(main, type -> type.withFlags(ClassFile.ACC_PUBLIC).withMethodBody("execute",
+                        MethodTypeDesc.of(ConstantDescs.CD_int, parseResult, options),
+                        ClassFile.ACC_PRIVATE | ClassFile.ACC_STATIC,
                         code -> code.ldc("org.example.Check")
                                 .invokestatic(ConstantDescs.CD_Class,
                                         "forName",
                                         MethodTypeDesc.of(ConstantDescs.CD_Class, ConstantDescs.CD_String))
                                 .pop()
-                                .return_())));
-        jar(served.resolve("checks.jar"), "org.example.Check", ClassFile.of().build(
+                                .iconst_0()
+                                .ireturn())),
+                options, empty(options, MethodTypeDesc.of(ConstantDescs.CD_void)),
+                parseResult, empty(parseResult, MethodTypeDesc.of(ConstantDescs.CD_void)),
+                commandLine, ClassFile.of().build(commandLine, type -> type.withFlags(ClassFile.ACC_PUBLIC)
+                        .withMethodBody(ConstantDescs.INIT_NAME,
+                                MethodTypeDesc.of(ConstantDescs.CD_void, ConstantDescs.CD_Object),
+                                ClassFile.ACC_PUBLIC,
+                                code -> code.aload(0)
+                                        .invokespecial(ConstantDescs.CD_Object,
+                                                ConstantDescs.INIT_NAME,
+                                                ConstantDescs.MTD_void)
+                                        .return_())
+                        .withMethodBody("setUsageHelpWidth",
+                                MethodTypeDesc.of(commandLine, ConstantDescs.CD_int),
+                                ClassFile.ACC_PUBLIC,
+                                code -> code.aload(0).areturn())
+                        .withMethodBody("setCaseInsensitiveEnumValuesAllowed",
+                                MethodTypeDesc.of(commandLine, ConstantDescs.CD_boolean),
+                                ClassFile.ACC_PUBLIC,
+                                code -> code.aload(0).areturn())
+                        .withMethodBody("parseArgs",
+                                MethodTypeDesc.of(parseResult, ConstantDescs.CD_String.arrayType()),
+                                ClassFile.ACC_PUBLIC,
+                                code -> code.new_(parseResult)
+                                        .dup()
+                                        .invokespecial(parseResult, ConstantDescs.INIT_NAME, ConstantDescs.MTD_void)
+                                        .areturn()))));
+        jar(served.resolve("checks.jar"), Map.of(ClassDesc.of("org.example.Check"), ClassFile.of().build(
                 ClassDesc.of("org.example.Check"),
-                type -> type.withFlags(ClassFile.ACC_PUBLIC)));
+                type -> type.withFlags(ClassFile.ACC_PUBLIC))));
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("checkstyle",
@@ -91,11 +121,21 @@ public class CheckstyleModuleTest {
                 .containsKey("checkstyle/check");
     }
 
-    private static void jar(Path file, String type, byte[] bytes) throws IOException {
+    private static byte[] empty(ClassDesc type, MethodTypeDesc constructor) {
+        return ClassFile.of().build(type, builder -> builder.withFlags(ClassFile.ACC_PUBLIC)
+                .withMethodBody(ConstantDescs.INIT_NAME, constructor, ClassFile.ACC_PUBLIC, code -> code.aload(0)
+                        .invokespecial(ConstantDescs.CD_Object, ConstantDescs.INIT_NAME, ConstantDescs.MTD_void)
+                        .return_()));
+    }
+
+    private static void jar(Path file, Map<ClassDesc, byte[]> types) throws IOException {
         try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(file))) {
-            out.putNextEntry(new JarEntry(type.replace('.', '/') + ".class"));
-            out.write(bytes);
-            out.closeEntry();
+            for (Map.Entry<ClassDesc, byte[]> type : types.entrySet()) {
+                out.putNextEntry(new JarEntry(type.getKey().descriptorString()
+                        .substring(1, type.getKey().descriptorString().length() - 1) + ".class"));
+                out.write(type.getValue());
+                out.closeEntry();
+            }
         }
     }
 

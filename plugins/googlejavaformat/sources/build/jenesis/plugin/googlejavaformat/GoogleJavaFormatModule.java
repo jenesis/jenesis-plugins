@@ -16,6 +16,7 @@ import build.jenesis.SequencedProperties;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.FormatBuildStep;
 import build.jenesis.step.ProcessBuildStep;
+import build.jenesis.step.ProcessHandler;
 
 public class GoogleJavaFormatModule implements BuildExecutorModule {
 
@@ -282,16 +283,17 @@ public class GoogleJavaFormatModule implements BuildExecutorModule {
                                        List<String> jars,
                                        Path config,
                                        List<String> files,
-                                       boolean verify) {
+                                       boolean verify) throws IOException {
             List<String> commands = new ArrayList<>(List.of(
-                    "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-                    "--add-exports", "jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
-                    "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-                    "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-                    "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-                    "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "com.google.googlejavaformat.java.Main"));
+                    "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+                    "--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+                    "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+                    "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+                    "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+                    "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+                    "-cp", ProcessHandler.OfProcess.driver(GoogleJavaFormatDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    GoogleJavaFormatDriver.class.getName()));
             if (aosp) {
                 commands.add("--aosp");
             }

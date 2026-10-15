@@ -2,15 +2,15 @@ package build.jenesis.plugin.ksp;
 
 import module java.base;
 
-public final class KspMain {
+public final class KspDriver {
 
     private static final String KSP = "com.google.devtools.ksp.";
 
-    private KspMain() {
+    private KspDriver() {
     }
 
-    public static void main(String[] args) throws Exception {
-        ClassLoader loader = KspMain.class.getClassLoader();
+    public static int main(String[] args) throws Exception {
+        ClassLoader loader = KspDriver.class.getClassLoader();
         Object parsed = Class.forName(KSP + "processing.KspJvmArgParserKt", true, loader)
                 .getMethod("kspJvmArgParser", String[].class)
                 .invoke(null, (Object) args);
@@ -21,7 +21,6 @@ public final class KspMain {
             urls[index] = Path.of(processorPath.get(index).toString()).toUri().toURL();
         }
         Class<?> logger = Class.forName(KSP + "processing.KspGradleLogger", true, loader);
-        int code;
         try (URLClassLoader processors = new URLClassLoader(urls, loader)) {
             List<Object> providers = new ArrayList<>();
             ServiceLoader.load(Class.forName(KSP + "processing.SymbolProcessorProvider", false, loader), processors)
@@ -34,10 +33,7 @@ public final class KspMain {
                             providers,
                             logger.getConstructor(int.class).newInstance(logger.getField("LOGGING_LEVEL_WARN").getInt(null)));
             Object executed = processing.getClass().getMethod("execute").invoke(processing);
-            code = (int) executed.getClass().getMethod("getCode").invoke(executed);
-        }
-        if (code != 0) {
-            throw new IllegalStateException("KSP failed with exit code " + code + ", as reported above");
+            return (int) executed.getClass().getMethod("getCode").invoke(executed);
         }
     }
 }

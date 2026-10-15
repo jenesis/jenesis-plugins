@@ -258,8 +258,9 @@ public class CheckstyleModule implements BuildExecutorModule {
             Path expansionFile = context.supplement().resolve(PROPERTIES);
             expanded.store(expansionFile);
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "com.puppycrawl.tools.checkstyle.Main",
+                    "-cp", ProcessHandler.OfProcess.driver(CheckstyleDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    CheckstyleDriver.class.getName(),
                     "-c", config.toString(),
                     "-p", expansionFile.toString(),
                     "-f", "xml",

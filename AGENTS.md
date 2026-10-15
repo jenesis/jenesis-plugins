@@ -51,6 +51,14 @@ rule there applies here as well; this file adds what is particular to the plugin
   build did not bind.
 - The plugin compiles against a published `build.jenesis`, pinned in its descriptor, never against the
   vendored engine that runs the build: a plugin needs a release of the tool that carries the API it uses.
+- A tool runs through `ProcessHandler.OfProcess.ofJavaMain()`, so the build keeps its JVM warm. A tool whose main
+  method calls `System.exit` on a call the build accepts - on every call, or on findings it only reports - is run
+  through a driver instead: a class `<Tool>Driver` of the plugin with a `public static int main(String[])` that calls
+  the entry point the tool offers short of its main method and returns the code. The driver is typed against the
+  tool's API by `requires static` where that entry point is public, so the plugin's own closure does not carry the
+  tool, and reaches it by reflection where it is private or has a shape Java cannot name. The step hands the folder
+  `ProcessHandler.OfProcess.driver(<Tool>Driver.class)` writes ahead of the tool's jars, which holds the driver's own
+  class files alone, so the driver touches nothing of the plugin beside it.
 
 - Every plugin folder carries a short `README.md`: one sentence on what it does, the file that activates it with an
   example, a table of the values it takes, the file it reads, and the setting that switches it off. The root

@@ -124,7 +124,10 @@ public class JaCoCoModuleTest {
         Files.writeString(source, """
                 package org.jacoco.cli.internal;
                 public class Main {
-                    public static void main(String[] args) {
+                    Main(String... args) {
+                    }
+                    public int execute(java.io.PrintWriter out, java.io.PrintWriter err) {
+                        return 0;
                     }
                 }
                 """);

@@ -298,24 +298,10 @@ public class KspModule implements BuildExecutorModule {
             state.store(working.resolve(STATE));
             listing.store(working.resolve(LISTING));
             classes.store(working.resolve(CLASSES));
-            List<String> classPath = new ArrayList<>(jars);
-            String main = "com.google.devtools.ksp.cmdline.KSPJvmMain";
-            if (terms.warm()) {
-                CodeSource source = KspMain.class.getProtectionDomain().getCodeSource();
-                if (source == null) {
-                    throw new IllegalStateException("KSP runs warm with the plugin's own classes, but the plugin was"
-                            + " loaded from no location it can hand a JVM - set jenesis.process.warm=false");
-                }
-                try {
-                    classPath.addFirst(Path.of(source.getLocation().toURI()).toString());
-                } catch (URISyntaxException e) {
-                    throw new IllegalStateException(e);
-                }
-                main = KspMain.class.getName();
-            }
             commands.addAll(List.of(
-                    "-cp", String.join(File.pathSeparator, classPath),
-                    main,
+                    "-cp", ProcessHandler.OfProcess.driver(KspDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    KspDriver.class.getName(),
                     "-module-name=" + (module == null ? "main" : module),
                     "-jvm-target=" + (release == null
                             ? Integer.toString(Runtime.version().feature())

@@ -369,8 +369,9 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                 return CompletableFuture.completedStage(null);
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "de.thetaphi.forbiddenapis.cli.CliMain"));
+                    "-cp", ProcessHandler.OfProcess.driver(ForbiddenApisDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    ForbiddenApisDriver.class.getName()));
             for (String name : bundled) {
                 commands.add("--bundledsignatures");
                 commands.add(VERSIONED.contains(name) ? name + "-" + release : name);

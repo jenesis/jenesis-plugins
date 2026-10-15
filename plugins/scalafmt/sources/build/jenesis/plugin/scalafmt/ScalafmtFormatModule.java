@@ -16,6 +16,7 @@ import build.jenesis.SequencedProperties;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.FormatBuildStep;
 import build.jenesis.step.ProcessBuildStep;
+import build.jenesis.step.ProcessHandler;
 
 public class ScalafmtFormatModule implements BuildExecutorModule {
 
@@ -148,13 +149,14 @@ public class ScalafmtFormatModule implements BuildExecutorModule {
                                        List<String> jars,
                                        Path config,
                                        List<String> files,
-                                       boolean verify) {
+                                       boolean verify) throws IOException {
             if (config == null) {
                 throw new IllegalStateException("No " + configFile + " found among the inputs of the scalafmt step");
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "org.scalafmt.cli.Cli",
+                    "-cp", ProcessHandler.OfProcess.driver(ScalafmtDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    ScalafmtDriver.class.getName(),
                     "--config", config.toString()));
             if (verify) {
                 commands.add("--test");

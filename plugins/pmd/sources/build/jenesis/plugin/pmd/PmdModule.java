@@ -210,8 +210,9 @@ public class PmdModule implements BuildExecutorModule {
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "net.sourceforge.pmd.cli.PmdCli", "check",
+                    "-cp", ProcessHandler.OfProcess.driver(PmdDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    PmdDriver.class.getName(), "check",
                     "--no-cache",
                     "-R", config.toString(),
                     "--minimum-priority", Integer.toString(priority),
