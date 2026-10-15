@@ -24,6 +24,6 @@ public class CheckstyleFactory implements BuildModuleFactory {
         return CheckstyleModule.ofEnvironment(environment, repositories, resolvers)
                 .expansions(properties)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
     }
 }

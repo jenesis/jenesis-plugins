@@ -87,7 +87,7 @@ public class CheckstyleModuleTest {
                         Map.of("maven", Resolver.identity())),
                 "project");
         assertThat(executor.execute("checkstyle/check"))
-                .as("a custom check that @jenesis.plugin checkstyle names loads beside Checkstyle")
+                .as("a custom check that a @jenesis.plugin line names loads beside Checkstyle")
                 .containsKey("checkstyle/check");
     }
 

@@ -47,11 +47,11 @@ public class KotlinFactoryTest {
     }
 
     @Test
-    public void resolves_the_compiler_in_the_group_it_is_handed_and_dokka_in_a_group_beside_it() throws IOException {
+    public void resolves_the_compiler_in_the_tool_group_of_the_plugin_and_dokka_in_a_group_beside_it() throws IOException {
         Language language = create(Map.of());
 
         assertThat(required(language.compiler(), "kotlin", "kotlin"))
-                .containsExactly("kotlin/runtime/maven/org.jetbrains.kotlin/kotlin-compiler-embeddable/RELEASE");
+                .containsExactly("kotlin:tool/runtime/maven/org.jetbrains.kotlin/kotlin-compiler-embeddable/RELEASE");
         assertThat(required(language.documentation(), "dokka", "dokka"))
                 .as("Dokka runs on a Kotlin of its own, so it is pinned apart from the compiler")
                 .contains("kotlin:dokka/runtime/maven/org.jetbrains.dokka/dokka-cli/RELEASE");

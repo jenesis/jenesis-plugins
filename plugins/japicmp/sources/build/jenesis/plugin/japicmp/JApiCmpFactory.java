@@ -44,7 +44,7 @@ public class JApiCmpFactory implements BuildModuleFactory {
         }
         JApiCmpModule module = JApiCmpModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
         String access = values.value("access");
         List<String> include = patterns(values.value("include")), exclude = patterns(values.value("exclude")),
                 formats = values.entries("format");

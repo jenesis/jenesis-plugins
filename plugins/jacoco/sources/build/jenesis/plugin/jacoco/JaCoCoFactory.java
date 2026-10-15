@@ -50,7 +50,7 @@ public class JaCoCoFactory implements ObservabilityFactory {
         }
         return new Observation(new JaCoCo(group), JaCoCoModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .minimum(minimum)
                 .maximumMissed(maximumMissed));
     }

@@ -69,7 +69,7 @@ public class PmdModuleTest {
     }
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("pmd", new PmdFactory().create(Environment.NONE,
@@ -83,7 +83,7 @@ public class PmdModuleTest {
         Path requiredOutput = root.resolve("pmd").resolve("required").resolve("output");
         SequencedProperties requires = SequencedProperties.ofFiles(requiredOutput.resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
-                .containsExactly("quality/runtime/maven/net.sourceforge.pmd/pmd-dist/RELEASE");
+                .containsExactly("quality:tool/runtime/maven/net.sourceforge.pmd/pmd-dist/RELEASE");
     }
 
     private BuildExecutor newExecutor() throws IOException {

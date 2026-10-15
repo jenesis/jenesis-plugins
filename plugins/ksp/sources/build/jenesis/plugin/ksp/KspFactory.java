@@ -19,8 +19,8 @@ public class KspFactory implements BuildModuleFactory {
                                       Map<String, Resolver> resolvers) {
         return KspModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group + ":runtime")
-                .processors(group)
+                .tool(group + ":tool")
+                .processors(group + ":processor")
                 .options(properties);
     }
 }

@@ -43,7 +43,7 @@ public class PalantirJavaFormatFactory implements BuildModuleFactory {
         }
         return PalantirJavaFormatModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .group(group)
+                .group(group + ":tool")
                 .reflow(values.flag(REFLOW, true))
                 .sortImports(imports.contains(SORT))
                 .removeUnusedImports(imports.contains(REMOVE));

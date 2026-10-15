@@ -45,7 +45,7 @@ public class ForbiddenApisFactory implements BuildModuleFactory {
         }
         return ForbiddenApisModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .bundled(bundled)
                 .signatures(signatures.stream().map(Path::of).toList())
                 .suppress(Objects.requireNonNullElse(values.entries(SUPPRESS), List.of()))

@@ -22,6 +22,6 @@ The compiler reads the `.scala` sources and, for their symbols, the `.java` sour
 `process-scaladoc.properties` configure the JVM each tool runs in. Scaladoc renders the module's documentation under
 `-Djenesis.project.documentation=true`, beside javadoc in a folder `scala/` where the module also holds Java.
 
-It reads nothing a project binds. The compiler resolves as `org.scala-lang:scala3-compiler_3` in the group named
-after the plugin, `scala/…`, with its `scala3-sbt-bridge` there too when compiling incrementally, Zinc as
+It reads nothing a project binds. The compiler resolves as `org.scala-lang:scala3-compiler_3` in the tool group
+of the plugin, `scala:tool/…`, with its `scala3-sbt-bridge` there too when compiling incrementally, Zinc as
 `org.scala-sbt:zinc_2.13` in `scala:zinc/…`, and Scaladoc as `org.scala-lang:scaladoc_3` in `scala:scaladoc/…`.

@@ -21,12 +21,12 @@ public class JReleaserModuleTest {
     public void requires_the_tool_provider_of_jreleaser_in_its_group() throws IOException {
         BuildExecutor executor = FakeTool.executor(root);
         executor.addSource("project", FakeTool.project(project, root, "1.2.3"));
-        executor.addModule("jreleaser", new JReleaserModule(Map.of(), Map.of()).tool("plugin-jreleaser"), "project");
+        executor.addModule("jreleaser", new JReleaserModule(Map.of(), Map.of()).tool("jreleaser:tool"), "project");
         executor.execute("jreleaser/required");
 
         assertThat(SequencedProperties.ofFiles(root.resolve("jreleaser/required/output").resolve(BuildStep.REQUIRES))
                 .stringPropertyNames())
-                .containsExactly("plugin-jreleaser/runtime/maven/org.jreleaser/jreleaser-tool-provider/RELEASE");
+                .containsExactly("jreleaser:tool/runtime/maven/org.jreleaser/jreleaser-tool-provider/RELEASE");
     }
 
     @Test

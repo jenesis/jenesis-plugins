@@ -21,7 +21,7 @@ public class KspFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_ksp_apart_from_the_processors_of_the_group_it_is_handed() throws IOException {
+    public void requires_ksp_in_the_tool_group_of_the_plugin_apart_from_its_processors() throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
                 new HashDigestFunction("MD5"),
@@ -46,6 +46,6 @@ public class KspFactoryTest {
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
                 .as("KSP resolves apart from the processors, which bring a Kotlin standard library of their own")
-                .containsExactly("symbols:runtime/runtime/maven/com.google.devtools.ksp/symbol-processing-aa-embeddable/RELEASE");
+                .containsExactly("symbols:tool/runtime/maven/com.google.devtools.ksp/symbol-processing-aa-embeddable/RELEASE");
     }
 }

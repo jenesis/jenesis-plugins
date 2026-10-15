@@ -31,7 +31,7 @@ public class XjcFactory implements BuildModuleFactory {
         }
         return XjcModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .packageName(values.value("package"))
                 .arguments(values.words("arguments"));
     }

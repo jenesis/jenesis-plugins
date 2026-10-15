@@ -30,7 +30,7 @@ public class AvroFactory implements BuildModuleFactory {
         }
         return AvroModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .arguments(values.words("arguments"));
     }
 }

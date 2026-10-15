@@ -26,7 +26,7 @@ public class ScalaFactory implements LanguageFactory {
                 Language.Order.BEFORE_JAVAC,
                 ScalaCompilerModule.ofEnvironment(environment, repositories, resolvers)
                         .permits(permits)
-                        .tool(group)
+                        .tool(group + ":tool")
                         .zinc(group + ":zinc"),
                 ScalaDocumentationModule.ofEnvironment(environment, repositories, resolvers)
                         .permits(permits)

@@ -33,7 +33,7 @@ public class PiTestFactory implements BuildModuleFactory {
         }
         PiTestModule module = PiTestModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
         List<String> targetClasses = values.entries(TARGET_CLASSES), targetTests = values.entries(TARGET_TESTS);
         List<String> outputFormats = values.entries(OUTPUT_FORMATS), mutators = values.entries(MUTATORS);
         module = targetClasses == null ? module : module.targetClasses(targetClasses);

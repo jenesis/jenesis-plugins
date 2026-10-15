@@ -22,5 +22,5 @@ Any other value is refused.
 It runs in every module that holds a `.groovy` file, which the build compiles only with this plugin, and needs no
 `plugin-groovy.properties`. It reads nothing a project binds: groovyc compiles the module's `.groovy` sources, and
 Groovydoc documents them at the root of the module's documentation, or in a `groovy/` folder of it beside the Javadoc
-of the module's Java sources. Groovy and Groovydoc resolve in the group named after the plugin, `groovy/…`, and a
+of the module's Java sources. Groovy and Groovydoc resolve in the tool group of the plugin, `groovy:tool/…`, and a
 `process-groovyc.properties` or `process-groovydoc.properties` configures the JVM each runs in.

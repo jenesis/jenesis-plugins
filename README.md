@@ -9,7 +9,7 @@
 that provides a `build.jenesis.BuildModuleFactory`, an `ObservabilityFactory` for one that observes the tests, or a
 `LanguageFactory` for one that compiles a language:
 the build that loads it hands it its settings, the resolved values of the `plugin-<name>.properties` that switched
-it on, its process permits, the dependency group to resolve its tool in, and its repositories and resolvers, and the
+it on, its process permits, its name as the group of its own closure, and its repositories and resolvers, and the
 plugin adds the steps that resolve the tool and run it. What the JDK ships stays built into the build tool; what
 needs a download lives here, so the tool itself stays small and nothing is fetched that a project does not use.
 
@@ -84,8 +84,8 @@ refuses a value it does not take, naming those it does. Checkstyle takes every v
 expands.
 
 A plugin that offers more than one provider names each, and the line picks one, as
-`ktlint+check=build.jenesis.plugin.ktlint@check`. A plugin resolves its tool in the group named after it - `antlr` above - so the tool is pinned as
-`antlr/maven/…` beside the project's own pins.
+`ktlint+check=build.jenesis.plugin.ktlint@check`. A plugin resolves its tool in a group named after it - `antlr:tool` for the line above - so the tool is pinned as
+`antlr:tool/maven/…` beside the project's own pins, and whatever else it resolves in another `antlr:<purpose>`.
 
 ## Layout
 

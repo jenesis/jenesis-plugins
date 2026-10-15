@@ -22,4 +22,5 @@ maximum.missed.branch=3
 A counter is `instruction`, `branch`, `line`, `complexity`, `method` or `class`. Any other value is refused.
 
 It reads nothing a project binds: the agent joins the JVM the tests run in, and the report reads what it recorded.
-The agent and the report's tool resolve in the group named after the plugin, `jacoco/…`.
+The report's tool resolves in the tool group of the plugin, `jacoco:tool/…`, and the agent the tests run with in
+`jacoco:agent/…`, at the release of JaCoCo the tool group pins.

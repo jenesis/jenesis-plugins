@@ -28,6 +28,6 @@ public class ScalastyleFactory implements BuildModuleFactory {
         }
         return ScalastyleModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
     }
 }

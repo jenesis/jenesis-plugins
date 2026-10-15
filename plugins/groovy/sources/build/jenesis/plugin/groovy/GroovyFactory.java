@@ -32,10 +32,10 @@ public class GroovyFactory implements LanguageFactory {
                 Language.Order.AFTER_JAVAC,
                 GroovyCompilerModule.ofEnvironment(environment, repositories, resolvers)
                         .permits(permits)
-                        .tool(group),
+                        .tool(group + ":tool"),
                 GroovyDocumentationModule.ofEnvironment(environment, repositories, resolvers)
                         .permits(permits)
-                        .tool(group)
+                        .tool(group + ":tool")
                         .includeJava(values.flag(INCLUDE_JAVA, false)));
     }
 }

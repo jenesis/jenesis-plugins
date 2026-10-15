@@ -28,7 +28,7 @@ public class ProtocModuleTest {
         Path requiredOutput = root.resolve("protoc").resolve("required").resolve("output");
         SequencedProperties requires = SequencedProperties.ofFiles(requiredOutput.resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
-                .containsExactly("protoc/runtime/maven/com.google.protobuf/protoc/exe/linux-x86_64/RELEASE");
+                .containsExactly("protoc:tool/runtime/maven/com.google.protobuf/protoc/exe/linux-x86_64/RELEASE");
     }
 
     @Test

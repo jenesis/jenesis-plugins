@@ -37,7 +37,7 @@ public class GroovyFactoryTest {
     }
 
     @Test
-    public void resolves_groovy_in_the_group_it_is_handed() throws IOException {
+    public void resolves_groovy_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         Language language = create(Map.of(), Map.of("maven", Resolver.identity()));
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
@@ -47,10 +47,10 @@ public class GroovyFactoryTest {
                 "documentation/" + GroovyDocumentationModule.REQUIRED);
 
         assertThat(requires(root.resolve("compiler").resolve(GroovyCompilerModule.REQUIRED)))
-                .as("the compiler resolves and is pinned in the group the loading build names")
-                .containsExactly("lang/runtime/maven/org.apache.groovy/groovy/RELEASE");
+                .as("the compiler resolves and is pinned in the tool group of the plugin the loading build names")
+                .containsExactly("lang:tool/runtime/maven/org.apache.groovy/groovy/RELEASE");
         assertThat(requires(root.resolve("documentation").resolve(GroovyDocumentationModule.REQUIRED)))
-                .containsExactly("lang/runtime/maven/org.apache.groovy/groovy-groovydoc/RELEASE");
+                .containsExactly("lang:tool/runtime/maven/org.apache.groovy/groovy-groovydoc/RELEASE");
     }
 
     @Test

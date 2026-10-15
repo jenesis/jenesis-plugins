@@ -30,6 +30,6 @@ public class KtlintFactory implements BuildModuleFactory {
         }
         return KtlintModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
     }
 }

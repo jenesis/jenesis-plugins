@@ -29,7 +29,7 @@ public class PiTestFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("pitest", create(Map.of(), "mutation", Map.of(), Map.of()), "project");
@@ -40,8 +40,8 @@ public class PiTestFactoryTest {
                 .resolve("output")
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames()).containsExactly(
-                "mutation/runtime/maven/org.pitest/pitest-command-line/RELEASE",
-                "mutation/runtime/maven/org.pitest/pitest-junit5-plugin/RELEASE");
+                "mutation:tool/runtime/maven/org.pitest/pitest-command-line/RELEASE",
+                "mutation:tool/runtime/maven/org.pitest/pitest-junit5-plugin/RELEASE");
     }
 
     @Test

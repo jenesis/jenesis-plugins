@@ -47,6 +47,9 @@ public class AntlrModuleRunTest {
     public void writeProject() throws IOException {
         SequencedProperties versions = new SequencedProperties();
         versions.load(new StringReader(PINS));
+        for (String key : List.copyOf(versions.stringPropertyNames())) {
+            versions.setProperty("antlr:tool" + key.substring(key.indexOf('/')), versions.getProperty(key));
+        }
         versions.store(project.resolve(BuildStep.VERSIONS));
         Files.writeString(
                 Files.createDirectories(project.resolve(AntlrModule.FOLDER)).resolve("Greeting.g4"),

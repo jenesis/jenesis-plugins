@@ -31,7 +31,7 @@ public class AntlrFactory implements BuildModuleFactory {
         }
         return AntlrModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .packageName(values.value("package"))
                 .arguments(values.words("arguments"));
     }

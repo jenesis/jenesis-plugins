@@ -45,16 +45,16 @@ public class ScalaFactoryTest {
     }
 
     @Test
-    public void resolves_the_compiler_in_the_group_it_is_handed() throws IOException {
+    public void resolves_the_compiler_in_the_tool_group_of_the_plugin() throws IOException {
         assertThat(required(create(Environment.NONE, Map.of()).compiler()))
-                .containsExactly("language/runtime/maven/org.scala-lang/scala3-compiler_3/RELEASE");
+                .containsExactly("language:tool/runtime/maven/org.scala-lang/scala3-compiler_3/RELEASE");
     }
 
     @Test
     public void resolves_zinc_in_a_group_beside_the_compiler_when_compiling_incrementally() throws IOException {
         assertThat(required(create(new Environment(Map.of("scala.incremental", "true")), Map.of()).compiler()))
-                .containsExactlyInAnyOrder("language/runtime/maven/org.scala-lang/scala3-compiler_3/RELEASE",
-                        "language/runtime/maven/org.scala-lang/scala3-sbt-bridge/RELEASE",
+                .containsExactlyInAnyOrder("language:tool/runtime/maven/org.scala-lang/scala3-compiler_3/RELEASE",
+                        "language:tool/runtime/maven/org.scala-lang/scala3-sbt-bridge/RELEASE",
                         "language:zinc/runtime/maven/org.scala-sbt/zinc_2.13/RELEASE");
     }
 

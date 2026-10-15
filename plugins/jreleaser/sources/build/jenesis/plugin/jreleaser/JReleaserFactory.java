@@ -21,7 +21,7 @@ public class JReleaserFactory implements BuildModuleFactory {
                                       Map<String, Resolver> resolvers) {
         JReleaserModule module = JReleaserModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
         SequencedMap<String, String> settings = new LinkedHashMap<>();
         for (Map.Entry<String, String> property : properties.entrySet()) {
             String value = property.getValue().strip();

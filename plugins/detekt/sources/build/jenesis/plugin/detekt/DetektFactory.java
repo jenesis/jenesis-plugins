@@ -28,6 +28,6 @@ public class DetektFactory implements BuildModuleFactory {
         }
         return DetektModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
     }
 }

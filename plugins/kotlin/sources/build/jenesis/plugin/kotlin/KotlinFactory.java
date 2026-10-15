@@ -181,7 +181,7 @@ public class KotlinFactory implements LanguageFactory {
         }
         KotlinCompilerModule compiler = KotlinCompilerModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .includeResources(false);
         return new Language(new LinkedHashSet<>(List.of(".kt")),
                 Language.Order.BEFORE_JAVAC,

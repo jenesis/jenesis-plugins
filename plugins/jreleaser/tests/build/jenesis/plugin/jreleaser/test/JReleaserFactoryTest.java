@@ -22,7 +22,7 @@ public class JReleaserFactoryTest {
         BuildExecutorModule module = new JReleaserFactory().create(new Environment(Map.of("release.publish", "true")),
                 new LinkedHashMap<>(Map.of("command", "deploy", "JRELEASER_GITHUB_TOKEN", "secret")),
                 Permits.of(1),
-                "plugin-jreleaser",
+                "jreleaser",
                 Map.of("maven", FakeTool.of(tool).repository()),
                 Map.of("maven", Resolver.identity()));
         BuildExecutor executor = FakeTool.executor(root);
@@ -60,7 +60,7 @@ public class JReleaserFactoryTest {
         return new JReleaserFactory().create(Environment.NONE,
                 new LinkedHashMap<>(values),
                 Permits.of(1),
-                "plugin-jreleaser",
+                "jreleaser",
                 Map.of(),
                 Map.of());
     }

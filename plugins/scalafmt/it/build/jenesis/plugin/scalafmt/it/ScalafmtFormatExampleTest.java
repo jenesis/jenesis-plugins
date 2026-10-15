@@ -24,7 +24,7 @@ public class ScalafmtFormatExampleTest {
                         """)
                 .write("sources/module-info.java", """
                         /**
-                         * @jenesis.pin scalafmt/maven/org.scalameta/scalafmt-cli_2.13 3.8.3
+                         * @jenesis.pin scalafmt:tool/maven/org.scalameta/scalafmt-cli_2.13 3.8.3
                          */
                         module example {
                             requires scala.library;

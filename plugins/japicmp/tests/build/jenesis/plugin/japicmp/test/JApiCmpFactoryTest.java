@@ -22,7 +22,7 @@ public class JApiCmpFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_the_tool_and_the_baseline_it_names_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_and_the_baseline_it_names_in_the_tool_group_of_the_plugin() throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
                 new HashDigestFunction("MD5"),
@@ -41,8 +41,8 @@ public class JApiCmpFactoryTest {
                 .resolve("output")
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
-                .contains("quality/baseline/maven/com.example/library/1.0")
-                .allMatch(key -> key.startsWith("quality/"));
+                .contains("quality:tool/baseline/maven/com.example/library/1.0")
+                .allMatch(key -> key.startsWith("quality:tool/"));
     }
 
     @Test

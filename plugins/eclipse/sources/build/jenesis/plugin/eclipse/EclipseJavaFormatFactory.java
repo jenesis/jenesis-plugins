@@ -24,6 +24,6 @@ public class EclipseJavaFormatFactory implements BuildModuleFactory {
         }
         return EclipseJavaFormatModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .group(group);
+                .group(group + ":tool");
     }
 }

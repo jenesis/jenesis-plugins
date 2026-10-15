@@ -31,7 +31,7 @@ public class WsImportFactory implements BuildModuleFactory {
         }
         return WsImportModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .packageName(values.value("package"))
                 .location(values.value("location"))
                 .arguments(values.words("arguments"));

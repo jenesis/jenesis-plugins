@@ -39,7 +39,7 @@ public class KtfmtFormatFactory implements BuildModuleFactory {
         }
         return KtfmtFormatModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .group(group)
+                .group(group + ":tool")
                 .style(switch (values.value(STYLE, "meta")) {
                     case "meta" -> KtfmtFormatModule.Style.META;
                     case "google" -> KtfmtFormatModule.Style.GOOGLE;

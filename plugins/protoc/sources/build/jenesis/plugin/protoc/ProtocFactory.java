@@ -38,12 +38,18 @@ public class ProtocFactory implements BuildModuleFactory {
                     throw new IllegalArgumentException("Malformed protoc plugin: " + entry
                             + " (expected <name>=<groupId>/<artifactId>)");
                 }
-                plugins.put(entry.substring(0, assign).trim(), entry.substring(assign + 1).trim());
+                String name = entry.substring(0, assign).trim();
+                if (name.equals("tool")) {
+                    throw new IllegalArgumentException("A protoc plugin cannot be named tool, the group protoc"
+                            + " itself resolves in: name it after the code it generates, as grpc-java");
+                }
+                plugins.put(name, entry.substring(assign + 1).trim());
             }
         }
         ProtocModule module = ProtocModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
+                .generators(group)
                 .plugins(plugins)
                 .arguments(values.words("arguments"));
         String classifier = values.value("classifier");

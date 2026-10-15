@@ -27,6 +27,7 @@ public class ProtocModule implements BuildExecutorModule {
     private final Dependencies dependencies;
     private final Pinning pinning;
     private final String tool;
+    private final String generators;
     private final String group;
     private final String classifier;
     private final SequencedMap<String, String> plugins;
@@ -37,6 +38,7 @@ public class ProtocModule implements BuildExecutorModule {
                         Map<String, Resolver> resolvers) {
         this(new Dependencies(repositories, resolvers),
              null,
+             "protoc:tool",
              "protoc",
              "main",
              classifier(),
@@ -50,6 +52,7 @@ public class ProtocModule implements BuildExecutorModule {
                                              Map<String, Resolver> resolvers) {
         return new ProtocModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
+                "protoc:tool",
                 "protoc",
                 "main",
                 classifier(),
@@ -61,6 +64,7 @@ public class ProtocModule implements BuildExecutorModule {
     private ProtocModule(Dependencies dependencies,
                          Pinning pinning,
                          String tool,
+                         String generators,
                          String group,
                          String classifier,
                          SequencedMap<String, String> plugins,
@@ -69,6 +73,7 @@ public class ProtocModule implements BuildExecutorModule {
         this.dependencies = dependencies;
         this.pinning = pinning;
         this.tool = tool;
+        this.generators = generators;
         this.group = group;
         this.classifier = classifier;
         this.plugins = plugins;
@@ -101,40 +106,44 @@ public class ProtocModule implements BuildExecutorModule {
     }
 
     public ProtocModule pinning(Pinning pinning) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms);
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
     }
 
     public ProtocModule tool(String tool) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms);
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
+    }
+
+    public ProtocModule generators(String generators) {
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
     }
 
     public ProtocModule group(String group) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms);
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
     }
 
     public ProtocModule classifier(String classifier) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms);
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
     }
 
     public ProtocModule plugins(SequencedMap<String, String> plugins) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms);
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
     }
 
     public ProtocModule arguments(List<String> arguments) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms);
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms);
     }
 
     public ProtocModule printing(BiConsumer<Boolean, String> printing) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms.printing(printing));
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms.printing(printing));
     }
 
     public ProtocModule permits(Permits permits) {
-        return new ProtocModule(dependencies, pinning, tool, group, classifier, plugins, arguments, terms.permits(permits));
+        return new ProtocModule(dependencies, pinning, tool, generators, group, classifier, plugins, arguments, terms.permits(permits));
     }
 
     @Override
     public void accept(BuildExecutor buildExecutor, SequencedMap<String, Path> inherited) {
-        buildExecutor.addStep(REQUIRED, new Requires(tool, classifier, plugins), inherited.sequencedKeySet());
+        buildExecutor.addStep(REQUIRED, new Requires(tool, generators, classifier, plugins), inherited.sequencedKeySet());
         SequencedSet<String> resolveInputs = new LinkedHashSet<>();
         resolveInputs.add(REQUIRED);
         resolveInputs.addAll(inherited.sequencedKeySet());
@@ -146,17 +155,17 @@ public class ProtocModule implements BuildExecutorModule {
         for (String plugin : plugins.keySet()) {
             String step = DEPENDENCIES + "-" + plugin;
             buildExecutor.addModule(step,
-                    dependencies.pinning(pinning).group(tool + ":" + plugin),
+                    dependencies.pinning(pinning).group(generators + ":" + plugin),
                     resolveInputs);
             generateInputs.add(step);
         }
         generateInputs.addAll(inherited.sequencedKeySet());
         buildExecutor.addStep(GENERATE,
-                new Generate(terms, tool, group, List.copyOf(plugins.sequencedKeySet()), arguments),
+                new Generate(terms, tool, generators, group, List.copyOf(plugins.sequencedKeySet()), arguments),
                 generateInputs);
     }
 
-    private record Requires(String tool, String classifier, SequencedMap<String, String> plugins) implements BuildStep {
+    private record Requires(String tool, String generators, String classifier, SequencedMap<String, String> plugins) implements BuildStep {
 
         @Override
         public boolean shouldRun(SequencedMap<String, BuildStepArgument> arguments) {
@@ -174,7 +183,7 @@ public class ProtocModule implements BuildExecutorModule {
                     + "/" + MAVEN_ARTIFACT
                     + "/exe/" + classifier
                     + "/RELEASE", "");
-            plugins.forEach((plugin, coordinate) -> requires.setProperty(tool
+            plugins.forEach((plugin, coordinate) -> requires.setProperty(generators
                     + ":" + plugin
                     + "/runtime/maven/" + coordinate
                     + "/exe/" + classifier
@@ -187,17 +196,20 @@ public class ProtocModule implements BuildExecutorModule {
     private static class Generate extends ProcessBuildStep {
 
         private final String tool;
+        private final String generators;
         private final String group;
         private final List<String> plugins;
         private final List<String> arguments;
 
         private Generate(ProcessBuildStep.Terms terms,
                          String tool,
+                         String generators,
                          String group,
                          List<String> plugins,
                          List<String> arguments) {
             super("protoc", ProcessHandler.OfProcess.ofStaged(), terms);
             this.tool = tool;
+            this.generators = generators;
             this.group = group;
             this.plugins = plugins;
             this.arguments = arguments;
@@ -225,7 +237,7 @@ public class ProtocModule implements BuildExecutorModule {
                     executable = resolved;
                 }
                 for (String plugin : plugins) {
-                    for (Path resolved : Dependencies.select(input.folder(), tool + ":" + plugin, "runtime")) {
+                    for (Path resolved : Dependencies.select(input.folder(), generators + ":" + plugin, "runtime")) {
                         Path previous = located.putIfAbsent(plugin, resolved);
                         if (previous != null) {
                             throw new IllegalStateException("Resolved more than one executable for protoc plugin "

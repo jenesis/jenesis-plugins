@@ -23,7 +23,7 @@ public class GoogleJavaFormatFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
                 new HashDigestFunction("MD5"),
@@ -42,8 +42,8 @@ public class GoogleJavaFormatFactoryTest {
                 .resolve("output")
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
-                .as("the formatter is resolved in the group the loading build names")
-                .containsExactly("quality/runtime/maven/com.google.googlejavaformat/google-java-format/RELEASE");
+                .as("the formatter is resolved in the tool group of the plugin the loading build names")
+                .containsExactly("quality:tool/runtime/maven/com.google.googlejavaformat/google-java-format/RELEASE");
     }
 
     @Test

@@ -32,7 +32,7 @@ public class OpenApiFactory implements BuildModuleFactory {
         }
         OpenApiModule module = OpenApiModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group)
+                .tool(group + ":tool")
                 .packageName(values.value("package"))
                 .arguments(values.words("arguments"));
         String generator = values.value("generator");

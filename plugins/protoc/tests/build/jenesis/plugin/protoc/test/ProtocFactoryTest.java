@@ -22,32 +22,30 @@ public class ProtocFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
-        BuildExecutor executor = BuildExecutor.of(root,
-                Duration.ZERO,
-                new HashDigestFunction("MD5"),
-                BuildStepHashFunction.ofSerializationDigest("MD5"),
-                BuildExecutorCallback.nop(),
-                BuildExecutorCache.nop(),
-                false,
-                false,
-                0);
-        executor.addSource("project", project);
-        executor.addModule("protoc", new ProtocFactory().create(Environment.NONE,
-                new LinkedHashMap<>(),
-                Permits.of(1),
-                "quality",
-                Map.of(),
-                Map.of()), "project");
-        executor.execute("protoc/required");
-
-        SequencedProperties requires = SequencedProperties.ofFiles(root.resolve("protoc")
-                .resolve("required")
-                .resolve("output")
-                .resolve(BuildStep.REQUIRES));
-        assertThat(requires.stringPropertyNames())
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
+        assertThat(required(new LinkedHashMap<>()))
                 .isNotEmpty()
-                .allMatch(key -> key.startsWith("quality/"));
+                .allMatch(key -> key.startsWith("quality:tool/"));
+    }
+
+    @Test
+    public void requires_each_generator_in_a_group_of_its_own_beside_the_tool() throws IOException {
+        assertThat(required(new LinkedHashMap<>(Map.of("plugins", "grpc-java=io.grpc/protoc-gen-grpc-java"))))
+                .as("a generator follows a release of its own, so it is pinned apart from protoc")
+                .anyMatch(key -> key.startsWith("quality:tool/"))
+                .anyMatch(key -> key.startsWith("quality:grpc-java/runtime/maven/io.grpc/protoc-gen-grpc-java/"));
+    }
+
+    @Test
+    public void refuses_a_generator_named_like_the_group_of_the_tool() {
+        assertThatThrownBy(() -> new ProtocFactory().create(Environment.NONE,
+                new LinkedHashMap<>(Map.of("plugins", "tool=io.grpc/protoc-gen-grpc-java")),
+                Permits.of(1),
+                "protoc",
+                Map.of(),
+                Map.of()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("cannot be named tool");
     }
 
     @Test
@@ -60,5 +58,29 @@ public class ProtocFactoryTest {
                 Map.of()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("unknown");
+    }
+
+    private Set<String> required(SequencedMap<String, String> values) throws IOException {
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                BuildExecutorCache.nop(),
+                false,
+                false,
+                0);
+        executor.addSource("project", project);
+        executor.addModule("protoc", new ProtocFactory().create(Environment.NONE,
+                values,
+                Permits.of(1),
+                "quality",
+                Map.of(),
+                Map.of()), "project");
+        executor.execute("protoc/required");
+        return SequencedProperties.ofFiles(root.resolve("protoc")
+                .resolve("required")
+                .resolve("output")
+                .resolve(BuildStep.REQUIRES)).stringPropertyNames();
     }
 }

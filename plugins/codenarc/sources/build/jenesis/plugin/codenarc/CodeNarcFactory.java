@@ -28,6 +28,6 @@ public class CodeNarcFactory implements BuildModuleFactory {
         }
         return CodeNarcModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
     }
 }

@@ -43,7 +43,7 @@ public class GoogleJavaFormatFactory implements BuildModuleFactory {
         }
         return GoogleJavaFormatModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .group(group)
+                .group(group + ":tool")
                 .aosp(switch (values.value(STYLE, "google")) {
                     case "google" -> false;
                     case "aosp" -> true;

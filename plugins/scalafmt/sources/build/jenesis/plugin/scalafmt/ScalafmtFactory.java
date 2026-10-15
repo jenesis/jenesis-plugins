@@ -30,6 +30,6 @@ public class ScalafmtFactory implements BuildModuleFactory {
         }
         return ScalafmtModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
     }
 }

@@ -26,6 +26,6 @@ public class SpotBugsFactory implements BuildModuleFactory {
         if (Enforcement.ofEnvironment(environment, SpotBugsModule.SETTING) == Enforcement.IGNORE) {
             return (_, _) -> { };
         }
-        return SpotBugsModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group);
+        return SpotBugsModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group + ":tool");
     }
 }

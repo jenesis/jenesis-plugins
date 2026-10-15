@@ -49,7 +49,7 @@ public class SpotBugsModuleTest {
     }
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("spotbugs", new SpotBugsFactory().create(Environment.NONE,
@@ -63,7 +63,7 @@ public class SpotBugsModuleTest {
         Path requiredOutput = root.resolve("spotbugs").resolve("required").resolve("output");
         SequencedProperties requires = SequencedProperties.ofFiles(requiredOutput.resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
-                .containsExactly("quality/runtime/maven/com.github.spotbugs/spotbugs/RELEASE");
+                .containsExactly("quality:tool/runtime/maven/com.github.spotbugs/spotbugs/RELEASE");
     }
 
     private BuildExecutor newExecutor() throws IOException {

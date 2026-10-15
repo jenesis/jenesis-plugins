@@ -35,8 +35,8 @@ public class KspModule implements BuildExecutorModule {
                      Map<String, Resolver> resolvers) {
         this(new Dependencies(repositories, resolvers),
              null,
-             "ksp:runtime",
-             "ksp",
+             "ksp:tool",
+             "ksp:processor",
              "main",
              Collections.emptyNavigableMap(),
              new ProcessBuildStep.Terms());
@@ -47,8 +47,8 @@ public class KspModule implements BuildExecutorModule {
                                           Map<String, Resolver> resolvers) {
         return new KspModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
-                "ksp:runtime",
-                "ksp",
+                "ksp:tool",
+                "ksp:processor",
                 "main",
                 Collections.emptyNavigableMap(),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "ksp"));

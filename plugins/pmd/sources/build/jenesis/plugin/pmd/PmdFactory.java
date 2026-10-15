@@ -26,6 +26,6 @@ public class PmdFactory implements BuildModuleFactory {
         if (Enforcement.ofEnvironment(environment, PmdModule.SETTING) == Enforcement.IGNORE) {
             return (_, _) -> { };
         }
-        return PmdModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group);
+        return PmdModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group + ":tool");
     }
 }

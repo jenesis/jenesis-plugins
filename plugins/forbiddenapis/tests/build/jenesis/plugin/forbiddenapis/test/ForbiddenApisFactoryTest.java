@@ -26,7 +26,7 @@ public class ForbiddenApisFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("forbiddenapis",
@@ -39,7 +39,7 @@ public class ForbiddenApisFactoryTest {
                 .resolve("output")
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
-                .containsExactly("quality/runtime/maven/de.thetaphi/forbiddenapis/RELEASE");
+                .containsExactly("quality:tool/runtime/maven/de.thetaphi/forbiddenapis/RELEASE");
     }
 
     @Test

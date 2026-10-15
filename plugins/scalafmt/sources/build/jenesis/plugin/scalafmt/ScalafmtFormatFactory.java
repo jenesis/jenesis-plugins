@@ -26,6 +26,6 @@ public class ScalafmtFormatFactory implements BuildModuleFactory {
         }
         return ScalafmtFormatModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .group(group);
+                .group(group + ":tool");
     }
 }

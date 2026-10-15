@@ -22,7 +22,7 @@ public class WsImportFactoryTest {
     private Path root, project;
 
     @Test
-    public void requires_the_tool_in_the_group_it_is_handed() throws IOException {
+    public void requires_the_tool_in_the_tool_group_of_the_plugin_it_is_handed() throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
                 new HashDigestFunction("MD5"),
@@ -47,7 +47,7 @@ public class WsImportFactoryTest {
                 .resolve(BuildStep.REQUIRES));
         assertThat(requires.stringPropertyNames())
                 .isNotEmpty()
-                .allMatch(key -> key.startsWith("quality/"));
+                .allMatch(key -> key.startsWith("quality:tool/"));
     }
 
     @Test

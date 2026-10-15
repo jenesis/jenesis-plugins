@@ -37,7 +37,7 @@ public class RevapiFactory implements BuildModuleFactory {
         }
         RevapiModule module = RevapiModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
-                .tool(group);
+                .tool(group + ":tool");
         String severity = value(properties, SEVERITY);
         if (severity != null) {
             module = module.severity(severity(origin, severity));
