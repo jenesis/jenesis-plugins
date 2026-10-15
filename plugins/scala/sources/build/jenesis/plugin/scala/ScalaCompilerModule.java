@@ -240,6 +240,15 @@ public class ScalaCompilerModule implements BuildExecutorModule {
         }
 
         @Override
+        protected ProcessHandler handler(BuildStepContext context, List<String> commands) throws IOException {
+            if (!incremental) {
+                return super.handler(context, commands);
+            }
+            ProcessHandler.OfProcess handler = ProcessHandler.OfProcess.ofJavaMain().apply(commands).shared(true);
+            return terms.warm() ? handler : handler.warm(false);
+        }
+
+        @Override
         public CompletionStage<BuildStepResult> apply(Executor executor,
                                                       BuildStepContext context,
                                                       SequencedMap<String, BuildStepArgument> arguments)

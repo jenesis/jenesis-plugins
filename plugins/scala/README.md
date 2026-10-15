@@ -8,7 +8,7 @@ The build discovers the plugin by itself in every module that holds a `.scala` s
 
 | Setting | Meaning |
 |---|---|
-| `-Djenesis.scala.incremental=true` | compiles with Zinc, in a JVM forked per compile, recompiling only what a change reaches |
+| `-Djenesis.scala.incremental=true` | compiles with Zinc, recompiling only what a change reaches, in a JVM the build daemon keeps warm and shares between modules |
 | `-Djenesis.print.scalac`, `-Djenesis.print.scaladoc` | streams the tool's output |
 
 The compiler reads the `.scala` sources and, for their symbols, the `.java` sources beside them other than

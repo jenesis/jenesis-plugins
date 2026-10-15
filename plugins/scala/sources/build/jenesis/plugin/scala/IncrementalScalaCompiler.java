@@ -17,6 +17,7 @@ public final class IncrementalScalaCompiler {
             INTERFACE = "xsbti/",
             LIBRARY = "scala/Predef.class",
             ZINC = "sbt.internal.inc.";
+    private static final ConcurrentMap<List<Path>, Object> COMPILERS = new ConcurrentHashMap<>();
 
     private IncrementalScalaCompiler() {
     }
@@ -46,6 +47,88 @@ public final class IncrementalScalaCompiler {
             throw new IllegalArgumentException("Expected " + COMPILER + " <jar>, " + ANALYSIS + " <file> and "
                     + CLASSES + " <folder>");
         }
+        Object compilers = COMPILERS.get(compiler);
+        if (compilers == null) {
+            Object created = compilers(List.copyOf(compiler));
+            Object existing = COMPILERS.putIfAbsent(List.copyOf(compiler), created);
+            compilers = existing == null ? created : existing;
+        }
+        ClassLoader zinc = IncrementalScalaCompiler.class.getClassLoader();
+        Object logger = Proxy.newProxyInstance(zinc, new Class<?>[]{type("xsbti.Logger")}, (proxy, method, arguments) -> switch (method.getName()) {
+            case "error", "warn" -> {
+                System.err.println(((Supplier<?>) arguments[0]).get());
+                yield null;
+            }
+            case "info" -> {
+                System.out.println(((Supplier<?>) arguments[0]).get());
+                yield null;
+            }
+            case "trace" -> {
+                ((Throwable) ((Supplier<?>) arguments[0]).get()).printStackTrace();
+                yield null;
+            }
+            case "hashCode" -> System.identityHashCode(proxy);
+            case "equals" -> proxy == arguments[0];
+            case "toString" -> "logger";
+            default -> null;
+        });
+        Object converter = invoke(type(ZINC + "PlainVirtualFileConverter"), null, "converter");
+        Object lookup = Proxy.newProxyInstance(zinc, new Class<?>[]{type("xsbti.compile.PerClasspathEntryLookup")}, (proxy, method, arguments) -> switch (method.getName()) {
+            case "analysis" -> Optional.empty();
+            case "definesClass" -> invoke(type(ZINC + "Locate"), null, "definesClass", arguments[0]);
+            case "hashCode" -> System.identityHashCode(proxy);
+            case "equals" -> proxy == arguments[0];
+            default -> "lookup";
+        });
+        Files.createDirectories(classes);
+        Object compile = invoke(type("xsbti.compile.CompileOptions"), null, "of");
+        compile = invoke(compile.getClass(), compile, "withSources", files(converter, sources));
+        List<Path> entries = new ArrayList<>();
+        entries.add(classes);
+        entries.addAll(classpath);
+        compile = invoke(compile.getClass(), compile, "withClasspath", files(converter, entries));
+        compile = invoke(compile.getClass(), compile, "withClassesDirectory", classes);
+        compile = invoke(compile.getClass(), compile, "withScalacOptions", (Object) scalac.toArray(String[]::new));
+        compile = invoke(compile.getClass(), compile, "withJavacOptions", (Object) javac.toArray(String[]::new));
+        compile = invoke(compile.getClass(), compile, "withOrder", type("xsbti.compile.CompileOrder").getField("Mixed").get(null));
+        compile = invoke(compile.getClass(), compile, "withConverter", Optional.of(converter));
+        Object store = invoke(type(ZINC + "FileAnalysisStore"), null, "binary", analysis.toFile());
+        Optional<?> contents = (Optional<?>) invoke(type("xsbti.compile.AnalysisStore"), store, "get");
+        Object previous = contents.isPresent()
+                ? invoke(type("xsbti.compile.PreviousResult"), null, "of",
+                        Optional.of(invoke(type("xsbti.compile.AnalysisContents"), contents.get(), "getAnalysis")),
+                        Optional.of(invoke(type("xsbti.compile.AnalysisContents"), contents.get(), "getMiniSetup")))
+                : invoke(type("xsbti.compile.PreviousResult"), null, "of", Optional.empty(), Optional.empty());
+        Object reporter = type(ZINC + "LoggedReporter")
+                .getConstructor(int.class, type("xsbti.Logger"), type("scala.Function1"))
+                .newInstance(100, logger, invoke(type(ZINC + "LoggedReporter"), null, "$lessinit$greater$default$3"));
+        Object setup = invoke(type("xsbti.compile.Setup"), null, "of",
+                lookup,
+                false,
+                analysis,
+                type(ZINC + "FreshCompilerCache").getConstructor().newInstance(),
+                invoke(type("xsbti.compile.IncOptions"), null, "of"),
+                reporter,
+                Optional.empty(),
+                Optional.empty(),
+                Array.newInstance(type("xsbti.T2"), 0));
+        Object inputs = invoke(type("xsbti.compile.Inputs"), null, "of", compilers, compile, setup, previous);
+        Object incremental = invoke(type(ZINC + "ZincUtil"), null, "defaultIncrementalCompiler");
+        Object result;
+        try {
+            result = invoke(type("xsbti.compile.IncrementalCompiler"), incremental, "compile", inputs, logger);
+        } catch (InvocationTargetException e) {
+            if (type("xsbti.CompileFailed").isInstance(e.getCause())) {
+                throw new IllegalStateException("Scala failed to compile the sources, as reported above");
+            }
+            throw e;
+        }
+        invoke(type("xsbti.compile.AnalysisStore"), store, "set", invoke(type("xsbti.compile.AnalysisContents"), null, "create",
+                invoke(type("xsbti.compile.CompileResult"), result, "analysis"),
+                invoke(type("xsbti.compile.CompileResult"), result, "setup")));
+    }
+
+    private static Object compilers(List<Path> compiler) throws Exception {
         Path bridge = null;
         String version = null, compilerVersion = null;
         List<Path> instance = new ArrayList<>(), library = new ArrayList<>();
@@ -105,83 +188,11 @@ public final class IncrementalScalaCompiler {
             case "toString" -> "Scala " + scalaVersion;
             default -> throw new UnsupportedOperationException(method.getName());
         });
-        Object logger = Proxy.newProxyInstance(zinc, new Class<?>[]{type("xsbti.Logger")}, (proxy, method, arguments) -> switch (method.getName()) {
-            case "error", "warn" -> {
-                System.err.println(((Supplier<?>) arguments[0]).get());
-                yield null;
-            }
-            case "info" -> {
-                System.out.println(((Supplier<?>) arguments[0]).get());
-                yield null;
-            }
-            case "trace" -> {
-                ((Throwable) ((Supplier<?>) arguments[0]).get()).printStackTrace();
-                yield null;
-            }
-            case "hashCode" -> System.identityHashCode(proxy);
-            case "equals" -> proxy == arguments[0];
-            case "toString" -> "logger";
-            default -> null;
-        });
-        Object converter = invoke(type(ZINC + "PlainVirtualFileConverter"), null, "converter");
-        Object lookup = Proxy.newProxyInstance(zinc, new Class<?>[]{type("xsbti.compile.PerClasspathEntryLookup")}, (proxy, method, arguments) -> switch (method.getName()) {
-            case "analysis" -> Optional.empty();
-            case "definesClass" -> invoke(type(ZINC + "Locate"), null, "definesClass", arguments[0]);
-            case "hashCode" -> System.identityHashCode(proxy);
-            case "equals" -> proxy == arguments[0];
-            default -> "lookup";
-        });
         Object options = invoke(type("xsbti.compile.ClasspathOptionsUtil"), null, "manual");
         Object compiled = invoke(type(ZINC + "ZincUtil"), null, "scalaCompiler", scala, bridge);
         Object tools = invoke(type(ZINC + "javac.JavaTools"), null, "directOrFork", scala, options,
                 type("scala.None$").getField("MODULE$").get(null));
-        Object compilers = invoke(type(ZINC + "ZincUtil"), null, "compilers", tools, compiled);
-        Files.createDirectories(classes);
-        Object compile = invoke(type("xsbti.compile.CompileOptions"), null, "of");
-        compile = invoke(compile.getClass(), compile, "withSources", files(converter, sources));
-        List<Path> entries = new ArrayList<>();
-        entries.add(classes);
-        entries.addAll(classpath);
-        compile = invoke(compile.getClass(), compile, "withClasspath", files(converter, entries));
-        compile = invoke(compile.getClass(), compile, "withClassesDirectory", classes);
-        compile = invoke(compile.getClass(), compile, "withScalacOptions", (Object) scalac.toArray(String[]::new));
-        compile = invoke(compile.getClass(), compile, "withJavacOptions", (Object) javac.toArray(String[]::new));
-        compile = invoke(compile.getClass(), compile, "withOrder", type("xsbti.compile.CompileOrder").getField("Mixed").get(null));
-        compile = invoke(compile.getClass(), compile, "withConverter", Optional.of(converter));
-        Object store = invoke(type(ZINC + "FileAnalysisStore"), null, "binary", analysis.toFile());
-        Optional<?> contents = (Optional<?>) invoke(type("xsbti.compile.AnalysisStore"), store, "get");
-        Object previous = contents.isPresent()
-                ? invoke(type("xsbti.compile.PreviousResult"), null, "of",
-                        Optional.of(invoke(type("xsbti.compile.AnalysisContents"), contents.get(), "getAnalysis")),
-                        Optional.of(invoke(type("xsbti.compile.AnalysisContents"), contents.get(), "getMiniSetup")))
-                : invoke(type("xsbti.compile.PreviousResult"), null, "of", Optional.empty(), Optional.empty());
-        Object reporter = type(ZINC + "LoggedReporter")
-                .getConstructor(int.class, type("xsbti.Logger"), type("scala.Function1"))
-                .newInstance(100, logger, invoke(type(ZINC + "LoggedReporter"), null, "$lessinit$greater$default$3"));
-        Object setup = invoke(type("xsbti.compile.Setup"), null, "of",
-                lookup,
-                false,
-                analysis,
-                type(ZINC + "FreshCompilerCache").getConstructor().newInstance(),
-                invoke(type("xsbti.compile.IncOptions"), null, "of"),
-                reporter,
-                Optional.empty(),
-                Optional.empty(),
-                Array.newInstance(type("xsbti.T2"), 0));
-        Object inputs = invoke(type("xsbti.compile.Inputs"), null, "of", compilers, compile, setup, previous);
-        Object incremental = invoke(type(ZINC + "ZincUtil"), null, "defaultIncrementalCompiler");
-        Object result;
-        try {
-            result = invoke(type("xsbti.compile.IncrementalCompiler"), incremental, "compile", inputs, logger);
-        } catch (InvocationTargetException e) {
-            if (type("xsbti.CompileFailed").isInstance(e.getCause())) {
-                System.exit(1);
-            }
-            throw e;
-        }
-        invoke(type("xsbti.compile.AnalysisStore"), store, "set", invoke(type("xsbti.compile.AnalysisContents"), null, "create",
-                invoke(type("xsbti.compile.CompileResult"), result, "analysis"),
-                invoke(type("xsbti.compile.CompileResult"), result, "setup")));
+        return invoke(type(ZINC + "ZincUtil"), null, "compilers", tools, compiled);
     }
 
     private static Object files(Object converter, List<Path> paths) throws ReflectiveOperationException {

@@ -18,6 +18,7 @@ import build.jenesis.step.Dependencies;
 import build.jenesis.step.ProcessBuildStep;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ScalaCompilerModuleRunTest {
 
@@ -222,6 +223,35 @@ public class ScalaCompilerModuleRunTest {
         assertThat(Files.getLastModifiedTime(classes.resolve("sample/Untouched.class"))).isEqualTo(untouched);
     }
 
+    @Test
+    public void compiles_incrementally_in_a_warm_jvm_that_outlives_a_failed_compile() throws IOException {
+        Path sample = sources();
+        Files.writeString(sample.resolve("Edited.scala"), """
+                package sample
+                class Edited:
+                  def value(): String = "first"
+                """);
+        Environment warm = new Environment(Map.of("process.warm", "true"));
+        compile(warm);
+        Files.writeString(sample.resolve("Edited.scala"), """
+                package sample
+                class Edited:
+                  def value(): String = undefined
+                """);
+        assertThatThrownBy(() -> compile(warm))
+                .as("a source that does not compile fails the build")
+                .isNotNull();
+        Files.writeString(sample.resolve("Edited.scala"), """
+                package sample
+                class Edited:
+                  def value(): String = "second"
+                """);
+        compile(warm);
+        assertThat(new String(Files.readAllBytes(classes().resolve("sample/Edited.class")), StandardCharsets.ISO_8859_1))
+                .as("the JVM that compiled before compiles again after a failure")
+                .contains("second");
+    }
+
     private Path sources() throws IOException {
         ScalaPins.write(project, "scalac", "zinc", "scaladoc");
         return Files.createDirectories(project.resolve(BuildStep.SOURCES + "sample"));
@@ -235,6 +265,19 @@ public class ScalaCompilerModuleRunTest {
     }
 
     private void compile(boolean incremental) throws IOException {
+        compile(new ScalaCompilerModule(Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
+                Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE)))
+                .incremental(incremental));
+    }
+
+    private void compile(Environment environment) throws IOException {
+        compile(ScalaCompilerModule.ofEnvironment(environment,
+                        Map.of("maven", MavenDefaultRepository.ofEnvironment(environment)),
+                        Map.of("maven", MavenPomResolver.ofEnvironment(environment)))
+                .incremental(true));
+    }
+
+    private void compile(ScalaCompilerModule module) throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
                 new HashDigestFunction("MD5"),
@@ -245,12 +288,7 @@ public class ScalaCompilerModuleRunTest {
                 false,
                 0);
         executor.addSource("project", project);
-        executor.addModule("scala",
-                new ScalaCompilerModule(Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
-                        Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE)))
-                        .pinning(Pinning.STRICT)
-                        .incremental(incremental),
-                "project");
+        executor.addModule("scala", module.pinning(Pinning.STRICT), "project");
         executor.execute();
     }
 }
