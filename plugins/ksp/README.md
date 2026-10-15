@@ -22,4 +22,9 @@ processor brings a Kotlin standard library of its own.
 It reads the sources of the module and resolves their types against the module's dependencies; it binds no file.
 What the processors write is compiled with the module's sources, and the resources they write join its jar.
 
+KSP runs incrementally, as Gradle runs it: a build hands it the sources that changed or were removed since the last
+one and the classes of the module's dependencies whose bytes changed, so a processor handles only the sources a change
+reaches and KSP keeps what the others generated. A change to the processors, their options or KSP itself processes
+the module from scratch.
+
 `-Djenesis.generate.ksp=false` switches it off.

@@ -128,6 +128,42 @@ public class KspModuleRunTest {
     }
 
     @Test
+    public void processes_only_what_a_change_reaches_and_removes_what_a_removed_source_generated() throws IOException {
+        Files.writeString(project.resolve(BuildStep.REQUIRES), """
+                main/compile/maven/com.squareup.moshi/moshi/1.15.2=
+                ksp\\:processor/plugin/maven/com.squareup.moshi/moshi-kotlin-codegen/1.15.2=
+                """);
+        Path sample = project.resolve(BuildStep.SOURCES + "sample");
+        generate();
+        Path point = generated().resolve(BuildStep.SOURCES + "sample/PointJsonAdapter.kt");
+        FileTime generatedAt = Files.getLastModifiedTime(point);
+
+        Files.writeString(sample.resolve("Line.kt"), """
+                package sample
+
+                import com.squareup.moshi.JsonClass
+
+                @JsonClass(generateAdapter = true)
+                data class Line(val from: Point, val to: Point)
+                """);
+        generate();
+        assertThat(generated().resolve(BuildStep.SOURCES + "sample/LineJsonAdapter.kt"))
+                .as("the added source is processed")
+                .content()
+                .contains("class LineJsonAdapter");
+        assertThat(Files.getLastModifiedTime(point))
+                .as("a source the change does not reach keeps what it generated before")
+                .isEqualTo(generatedAt);
+
+        Files.delete(sample.resolve("Line.kt"));
+        generate();
+        assertThat(generated().resolve(BuildStep.SOURCES + "sample/LineJsonAdapter.kt"))
+                .as("what a removed source generated is removed with it")
+                .doesNotExist();
+        assertThat(point).isNotEmptyFile();
+    }
+
+    @Test
     public void refuses_to_run_without_a_declared_processor() throws IOException {
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
@@ -135,6 +171,14 @@ public class KspModuleRunTest {
         assertThatThrownBy(executor::execute)
                 .hasStackTraceContaining("no symbol processor is declared")
                 .hasStackTraceContaining("@jenesis.plugin ksp:processor <coordinate>");
+    }
+
+    private void generate() throws IOException {
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule("libraries", libraries(), "project");
+        executor.addModule("ksp", newModule(), "project", "libraries");
+        executor.execute();
     }
 
     private Path generated() {

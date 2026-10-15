@@ -20,7 +20,9 @@ import build.jenesis.step.ProcessHandler;
 public class KspModule implements BuildExecutorModule {
 
     public static final String GENERATE = "generate";
-    private static final String REQUIRED = "required", DEPENDENCIES = "dependencies", PROCESSORS = "processors";
+    private static final String REQUIRED = "required", DEPENDENCIES = "dependencies", PROCESSORS = "processors",
+            INCREMENTAL = "incremental", STATE = "state.properties", LISTING = "listing.properties",
+            CLASSES = "classes.properties";
     private static final String MAVEN_GROUP = "com.google.devtools.ksp", MAVEN_ARTIFACT = "symbol-processing-aa-embeddable";
 
     private final Dependencies dependencies;
@@ -215,8 +217,86 @@ public class KspModule implements BuildExecutorModule {
             }
             ForkedOptions forked = forked(properties);
             List<String> commands = new ArrayList<>(forked.jvm()), declared = forked.program();
-            Path supplement = context.supplement();
+            Path supplement = context.supplement(),
+                    working = Files.createDirectories(context.next().resolve(INCREMENTAL)),
+                    generated = Files.createDirectories(context.next().resolve(BuildStep.SOURCES)),
+                    resources = Files.createDirectories(context.next().resolve(BuildStep.RESOURCES));
             String sourceRoots = String.join(File.pathSeparator, roots);
+            SequencedProperties state = new SequencedProperties(), listing = new SequencedProperties(), classes = new SequencedProperties();
+            state.setProperty("configuration", String.join("\n", jars) + "\n" + String.join("\n", processorPath)
+                    + "\n" + options + "\n" + release + "\n" + module + "\n" + declared + "\n" + sourceRoots);
+            state.setProperty("destination", context.next().toAbsolutePath().toString());
+            for (String root : roots) {
+                try (Stream<Path> files = Files.walk(Path.of(root))) {
+                    for (Path file : files.filter(file -> file.toString().endsWith(".kt") || file.toString().endsWith(".java")).sorted().toList()) {
+                        listing.setProperty(file.toAbsolutePath().toString(), digest(Files.readAllBytes(file)));
+                    }
+                }
+            }
+            for (String library : libraries) {
+                Path path = Path.of(library);
+                if (Files.isDirectory(path)) {
+                    try (Stream<Path> files = Files.walk(path)) {
+                        for (Path file : files.filter(file -> file.toString().endsWith(".class")).sorted().toList()) {
+                            CRC32 crc = new CRC32();
+                            crc.update(Files.readAllBytes(file));
+                            classes.putIfAbsent(className(path.relativize(file).toString()), Long.toHexString(crc.getValue()));
+                        }
+                    }
+                } else if (Files.isRegularFile(path)) {
+                    try (JarFile jar = new JarFile(path.toFile())) {
+                        jar.stream().filter(entry -> entry.getName().endsWith(".class")).forEach(entry ->
+                                classes.putIfAbsent(className(entry.getName()), Long.toHexString(entry.getCrc())));
+                    }
+                }
+            }
+            Path previous = context.previous() == null ? null : context.previous().resolve(INCREMENTAL);
+            boolean incremental = previous != null
+                    && Files.isRegularFile(previous.resolve(STATE))
+                    && Files.isRegularFile(previous.resolve(LISTING))
+                    && Files.isRegularFile(previous.resolve(CLASSES))
+                    && SequencedProperties.ofFiles(previous.resolve(STATE)).equals(state);
+            List<String> modified = new ArrayList<>(), removed = new ArrayList<>(), changed = new ArrayList<>();
+            if (incremental) {
+                Path caches = previous.resolve("caches");
+                if (Files.isDirectory(caches)) {
+                    try (Stream<Path> files = Files.walk(caches)) {
+                        for (Path file : files.toList()) {
+                            Path copied = working.resolve("caches").resolve(caches.relativize(file).toString());
+                            if (Files.isDirectory(file)) {
+                                Files.createDirectories(copied);
+                            } else {
+                                Files.copy(file, copied, StandardCopyOption.COPY_ATTRIBUTES);
+                            }
+                        }
+                    }
+                }
+                SequencedProperties recorded = SequencedProperties.ofFiles(previous.resolve(LISTING)),
+                        compiled = SequencedProperties.ofFiles(previous.resolve(CLASSES));
+                for (String file : listing.stringPropertyNames()) {
+                    if (!listing.getProperty(file).equals(recorded.getProperty(file))) {
+                        modified.add(file);
+                    }
+                }
+                for (String file : recorded.stringPropertyNames()) {
+                    if (listing.getProperty(file) == null) {
+                        removed.add(file);
+                    }
+                }
+                for (String name : classes.stringPropertyNames()) {
+                    if (!classes.getProperty(name).equals(compiled.getProperty(name))) {
+                        changed.add(name);
+                    }
+                }
+                for (String name : compiled.stringPropertyNames()) {
+                    if (classes.getProperty(name) == null) {
+                        changed.add(name);
+                    }
+                }
+            }
+            state.store(working.resolve(STATE));
+            listing.store(working.resolve(LISTING));
+            classes.store(working.resolve(CLASSES));
             commands.addAll(List.of(
                     "-cp", String.join(File.pathSeparator, jars),
                     "com.google.devtools.ksp.cmdline.KSPJvmMain",
@@ -227,13 +307,22 @@ public class KspModule implements BuildExecutorModule {
                     "-source-roots=" + sourceRoots,
                     "-java-source-roots=" + sourceRoots,
                     "-project-base-dir=" + supplement,
-                    "-output-base-dir=" + supplement.resolve("output"),
-                    "-caches-dir=" + supplement.resolve("caches"),
-                    "-class-output-dir=" + supplement.resolve("classes"),
-                    "-kotlin-output-dir=" + Files.createDirectories(context.next().resolve(BuildStep.SOURCES)),
-                    "-java-output-dir=" + context.next().resolve(BuildStep.SOURCES),
-                    "-resource-output-dir=" + Files.createDirectories(context.next().resolve(BuildStep.RESOURCES)),
-                    "-incremental=false"));
+                    "-output-base-dir=" + context.next(),
+                    "-caches-dir=" + working.resolve("caches"),
+                    "-class-output-dir=" + working.resolve("classes"),
+                    "-kotlin-output-dir=" + generated,
+                    "-java-output-dir=" + generated,
+                    "-resource-output-dir=" + resources,
+                    "-incremental=true"));
+            if (!modified.isEmpty()) {
+                commands.add("-modified-sources=" + String.join(File.pathSeparator, modified));
+            }
+            if (!removed.isEmpty()) {
+                commands.add("-removed-sources=" + String.join(File.pathSeparator, removed));
+            }
+            if (!changed.isEmpty()) {
+                commands.add("-changed-classes=" + String.join(File.pathSeparator, changed));
+            }
             if (declared.stream().noneMatch(option -> option.startsWith("-language-version"))) {
                 String version = kotlinVersion(jars);
                 commands.add("-language-version=" + version);
@@ -252,6 +341,18 @@ public class KspModule implements BuildExecutorModule {
             commands.addAll(declared);
             commands.add(String.join(File.pathSeparator, processorPath));
             return CompletableFuture.completedStage(commands);
+        }
+
+        private static String className(String entry) {
+            return entry.substring(0, entry.length() - ".class".length()).replace('\\', '/').replace('/', '.').replace('$', '.');
+        }
+
+        private static String digest(byte[] bytes) {
+            try {
+                return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException(e);
+            }
         }
 
         private static String kotlinVersion(Collection<String> jars) throws IOException {
