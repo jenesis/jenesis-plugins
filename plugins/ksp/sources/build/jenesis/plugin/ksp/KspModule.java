@@ -194,7 +194,7 @@ public class KspModule implements BuildExecutorModule {
                 if (module == null && Files.isRegularFile(metadata)) {
                     module = SequencedProperties.ofFiles(metadata).value("artifact");
                 }
-                Path root = folder.resolve(BuildStep.SOURCES);
+                Path root = folder.resolve(BuildStep.SOURCES).toAbsolutePath();
                 if (Files.isDirectory(root)) {
                     roots.add(root.toString());
                     try (Stream<Path> files = Files.walk(root)) {
@@ -217,15 +217,16 @@ public class KspModule implements BuildExecutorModule {
             }
             ForkedOptions forked = forked(properties);
             List<String> commands = new ArrayList<>(forked.jvm()), declared = forked.program();
-            Path supplement = context.supplement(),
-                    working = Files.createDirectories(context.next().resolve(INCREMENTAL)),
-                    generated = Files.createDirectories(context.next().resolve(BuildStep.SOURCES)),
-                    resources = Files.createDirectories(context.next().resolve(BuildStep.RESOURCES));
+            Path next = context.next().toAbsolutePath(),
+                    supplement = context.supplement().toAbsolutePath(),
+                    working = Files.createDirectories(next.resolve(INCREMENTAL)),
+                    generated = Files.createDirectories(next.resolve(BuildStep.SOURCES)),
+                    resources = Files.createDirectories(next.resolve(BuildStep.RESOURCES));
             String sourceRoots = String.join(File.pathSeparator, roots);
             SequencedProperties state = new SequencedProperties(), listing = new SequencedProperties(), classes = new SequencedProperties();
             state.setProperty("configuration", String.join("\n", jars) + "\n" + String.join("\n", processorPath)
                     + "\n" + options + "\n" + release + "\n" + module + "\n" + declared + "\n" + sourceRoots);
-            state.setProperty("destination", context.next().toAbsolutePath().toString());
+            state.setProperty("destination", next.toString());
             for (String root : roots) {
                 try (Stream<Path> files = Files.walk(Path.of(root))) {
                     for (Path file : files.filter(file -> file.toString().endsWith(".kt") || file.toString().endsWith(".java")).sorted().toList()) {
@@ -297,9 +298,24 @@ public class KspModule implements BuildExecutorModule {
             state.store(working.resolve(STATE));
             listing.store(working.resolve(LISTING));
             classes.store(working.resolve(CLASSES));
+            List<String> classPath = new ArrayList<>(jars);
+            String main = "com.google.devtools.ksp.cmdline.KSPJvmMain";
+            if (terms.warm()) {
+                CodeSource source = KspMain.class.getProtectionDomain().getCodeSource();
+                if (source == null) {
+                    throw new IllegalStateException("KSP runs warm with the plugin's own classes, but the plugin was"
+                            + " loaded from no location it can hand a JVM - set jenesis.process.warm=false");
+                }
+                try {
+                    classPath.addFirst(Path.of(source.getLocation().toURI()).toString());
+                } catch (URISyntaxException e) {
+                    throw new IllegalStateException(e);
+                }
+                main = KspMain.class.getName();
+            }
             commands.addAll(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "com.google.devtools.ksp.cmdline.KSPJvmMain",
+                    "-cp", String.join(File.pathSeparator, classPath),
+                    main,
                     "-module-name=" + (module == null ? "main" : module),
                     "-jvm-target=" + (release == null
                             ? Integer.toString(Runtime.version().feature())
@@ -307,7 +323,7 @@ public class KspModule implements BuildExecutorModule {
                     "-source-roots=" + sourceRoots,
                     "-java-source-roots=" + sourceRoots,
                     "-project-base-dir=" + supplement,
-                    "-output-base-dir=" + context.next(),
+                    "-output-base-dir=" + next,
                     "-caches-dir=" + working.resolve("caches"),
                     "-class-output-dir=" + working.resolve("classes"),
                     "-kotlin-output-dir=" + generated,

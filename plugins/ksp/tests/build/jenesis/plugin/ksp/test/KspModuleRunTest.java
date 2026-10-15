@@ -128,7 +128,7 @@ public class KspModuleRunTest {
     }
 
     @Test
-    public void processes_only_what_a_change_reaches_and_removes_what_a_removed_source_generated() throws IOException {
+    public void processes_only_what_a_change_reaches_in_a_warm_jvm_and_removes_what_a_removed_source_generated() throws IOException {
         Files.writeString(project.resolve(BuildStep.REQUIRES), """
                 main/compile/maven/com.squareup.moshi/moshi/1.15.2=
                 ksp\\:processor/plugin/maven/com.squareup.moshi/moshi-kotlin-codegen/1.15.2=
@@ -174,10 +174,11 @@ public class KspModuleRunTest {
     }
 
     private void generate() throws IOException {
+        Environment warm = new Environment(Map.of("process.warm", "true"));
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("libraries", libraries(), "project");
-        executor.addModule("ksp", newModule(), "project", "libraries");
+        executor.addModule("ksp", KspModule.ofEnvironment(warm, REPOSITORIES, RESOLVERS).pinning(Pinning.STRICT), "project", "libraries");
         executor.execute();
     }
 
