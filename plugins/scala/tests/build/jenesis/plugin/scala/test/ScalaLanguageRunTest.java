@@ -5,12 +5,10 @@ import module org.junit.jupiter.api;
 import build.jenesis.BuildExecutor;
 import build.jenesis.BuildExecutorCache;
 import build.jenesis.BuildExecutorCallback;
-import build.jenesis.BuildExecutorModule;
 import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
-import build.jenesis.Observation;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
@@ -20,8 +18,7 @@ import build.jenesis.plugin.scala.ScalaFactory;
 import build.jenesis.project.InferredCompilerChainModule;
 import build.jenesis.project.InferredDocumentationChainModule;
 import build.jenesis.project.Language;
-import build.jenesis.project.PluginModule;
-import build.jenesis.project.TestFramework;
+import build.jenesis.project.Prepared;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,7 +62,8 @@ public class ScalaLanguageRunTest {
                 "scala",
                 repositories,
                 resolvers);
-        SequencedMap<String, PluginModule> languages = new LinkedHashMap<>(Map.of("scala", new Plugged(language)));
+        SequencedMap<String, Prepared<Language>> languages = new LinkedHashMap<>(Map.of("scala",
+                new Prepared<>((_, _) -> { }, _ -> language)));
 
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
@@ -104,42 +102,5 @@ public class ScalaLanguageRunTest {
         assertThat(javadoc.resolve("scala/index.html"))
                 .as("Scaladoc is placed in a folder named after the plugin beside the documentation of javac")
                 .isNotEmptyFile();
-    }
-
-    private record Plugged(Language language) implements PluginModule {
-
-        @Override
-        public BuildExecutorModule preparation() {
-            return (_, _) -> { };
-        }
-
-        @Override
-        public Observation observation(SequencedMap<String, Path> prepared) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public TestFramework framework(SequencedMap<String, Path> prepared) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public Language language(SequencedMap<String, Path> prepared) {
-            return language;
-        }
-
-        @Override
-        public PluginModule toolRepositories(Map<String, Repository> toolRepositories) {
-            return this;
-        }
-
-        @Override
-        public PluginModule toolResolvers(Map<String, Resolver> toolResolvers) {
-            return this;
-        }
-
-        @Override
-        public void accept(BuildExecutor buildExecutor, SequencedMap<String, Path> inherited) {
-        }
     }
 }
