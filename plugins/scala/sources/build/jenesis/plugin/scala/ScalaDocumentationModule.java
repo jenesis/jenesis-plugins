@@ -251,11 +251,15 @@ public class ScalaDocumentationModule implements BuildExecutorModule {
             List<String> userClasspath = new ArrayList<>(classRoots);
             userClasspath.addAll(classpath);
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "dotty.tools.scaladoc.Main",
-                    "-d", output.toString(),
-                    "-classpath", String.join(File.pathSeparator, userClasspath),
-                    "-project", "documentation"));
+                    "-d",
+                    output.toString(),
+                    "-classpath",
+                    String.join(File.pathSeparator, userClasspath),
+                    "-project",
+                    "documentation"));
             commands.addAll(classRoots);
             return CompletableFuture.completedStage(commands);
         }

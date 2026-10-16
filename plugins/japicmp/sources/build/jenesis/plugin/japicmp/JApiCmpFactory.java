@@ -46,7 +46,8 @@ public class JApiCmpFactory implements BuildModuleFactory {
                 .permits(permits)
                 .tool(group + ":tool");
         String access = values.value("access");
-        List<String> include = patterns(values.value("include")), exclude = patterns(values.value("exclude")),
+        List<String> include = patterns(values.value("include")),
+                exclude = patterns(values.value("exclude")),
                 formats = values.entries("format");
         if (access != null) {
             module = module.access(named(JApiCmpModule.Access.class, origin, "access", access));

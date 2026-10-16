@@ -375,11 +375,15 @@ public class ScalaCompilerModule implements BuildExecutorModule {
             userClasspath.addAll(classpath);
             if (!incremental) {
                 List<String> commands = new ArrayList<>(List.of(
-                        "-cp", String.join(File.pathSeparator, jars),
+                        "-cp",
+                        String.join(File.pathSeparator, jars),
                         "dotty.tools.dotc.Main",
-                        "-d", target.toString(),
-                        "-classpath", String.join(File.pathSeparator, userClasspath),
-                        "-sourceroot", sourceroot.toString()));
+                        "-d",
+                        target.toString(),
+                        "-classpath",
+                        String.join(File.pathSeparator, userClasspath),
+                        "-sourceroot",
+                        sourceroot.toString()));
                 if (release != null) {
                     commands.add("-release");
                     commands.add(release);
@@ -414,7 +418,8 @@ public class ScalaCompilerModule implements BuildExecutorModule {
                 throw new IllegalStateException(e);
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", plugin + File.pathSeparator + String.join(File.pathSeparator, engine),
+                    "-cp",
+                    plugin + File.pathSeparator + String.join(File.pathSeparator, engine),
                     IncrementalScalaCompiler.class.getName()));
             for (String jar : jars) {
                 commands.add(IncrementalScalaCompiler.COMPILER);
@@ -451,8 +456,10 @@ public class ScalaCompilerModule implements BuildExecutorModule {
             }
             configuration.store(state.resolve(STATE));
             commands.addAll(List.of(
-                    IncrementalScalaCompiler.ANALYSIS, state.resolve("analysis.bin").toString(),
-                    IncrementalScalaCompiler.CLASSES, state.resolve(CLASSES).toString(),
+                    IncrementalScalaCompiler.ANALYSIS,
+                    state.resolve("analysis.bin").toString(),
+                    IncrementalScalaCompiler.CLASSES,
+                    state.resolve(CLASSES).toString(),
                     IncrementalScalaCompiler.SOURCES));
             commands.addAll(files);
             return CompletableFuture.completedStage(commands);

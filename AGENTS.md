@@ -70,7 +70,8 @@ rule there applies here as well; this file adds what is particular to the plugin
 
 ## Tests
 
-- `it/` per plugin builds an example project through `ExampleProject` of the shared `testing/` module: it installs
+- `it/` per plugin builds an example project through `ExampleProject` of `harness/`, the module
+  `build.jenesis.plugin.harness` released beside the plugins so that a plugin of anyone's is tested the same way: it installs
   the plugin and `build.jenesis` into a local module repository, writes the project's files - a
   `jenesis.plugins.properties` naming the plugin, its `plugin-<name>.properties`, the sources - and runs
   `jenesis-make` in process with a selector that narrows the build to the plugin's hook point where that suffices. It

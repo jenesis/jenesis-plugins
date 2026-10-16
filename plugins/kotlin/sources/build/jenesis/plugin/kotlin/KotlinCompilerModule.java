@@ -295,8 +295,10 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                     || !Files.isRegularFile(working.resolve(LISTING))
                     || !SequencedProperties.ofFiles(working.resolve(STATE)).equals(state);
             Path caches = working.resolve("caches");
-            List<String> commands = new ArrayList<>(List.of(IncrementalKotlinCompiler.WORKING, caches.toString(),
-                    IncrementalKotlinCompiler.SNAPSHOTS, working.resolve("snapshots").toString()));
+            List<String> commands = new ArrayList<>(List.of(IncrementalKotlinCompiler.WORKING,
+                    caches.toString(),
+                    IncrementalKotlinCompiler.SNAPSHOTS,
+                    working.resolve("snapshots").toString()));
             if (rebuild) {
                 if (Files.isDirectory(caches)) {
                     try (Stream<Path> files = Files.walk(caches)) {
@@ -533,9 +535,11 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             List<String> commands = new ArrayList<>(forked.jvm()), options = forked.program();
             List<String> arguments = arguments(release, sources, classpath, friends, options);
             commands.addAll(List.of(
-                    "-cp", String.join(File.pathSeparator, sources.jars()),
+                    "-cp",
+                    String.join(File.pathSeparator, sources.jars()),
                     MAIN_CLASS,
-                    "-d", target.toString()));
+                    "-d",
+                    target.toString()));
             commands.addAll(arguments);
             commands.addAll(files);
             return commands;
@@ -574,7 +578,8 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             List<String> arguments = new ArrayList<>(List.of(
                     "-no-stdlib",
                     "-no-reflect",
-                    IncrementalKotlinCompiler.CLASSPATH, String.join(File.pathSeparator, classpath)));
+                    IncrementalKotlinCompiler.CLASSPATH,
+                    String.join(File.pathSeparator, classpath)));
             if (release != null) {
                 arguments.add("-jvm-target");
                 arguments.add(Integer.parseInt(release) < 9 ? "1." + release : release);

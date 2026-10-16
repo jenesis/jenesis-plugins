@@ -173,7 +173,8 @@ public class AvroModule implements BuildExecutorModule {
             }
             Path target = Files.createDirectories(context.next().resolve(BuildStep.SOURCES));
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(AvroDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(AvroDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     AvroDriver.class.getName()));
             commands.addAll(arguments);

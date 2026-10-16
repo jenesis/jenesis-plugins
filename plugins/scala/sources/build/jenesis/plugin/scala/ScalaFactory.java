@@ -2,11 +2,11 @@ package build.jenesis.plugin.scala;
 
 import module java.base;
 import build.jenesis.Environment;
+import build.jenesis.Language;
+import build.jenesis.LanguageFactory;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
-import build.jenesis.project.Language;
-import build.jenesis.project.LanguageFactory;
 
 public class ScalaFactory implements LanguageFactory {
 

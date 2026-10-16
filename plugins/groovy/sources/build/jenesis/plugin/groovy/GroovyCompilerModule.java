@@ -211,10 +211,13 @@ public class GroovyCompilerModule implements BuildExecutorModule {
                 }
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "org.codehaus.groovy.tools.FileSystemCompiler",
-                    "-d", target.toString(),
-                    "--classpath", String.join(File.pathSeparator, compiling)));
+                    "-d",
+                    target.toString(),
+                    "--classpath",
+                    String.join(File.pathSeparator, compiling)));
             commands.addAll(files);
             return CompletableFuture.completedStage(commands);
         }

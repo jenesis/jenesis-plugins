@@ -151,11 +151,15 @@ public class JaCoCoModuleRunTest {
                         .observe(new JaCoCo("jacoco"))
                         .isTest(candidate -> candidate.endsWith("CoveredTest"))
                         .jarsOnly(false),
-                "dependencies", "classes");
+                "dependencies",
+                "classes");
         executor.addModule(
                 "coverage",
                 limits.apply(new JaCoCoModule(Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)), Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))).pinning(Pinning.STRICT).classes(true)),
-                "test", "classes", "sources", "dependencies");
+                "test",
+                "classes",
+                "sources",
+                "dependencies");
         executor.execute();
     }
 

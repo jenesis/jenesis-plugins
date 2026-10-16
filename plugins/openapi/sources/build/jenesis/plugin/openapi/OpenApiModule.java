@@ -211,13 +211,18 @@ public class OpenApiModule implements BuildExecutorModule {
             }
             Path target = Files.createDirectories(context.next().resolve("generated"));
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "org.openapitools.codegen.OpenAPIGenerator",
                     "generate",
-                    "-i", located.toString(),
-                    "-g", generator,
-                    "-o", target.toString(),
-                    "--additional-properties", "hideGenerationTimestamp=true"));
+                    "-i",
+                    located.toString(),
+                    "-g",
+                    generator,
+                    "-o",
+                    target.toString(),
+                    "--additional-properties",
+                    "hideGenerationTimestamp=true"));
             if (packageName != null) {
                 commands.add("--additional-properties");
                 commands.add("apiPackage=" + packageName

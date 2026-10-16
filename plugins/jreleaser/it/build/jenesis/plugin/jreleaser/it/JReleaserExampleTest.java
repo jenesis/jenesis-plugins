@@ -3,7 +3,7 @@ package build.jenesis.plugin.jreleaser.it;
 import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.plugin.jreleaser.JReleaserFactory;
-import build.jenesis.plugin.testing.ExampleProject;
+import build.jenesis.plugin.harness.ExampleProject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,8 +38,16 @@ public class JReleaserExampleTest {
                 .write("sources/module-info.java", "module example { }\n");
         for (List<String> command : List.of(List.of("git", "init", "-q"),
                 List.of("git", "remote", "add", "origin", "https://github.com/someone/example.git"),
-                List.of("git", "-c", "user.name=someone", "-c", "user.email=someone@example.org",
-                        "commit", "-q", "--allow-empty", "-m", "initial"))) {
+                List.of("git",
+                        "-c",
+                        "user.name=someone",
+                        "-c",
+                        "user.email=someone@example.org",
+                        "commit",
+                        "-q",
+                        "--allow-empty",
+                        "-m",
+                        "initial"))) {
             assertThat(new ProcessBuilder(command).directory(project.root().toFile()).inheritIO().start().waitFor())
                     .as("git prepares the checkout JReleaser reads")
                     .isZero();

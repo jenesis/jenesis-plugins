@@ -191,12 +191,15 @@ public class WsImportModule implements BuildExecutorModule {
             }
             Path target = Files.createDirectories(context.next().resolve(BuildStep.SOURCES));
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(WsImportDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(WsImportDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     WsImportDriver.class.getName(),
                     "-Xnocompile",
-                    "-s", target.toString(),
-                    "-wsdllocation", location));
+                    "-s",
+                    target.toString(),
+                    "-wsdllocation",
+                    location));
             if (packageName != null) {
                 commands.add("-p");
                 commands.add(packageName);

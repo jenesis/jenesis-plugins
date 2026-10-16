@@ -95,14 +95,18 @@ public final class IncrementalScalaCompiler {
         Object store = invoke(type(ZINC + "FileAnalysisStore"), null, "binary", analysis.toFile());
         Optional<?> contents = (Optional<?>) invoke(type("xsbti.compile.AnalysisStore"), store, "get");
         Object previous = contents.isPresent()
-                ? invoke(type("xsbti.compile.PreviousResult"), null, "of",
+                ? invoke(type("xsbti.compile.PreviousResult"),
+                        null,
+                        "of",
                         Optional.of(invoke(type("xsbti.compile.AnalysisContents"), contents.get(), "getAnalysis")),
                         Optional.of(invoke(type("xsbti.compile.AnalysisContents"), contents.get(), "getMiniSetup")))
                 : invoke(type("xsbti.compile.PreviousResult"), null, "of", Optional.empty(), Optional.empty());
         Object reporter = type(ZINC + "LoggedReporter")
                 .getConstructor(int.class, type("xsbti.Logger"), type("scala.Function1"))
                 .newInstance(100, logger, invoke(type(ZINC + "LoggedReporter"), null, "$lessinit$greater$default$3"));
-        Object setup = invoke(type("xsbti.compile.Setup"), null, "of",
+        Object setup = invoke(type("xsbti.compile.Setup"),
+                null,
+                "of",
                 lookup,
                 false,
                 analysis,
@@ -123,7 +127,9 @@ public final class IncrementalScalaCompiler {
             }
             throw e;
         }
-        invoke(type("xsbti.compile.AnalysisStore"), store, "set", invoke(type("xsbti.compile.AnalysisContents"), null, "create",
+        invoke(type("xsbti.compile.AnalysisStore"), store, "set", invoke(type("xsbti.compile.AnalysisContents"),
+                null,
+                "create",
                 invoke(type("xsbti.compile.CompileResult"), result, "analysis"),
                 invoke(type("xsbti.compile.CompileResult"), result, "setup")));
     }
@@ -190,7 +196,11 @@ public final class IncrementalScalaCompiler {
         });
         Object options = invoke(type("xsbti.compile.ClasspathOptionsUtil"), null, "manual");
         Object compiled = invoke(type(ZINC + "ZincUtil"), null, "scalaCompiler", scala, bridge);
-        Object tools = invoke(type(ZINC + "javac.JavaTools"), null, "directOrFork", scala, options,
+        Object tools = invoke(type(ZINC + "javac.JavaTools"),
+                null,
+                "directOrFork",
+                scala,
+                options,
                 type("scala.None$").getField("MODULE$").get(null));
         return invoke(type(ZINC + "ZincUtil"), null, "compilers", tools, compiled);
     }

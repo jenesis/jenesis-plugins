@@ -3,7 +3,7 @@ package build.jenesis.plugin.pitest.it;
 import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.plugin.pitest.PiTestFactory;
-import build.jenesis.plugin.testing.ExampleProject;
+import build.jenesis.plugin.harness.ExampleProject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

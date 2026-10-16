@@ -171,11 +171,13 @@ public class XjcModule implements BuildExecutorModule {
             }
             Path target = Files.createDirectories(context.next().resolve(BuildStep.SOURCES));
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(XjcDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(XjcDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     XjcDriver.class.getName(),
                     "-no-header",
-                    "-d", target.toString()));
+                    "-d",
+                    target.toString()));
             if (packageName != null) {
                 commands.add("-p");
                 commands.add(packageName);

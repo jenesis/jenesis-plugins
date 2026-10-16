@@ -92,8 +92,11 @@ public class DokkaDocumentationModuleTest {
                 .containsEntry("skipDeprecated", false)
                 .containsEntry("reportUndocumented", false)
                 .containsEntry("includes", List.of())
-                .doesNotContainKeys("documentedVisibilities", "jdkVersion", "sourceLinks",
-                        "externalDocumentationLinks", "perPackageOptions");
+                .doesNotContainKeys("documentedVisibilities",
+                        "jdkVersion",
+                        "sourceLinks",
+                        "externalDocumentationLinks",
+                        "perPackageOptions");
         assertThat(list(sourceSet.get("sourceRoots"))).singleElement()
                 .satisfies(folder -> assertThat(Path.of(folder.toString()).resolve("sample/Sample.kt")).exists());
     }

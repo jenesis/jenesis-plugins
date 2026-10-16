@@ -133,12 +133,20 @@ final class IncrementalKotlinCompiler implements ToolProvider {
                     Object changes = rebuild
                             ? type(loader, "SourcesChanges$Unknown").getField("INSTANCE").get(null)
                             : type(loader, "SourcesChanges$Known").getConstructor(List.class, List.class).newInstance(modified, removed);
-                    Object configuration = invoke(type(loader, "jvm.operations.JvmCompilationOperation$Builder"), builder,
-                            "snapshotBasedIcConfigurationBuilder", working, changes, dependencies, working.resolve(SHRUNK));
+                    Object configuration = invoke(type(loader, "jvm.operations.JvmCompilationOperation$Builder"),
+                            builder,
+                            "snapshotBasedIcConfigurationBuilder",
+                            working,
+                            changes,
+                            dependencies,
+                            working.resolve(SHRUNK));
                     Object incremental = invoke(type(loader, "jvm.JvmSnapshotBasedIncrementalCompilationConfiguration$Builder"), configuration, "build");
                     Class<?> operationType = type(loader, "jvm.operations.JvmCompilationOperation");
-                    invoke(type(loader, "jvm.operations.JvmCompilationOperation$Builder"), builder, "set",
-                            operationType.getField("INCREMENTAL_COMPILATION").get(null), incremental);
+                    invoke(type(loader, "jvm.operations.JvmCompilationOperation$Builder"),
+                            builder,
+                            "set",
+                            operationType.getField("INCREMENTAL_COMPILATION").get(null),
+                            incremental);
                 }
                 Object operation = invoke(type(loader, "jvm.operations.JvmCompilationOperation$Builder"), builder, "build");
                 Object result = invoke(sessionType, session, "executeOperation", operation, policy, logger);

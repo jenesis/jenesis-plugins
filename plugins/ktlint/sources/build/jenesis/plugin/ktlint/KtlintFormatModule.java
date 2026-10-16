@@ -138,7 +138,8 @@ public class KtlintFormatModule implements BuildExecutorModule {
                                        List<String> files,
                                        boolean verify) {
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "com.pinterest.ktlint.Main"));
             if (config != null) {
                 commands.add("--editorconfig=" + config);

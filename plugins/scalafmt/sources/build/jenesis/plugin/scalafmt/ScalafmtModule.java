@@ -202,11 +202,13 @@ public class ScalafmtModule implements BuildExecutorModule {
                 throw new IllegalStateException("No " + configFile + " found among the inputs of the scalafmt step");
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(ScalafmtDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(ScalafmtDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     ScalafmtDriver.class.getName(),
                     "--test",
-                    "--config", config.toString()));
+                    "--config",
+                    config.toString()));
             commands.addAll(roots);
             return CompletableFuture.completedStage(commands);
         }

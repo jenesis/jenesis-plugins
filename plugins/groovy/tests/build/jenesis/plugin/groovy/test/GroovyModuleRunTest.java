@@ -93,7 +93,8 @@ public class GroovyModuleRunTest {
         executor.addSource("classes", compiled);
         executor.addModule("groovy",
                 new GroovyCompilerModule(repositories(), resolvers()).pinning(Pinning.STRICT),
-                "project", "classes");
+                "project",
+                "classes");
         executor.execute();
 
         Path classes = root.resolve("groovy").resolve(GroovyCompilerModule.COMPILED).resolve("output")

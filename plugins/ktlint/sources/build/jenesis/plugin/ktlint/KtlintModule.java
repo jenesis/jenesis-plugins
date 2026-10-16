@@ -190,7 +190,8 @@ public class KtlintModule implements BuildExecutorModule {
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "com.pinterest.ktlint.Main",
                     "--reporter=checkstyle,output=" + report));
             if (config != null) {

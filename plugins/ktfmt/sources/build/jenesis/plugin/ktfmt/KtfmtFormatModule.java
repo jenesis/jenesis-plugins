@@ -185,7 +185,8 @@ public class KtfmtFormatModule implements BuildExecutorModule {
                                        List<String> files,
                                        boolean verify) throws IOException {
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(KtfmtDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(KtfmtDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     KtfmtDriver.class.getName(),
                     style.option));

@@ -194,11 +194,15 @@ public class DetektModule implements BuildExecutorModule {
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "io.gitlab.arturbosch.detekt.cli.Main",
-                    "--input", String.join(File.pathSeparator, roots),
-                    "--config", config.toString(),
-                    "--report", "xml:" + report));
+                    "--input",
+                    String.join(File.pathSeparator, roots),
+                    "--config",
+                    config.toString(),
+                    "--report",
+                    "xml:" + report));
             return CompletableFuture.completedStage(commands);
         }
     }

@@ -22,8 +22,10 @@ public class JReleaserModule implements BuildExecutorModule {
     public static final List<String> CONFIGURATIONS = List.of(
             "jreleaser.yml", "jreleaser.yaml", "jreleaser.toml", "jreleaser.json");
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies", SETTINGS = "settings.properties";
-    private static final String MAVEN_GROUP = "org.jreleaser", MAVEN_ARTIFACT = "jreleaser-tool-provider",
-            NAME = "jreleaser", PREFIX = "jenesis";
+    private static final String MAVEN_GROUP = "org.jreleaser",
+            MAVEN_ARTIFACT = "jreleaser-tool-provider",
+            NAME = "jreleaser",
+            PREFIX = "jenesis";
 
     private final Dependencies dependencies;
     private final Pinning pinning;
@@ -109,8 +111,15 @@ public class JReleaserModule implements BuildExecutorModule {
                         + " JRELEASER_* settings");
             }
         }
-        return new JReleaserModule(dependencies, pinning, tool, command, publish,
-                Collections.unmodifiableSequencedMap(new LinkedHashMap<>(settings)), permits, out, err);
+        return new JReleaserModule(dependencies,
+                pinning,
+                tool,
+                command,
+                publish,
+                Collections.unmodifiableSequencedMap(new LinkedHashMap<>(settings)),
+                permits,
+                out,
+                err);
     }
 
     public JReleaserModule permits(Permits permits) {
@@ -230,9 +239,12 @@ public class JReleaserModule implements BuildExecutorModule {
                 throw new IllegalStateException("No JReleaser jar resolved upstream of the JReleaser step");
             }
             List<String> commands = new ArrayList<>(List.of(command,
-                    "--basedir", Path.of(root.value(ProjectPlugins.ROOT_KEY)).toString(),
-                    "--config-file", configuration.toAbsolutePath().toString(),
-                    "--output-directory", context.next().toAbsolutePath().toString()));
+                    "--basedir",
+                    Path.of(root.value(ProjectPlugins.ROOT_KEY)).toString(),
+                    "--config-file",
+                    configuration.toAbsolutePath().toString(),
+                    "--output-directory",
+                    context.next().toAbsolutePath().toString()));
             if (!publish) {
                 commands.add("--dry-run");
             }

@@ -201,9 +201,13 @@ public class SpotBugsModule implements BuildExecutorModule {
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    "edu.umd.cs.findbugs.LaunchAppropriateUI", "-textui",
-                    "-xml", "-output", report.toString()));
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
+                    "edu.umd.cs.findbugs.LaunchAppropriateUI",
+                    "-textui",
+                    "-xml",
+                    "-output",
+                    report.toString()));
             if (config != null) {
                 commands.add("-exclude");
                 commands.add(config.toString());

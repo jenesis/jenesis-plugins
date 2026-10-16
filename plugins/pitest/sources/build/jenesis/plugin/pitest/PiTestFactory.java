@@ -11,9 +11,15 @@ import build.jenesis.SequencedProperties;
 
 public class PiTestFactory implements BuildModuleFactory {
 
-    private static final String TARGET_CLASSES = "targetClasses", TARGET_TESTS = "targetTests",
-            OUTPUT_FORMATS = "outputFormats", MUTATORS = "mutators", FAIL_WHEN_NO_MUTATIONS = "failWhenNoMutations";
-    private static final List<String> KEYS = List.of(TARGET_CLASSES, TARGET_TESTS, OUTPUT_FORMATS, MUTATORS,
+    private static final String TARGET_CLASSES = "targetClasses",
+            TARGET_TESTS = "targetTests",
+            OUTPUT_FORMATS = "outputFormats",
+            MUTATORS = "mutators",
+            FAIL_WHEN_NO_MUTATIONS = "failWhenNoMutations";
+    private static final List<String> KEYS = List.of(TARGET_CLASSES,
+            TARGET_TESTS,
+            OUTPUT_FORMATS,
+            MUTATORS,
             FAIL_WHEN_NO_MUTATIONS);
 
     @Override

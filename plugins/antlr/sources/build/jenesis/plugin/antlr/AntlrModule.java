@@ -214,10 +214,12 @@ public class AntlrModule implements BuildExecutorModule {
             }
             Files.createDirectories(target);
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(AntlrDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(AntlrDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     AntlrDriver.class.getName(),
-                    "-o", target.toString(),
+                    "-o",
+                    target.toString(),
                     "-Xexact-output-dir"));
             if (packageName != null) {
                 commands.add("-package");

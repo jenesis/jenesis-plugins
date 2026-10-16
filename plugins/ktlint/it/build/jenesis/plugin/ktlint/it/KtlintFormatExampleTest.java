@@ -4,7 +4,7 @@ import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.plugin.kotlin.KotlinFactory;
 import build.jenesis.plugin.ktlint.KtlintFormatFactory;
-import build.jenesis.plugin.testing.ExampleProject;
+import build.jenesis.plugin.harness.ExampleProject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

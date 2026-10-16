@@ -111,85 +111,276 @@ public class JApiCmpModule implements BuildExecutorModule {
     }
 
     public JApiCmpModule pinning(Pinning pinning) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule tool(String tool) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule group(String group) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule baseline(String baseline) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule access(Access access) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule include(List<String> include) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, List.copyOf(include), exclude,
-                formats, ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                List.copyOf(include),
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule exclude(List<String> exclude) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, List.copyOf(exclude),
-                formats, ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                List.copyOf(exclude),
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule formats(Set<Format> formats) {
         EnumSet<Format> copied = EnumSet.noneOf(Format.class);
         copied.addAll(formats);
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude,
-                Collections.unmodifiableSet(copied), ignoreMissingClasses, onlyIncompatible, onlyModified,
-                semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                Collections.unmodifiableSet(copied),
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule ignoreMissingClasses(boolean ignoreMissingClasses) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule onlyIncompatible(boolean onlyIncompatible) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule onlyModified(boolean onlyModified) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule semanticVersioning(boolean semanticVersioning) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn, terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
+                terms);
     }
 
     public JApiCmpModule errorOn(Set<Failure> errorOn) {
         EnumSet<Failure> copied = EnumSet.noneOf(Failure.class);
         copied.addAll(errorOn);
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning,
-                Collections.unmodifiableSet(copied), terms);
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                Collections.unmodifiableSet(copied),
+                terms);
     }
 
     public JApiCmpModule printing(BiConsumer<Boolean, String> printing) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn,
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
                 terms.printing(printing));
     }
 
     public JApiCmpModule permits(Permits permits) {
-        return new JApiCmpModule(dependencies, pinning, tool, group, baseline, access, include, exclude, formats,
-                ignoreMissingClasses, onlyIncompatible, onlyModified, semanticVersioning, errorOn,
+        return new JApiCmpModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                access,
+                include,
+                exclude,
+                formats,
+                ignoreMissingClasses,
+                onlyIncompatible,
+                onlyModified,
+                semanticVersioning,
+                errorOn,
                 terms.permits(permits));
     }
 
@@ -309,10 +500,13 @@ public class JApiCmpModule implements BuildExecutorModule {
             ForkedOptions forked = forked(properties);
             List<String> commands = new ArrayList<>(forked.jvm()), options = forked.program();
             commands.addAll(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
+                    "-cp",
+                    String.join(File.pathSeparator, jars),
                     "japicmp.JApiCmp",
-                    "-o", baselines.getFirst(),
-                    "-n", artifact.toString()));
+                    "-o",
+                    baselines.getFirst(),
+                    "-n",
+                    artifact.toString()));
             for (Format format : formats) {
                 commands.add("--" + format.name().toLowerCase(Locale.ROOT) + "-file");
                 commands.add(report.resolve("japicmp-report." + format.name().toLowerCase(Locale.ROOT)).toString());

@@ -104,12 +104,24 @@ public class RevapiModule implements BuildExecutorModule {
     }
 
     public RevapiModule printing(BiConsumer<Boolean, String> printing) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict,
+        return new RevapiModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                severity,
+                strict,
                 terms.printing(printing));
     }
 
     public RevapiModule permits(Permits permits) {
-        return new RevapiModule(dependencies, pinning, tool, group, baseline, severity, strict,
+        return new RevapiModule(dependencies,
+                pinning,
+                tool,
+                group,
+                baseline,
+                severity,
+                strict,
                 terms.permits(permits));
     }
 
@@ -120,7 +132,9 @@ public class RevapiModule implements BuildExecutorModule {
             return;
         }
         buildExecutor.addStep(REQUIRED,
-                new Baseline(tool, baseline, EXTENSIONS.stream().map(artifact -> MAVEN_GROUP + "/" + artifact).toList(),
+                new Baseline(tool,
+                        baseline,
+                        EXTENSIONS.stream().map(artifact -> MAVEN_GROUP + "/" + artifact).toList(),
                         CONFIGURATION),
                 inherited.sequencedKeySet());
         SequencedSet<String> resolveInputs = new LinkedHashSet<>();
@@ -220,7 +234,8 @@ public class RevapiModule implements BuildExecutorModule {
             }
             String configuration = analysis == null ? "-" : analysis.toString();
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(RevapiDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(RevapiDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     RevapiDriver.class.getName(),
                     report.toString(),

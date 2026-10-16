@@ -20,8 +20,11 @@ import build.jenesis.step.ProcessHandler;
 public class KspModule implements BuildExecutorModule {
 
     public static final String GENERATE = "generate";
-    private static final String REQUIRED = "required", DEPENDENCIES = "dependencies", PROCESSORS = "processors",
-            STATE = "state.properties", LISTING = "listing.properties",
+    private static final String REQUIRED = "required",
+            DEPENDENCIES = "dependencies",
+            PROCESSORS = "processors",
+            STATE = "state.properties",
+            LISTING = "listing.properties",
             CLASSES = "classes.properties";
     private static final String MAVEN_GROUP = "com.google.devtools.ksp", MAVEN_ARTIFACT = "symbol-processing-aa-embeddable";
 
@@ -291,7 +294,8 @@ public class KspModule implements BuildExecutorModule {
             listing.store(working.resolve(LISTING));
             classes.store(working.resolve(CLASSES));
             commands.addAll(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(KspDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(KspDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     KspDriver.class.getName(),
                     "-module-name=" + (module == null ? "main" : module),

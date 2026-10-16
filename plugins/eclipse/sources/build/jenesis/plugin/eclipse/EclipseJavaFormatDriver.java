@@ -45,7 +45,12 @@ public final class EclipseJavaFormatDriver {
             int kind = codeFormatter.getField("K_COMPILATION_UNIT").getInt(null)
                     | codeFormatter.getField("F_INCLUDE_COMMENTS").getInt(null);
             Method format = codeFormatter.getMethod("format",
-                    int.class, String.class, int.class, int.class, int.class, String.class),
+                    int.class,
+                    String.class,
+                    int.class,
+                    int.class,
+                    int.class,
+                    String.class),
                     apply = textEdit.getMethod("apply", Class.forName("org.eclipse.jface.text.IDocument")),
                     get = document.getMethod("get");
             Constructor<?> create = document.getConstructor(String.class);

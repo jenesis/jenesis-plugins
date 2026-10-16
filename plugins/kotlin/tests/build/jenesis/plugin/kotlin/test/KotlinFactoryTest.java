@@ -11,13 +11,13 @@ import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
 import build.jenesis.Json;
+import build.jenesis.Language;
 import build.jenesis.Permits;
 import build.jenesis.RepositoryItem;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.kotlin.DokkaDocumentationModule;
 import build.jenesis.plugin.kotlin.KotlinFactory;
-import build.jenesis.project.Language;
 import build.jenesis.step.ProcessHandler;
 
 import static org.assertj.core.api.Assertions.assertThat;

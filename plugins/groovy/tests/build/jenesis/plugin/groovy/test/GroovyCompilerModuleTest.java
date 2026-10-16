@@ -125,7 +125,8 @@ public class GroovyCompilerModuleTest {
                             CAPTURED.addAll(commands);
                             return ProcessHandler.OfTool.of(new Silent()).apply(commands);
                         }),
-                "project", "classes");
+                "project",
+                "classes");
         executor.execute();
     }
 

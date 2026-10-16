@@ -194,11 +194,14 @@ public class ScalastyleModule implements BuildExecutorModule {
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(ScalastyleDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(ScalastyleDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     ScalastyleDriver.class.getName(),
-                    "--config", config.toString(),
-                    "--xmlOutput", report.toString()));
+                    "--config",
+                    config.toString(),
+                    "--xmlOutput",
+                    report.toString()));
             commands.addAll(roots);
             return CompletableFuture.completedStage(commands);
         }

@@ -1,4 +1,4 @@
-package build.jenesis.plugin.testing;
+package build.jenesis.plugin.harness;
 
 import module java.base;
 import build.jenesis.BuildExecutor;

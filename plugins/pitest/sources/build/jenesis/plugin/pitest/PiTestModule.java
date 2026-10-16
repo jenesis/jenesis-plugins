@@ -412,17 +412,27 @@ public class PiTestModule implements BuildExecutorModule {
             classPath.add(code.toString());
             classPath.addAll(new LinkedHashSet<>(external));
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", tools.stream().distinct().collect(Collectors.joining(File.pathSeparator)),
+                    "-cp",
+                    tools.stream().distinct().collect(Collectors.joining(File.pathSeparator)),
                     "org.pitest.mutationtest.commandline.MutationCoverageReport",
-                    "--reportDir", report.toString(),
-                    "--classPath", String.join(",", classPath),
-                    "--sourceDirs", String.join(",", sources),
-                    "--targetClasses", String.join(",", targetClasses),
-                    "--targetTests", String.join(",", targetTests),
-                    "--outputFormats", outputFormats.stream().map(OutputFormat::name).collect(Collectors.joining(",")),
-                    "--mutableCodePaths", code.toString(),
-                    "--timestampedReports", "false",
-                    "--failWhenNoMutations", Boolean.toString(failWhenNoMutations)));
+                    "--reportDir",
+                    report.toString(),
+                    "--classPath",
+                    String.join(",", classPath),
+                    "--sourceDirs",
+                    String.join(",", sources),
+                    "--targetClasses",
+                    String.join(",", targetClasses),
+                    "--targetTests",
+                    String.join(",", targetTests),
+                    "--outputFormats",
+                    outputFormats.stream().map(OutputFormat::name).collect(Collectors.joining(",")),
+                    "--mutableCodePaths",
+                    code.toString(),
+                    "--timestampedReports",
+                    "false",
+                    "--failWhenNoMutations",
+                    Boolean.toString(failWhenNoMutations)));
             if (!mutators.isEmpty()) {
                 commands.add("--mutators");
                 commands.add(String.join(",", mutators));

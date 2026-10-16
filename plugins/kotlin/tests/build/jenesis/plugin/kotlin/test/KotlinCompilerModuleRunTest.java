@@ -23,7 +23,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class KotlinCompilerModuleRunTest {
 
-    private static final String KOTLIN_VERSION = "2.3.21", PINS = """
+    private static final String KOTLIN_VERSION = "2.3.21",
+            PINS = """
             kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-api 2.3.21 SHA-256/b2e5cc2666c100079ed343618528eb820dcfa5095095e30f2dd19c60dff7e462
             kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-cri-impl 2.3.21 SHA-256/cff0a9b665851a325c2195857e2e1a5a747954c9437d00de0ba15519a4294c46
             kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-impl 2.3.21 SHA-256/2cd70396404a0e43c05aaf79a8b35ff3a8ff2e296aedf770f6e5923fbfacae3b
@@ -66,7 +67,7 @@ public class KotlinCompilerModuleRunTest {
     }
 
     @Test
-    public void includeResources_false_excludes_non_kotlin_non_java_files_from_output() throws IOException {
+    public void leaves_out_files_other_than_sources_when_resources_are_not_included() throws IOException {
         Path sample = sources(project);
         Files.writeString(sample.resolve("Sample.kt"), """
                 package sample

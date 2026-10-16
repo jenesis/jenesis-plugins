@@ -4,7 +4,7 @@ import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.plugin.scala.ScalaFactory;
 import build.jenesis.plugin.scalastyle.ScalastyleFactory;
-import build.jenesis.plugin.testing.ExampleProject;
+import build.jenesis.plugin.harness.ExampleProject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

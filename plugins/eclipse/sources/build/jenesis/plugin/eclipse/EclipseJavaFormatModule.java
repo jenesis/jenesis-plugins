@@ -154,7 +154,8 @@ public class EclipseJavaFormatModule implements BuildExecutorModule {
                                        List<String> files,
                                        boolean verify) throws IOException {
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(EclipseJavaFormatDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(EclipseJavaFormatDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     EclipseJavaFormatDriver.class.getName(),
                     verify ? "verify" : "rewrite",

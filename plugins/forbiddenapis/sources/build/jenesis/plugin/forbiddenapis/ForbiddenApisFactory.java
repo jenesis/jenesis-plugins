@@ -12,11 +12,22 @@ import build.jenesis.SequencedProperties;
 
 public class ForbiddenApisFactory implements BuildModuleFactory {
 
-    private static final String BUNDLED = "bundled", SIGNATURES = "signatures", SUPPRESS = "suppress",
-            INCLUDES = "includes", EXCLUDES = "excludes", WARN = "warn", ALLOW_MISSING_CLASSES = "allowmissingclasses",
+    private static final String BUNDLED = "bundled",
+            SIGNATURES = "signatures",
+            SUPPRESS = "suppress",
+            INCLUDES = "includes",
+            EXCLUDES = "excludes",
+            WARN = "warn",
+            ALLOW_MISSING_CLASSES = "allowmissingclasses",
             IGNORE_SIGNATURES_OF_MISSING_CLASSES = "ignoresignaturesofmissingclasses";
-    private static final Set<String> KEYS = Set.of(BUNDLED, SIGNATURES, SUPPRESS, INCLUDES, EXCLUDES, WARN,
-            ALLOW_MISSING_CLASSES, IGNORE_SIGNATURES_OF_MISSING_CLASSES);
+    private static final Set<String> KEYS = Set.of(BUNDLED,
+            SIGNATURES,
+            SUPPRESS,
+            INCLUDES,
+            EXCLUDES,
+            WARN,
+            ALLOW_MISSING_CLASSES,
+            IGNORE_SIGNATURES_OF_MISSING_CLASSES);
 
     @Override
     public BuildExecutorModule create(Environment environment,

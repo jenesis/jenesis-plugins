@@ -111,28 +111,88 @@ public class ForbiddenApisModule implements BuildExecutorModule {
     }
 
     public ForbiddenApisModule pinning(Pinning pinning) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule tool(String tool) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule group(String group) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule strict(boolean strict) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule bundled(List<String> bundled) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, List.copyOf(bundled), signatures,
-                suppress, includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                List.copyOf(bundled),
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule signatures(List<Path> signatures) {
@@ -143,50 +203,155 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                         + " the check reads - name it relative to the input it is bound into");
             }
         }
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, List.copyOf(signatures),
-                suppress, includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                List.copyOf(signatures),
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule suppress(List<String> suppress) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures,
-                List.copyOf(suppress), includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses,
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                List.copyOf(suppress),
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
                 terms);
     }
 
     public ForbiddenApisModule includes(List<String> includes) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                List.copyOf(includes), excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                List.copyOf(includes),
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule excludes(List<String> excludes) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, List.copyOf(excludes), warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                List.copyOf(excludes),
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule warn(List<String> warn) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, List.copyOf(warn), allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                List.copyOf(warn),
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule allowMissingClasses(boolean allowMissingClasses) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule ignoreSignaturesOfMissingClasses(boolean ignoreSignaturesOfMissingClasses) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses, terms);
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
+                terms);
     }
 
     public ForbiddenApisModule printing(BiConsumer<Boolean, String> printing) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses,
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
                 terms.printing(printing));
     }
 
     public ForbiddenApisModule permits(Permits permits) {
-        return new ForbiddenApisModule(dependencies, pinning, tool, group, strict, bundled, signatures, suppress,
-                includes, excludes, warn, allowMissingClasses, ignoreSignaturesOfMissingClasses,
+        return new ForbiddenApisModule(dependencies,
+                pinning,
+                tool,
+                group,
+                strict,
+                bundled,
+                signatures,
+                suppress,
+                includes,
+                excludes,
+                warn,
+                allowMissingClasses,
+                ignoreSignaturesOfMissingClasses,
                 terms.permits(permits));
     }
 
@@ -369,7 +534,8 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                 return CompletableFuture.completedStage(null);
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(ForbiddenApisDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(ForbiddenApisDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     ForbiddenApisDriver.class.getName()));
             for (String name : bundled) {

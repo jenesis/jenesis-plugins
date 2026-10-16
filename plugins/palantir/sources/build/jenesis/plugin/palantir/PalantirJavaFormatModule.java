@@ -236,7 +236,8 @@ public class PalantirJavaFormatModule implements BuildExecutorModule {
                     "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
                     "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
                     "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-                    "-cp", ProcessHandler.OfProcess.driver(PalantirJavaFormatDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(PalantirJavaFormatDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     PalantirJavaFormatDriver.class.getName(),
                     "--palantir"));

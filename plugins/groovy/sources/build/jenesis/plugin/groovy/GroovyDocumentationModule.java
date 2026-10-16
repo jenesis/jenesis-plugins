@@ -196,7 +196,9 @@ public class GroovyDocumentationModule implements BuildExecutorModule {
                                                      SequencedMap<String, SequencedMap<String, String>> properties)
                 throws IOException {
             Path output = Files.createDirectories(context.next().resolve(Javadoc.JAVADOC));
-            List<String> roots = new ArrayList<>(), rootFiles = new ArrayList<>(), jars = new ArrayList<>(),
+            List<String> roots = new ArrayList<>(),
+                    rootFiles = new ArrayList<>(),
+                    jars = new ArrayList<>(),
                     classpath = new ArrayList<>();
             SequencedSet<String> packages = new TreeSet<>();
             boolean[] groovy = new boolean[1];
@@ -251,11 +253,15 @@ public class GroovyDocumentationModule implements BuildExecutorModule {
                 throw new IllegalStateException("No groovydoc jars resolved upstream of the Groovy documentation step");
             }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, Stream.concat(jars.stream(), classpath.stream()).toList()),
+                    "-cp",
+                    String.join(File.pathSeparator, Stream.concat(jars.stream(), classpath.stream()).toList()),
                     "org.codehaus.groovy.tools.groovydoc.Main",
-                    "-d", output.toString(),
-                    "-javaVersion", languageLevel(release),
-                    "-sourcepath", String.join(File.pathSeparator, roots)));
+                    "-d",
+                    output.toString(),
+                    "-javaVersion",
+                    languageLevel(release),
+                    "-sourcepath",
+                    String.join(File.pathSeparator, roots)));
             if (!timestamped) {
                 commands.add("-notimestamp");
             }

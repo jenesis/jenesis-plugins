@@ -210,14 +210,20 @@ public class PmdModule implements BuildExecutorModule {
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(PmdDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(PmdDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
-                    PmdDriver.class.getName(), "check",
+                    PmdDriver.class.getName(),
+                    "check",
                     "--no-cache",
-                    "-R", config.toString(),
-                    "--minimum-priority", Integer.toString(priority),
-                    "-f", "xml",
-                    "-r", report.toString()));
+                    "-R",
+                    config.toString(),
+                    "--minimum-priority",
+                    Integer.toString(priority),
+                    "-f",
+                    "xml",
+                    "-r",
+                    report.toString()));
             for (String root : roots) {
                 commands.add("-d");
                 commands.add(root);

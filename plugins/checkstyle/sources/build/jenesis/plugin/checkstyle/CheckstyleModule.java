@@ -258,13 +258,18 @@ public class CheckstyleModule implements BuildExecutorModule {
             Path expansionFile = context.supplement().resolve(PROPERTIES);
             expanded.store(expansionFile);
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", ProcessHandler.OfProcess.driver(CheckstyleDriver.class) + File.pathSeparator
+                    "-cp",
+                    ProcessHandler.OfProcess.driver(CheckstyleDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
                     CheckstyleDriver.class.getName(),
-                    "-c", config.toString(),
-                    "-p", expansionFile.toString(),
-                    "-f", "xml",
-                    "-o", report.toString()));
+                    "-c",
+                    config.toString(),
+                    "-p",
+                    expansionFile.toString(),
+                    "-f",
+                    "xml",
+                    "-o",
+                    report.toString()));
             commands.addAll(files);
             return CompletableFuture.completedStage(commands);
         }

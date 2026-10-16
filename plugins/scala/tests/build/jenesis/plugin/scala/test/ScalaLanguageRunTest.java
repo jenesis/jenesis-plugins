@@ -9,13 +9,13 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Language;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.maven.MavenDefaultRepository;
 import build.jenesis.maven.MavenPomResolver;
 import build.jenesis.plugin.scala.ScalaFactory;
-import build.jenesis.project.Language;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

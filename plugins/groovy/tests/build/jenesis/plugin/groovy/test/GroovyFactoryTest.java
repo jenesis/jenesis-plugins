@@ -9,13 +9,13 @@ import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
+import build.jenesis.Language;
 import build.jenesis.Permits;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.groovy.GroovyCompilerModule;
 import build.jenesis.plugin.groovy.GroovyDocumentationModule;
 import build.jenesis.plugin.groovy.GroovyFactory;
-import build.jenesis.project.Language;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
