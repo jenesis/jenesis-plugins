@@ -7,8 +7,13 @@ on:
         description: Commit to release; defaults to the head this workflow runs on
         required: false
         type: string
+      plugin:
+        description: Folder under plugins/ to release alone, harness for the plugin harness, or all to release every plugin and the harness
+        required: false
+        default: all
+        type: string
       tag:
-        description: Tag to cut, vX.Y.Z; defaults to the next minor of the latest tag
+        description: Version to release, vX.Y.Z; defaults to the next minor of the latest tag
         required: false
         type: string
 
@@ -34,8 +39,14 @@ jobs:
       - name: Resolve release version
         id: version
         env:
+          PLUGIN: ${{ inputs.plugin || 'all' }}
           TAG: ${{ inputs.tag }}
         run: |
+          if [ "$PLUGIN" != all ] && [ "$PLUGIN" != harness ] \
+              && ! { printf '%s' "$PLUGIN" | grep -qE '^[a-z0-9]+$' && [ -d "plugins/$PLUGIN" ]; }; then
+            echo "Plugin '$PLUGIN' is not a folder under plugins/: pass one of them, harness, or all." >&2
+            exit 1
+          fi
           if [ -n "$TAG" ]; then
             VERSION="$(printf '%s' "$TAG" | sed -nE 's/^v?([0-9]+\.[0-9]+\.[0-9]+)$/\1/p')"
             if [ -z "$VERSION" ]; then
@@ -43,7 +54,7 @@ jobs:
               exit 1
             fi
           else
-            LATEST="$(git tag --list --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 | sed 's/^v//')"
+            LATEST="$(git tag --list | sed -nE 's/^([a-z0-9]+-)?v?([0-9]+\.[0-9]+\.[0-9]+)$/\2/p' | sort -V | tail -n1)"
             if [ -z "$LATEST" ]; then
               VERSION="0.0.1"
             else
@@ -52,8 +63,21 @@ jobs:
               VERSION="${MAJOR}.$((MINOR + 1)).0"
             fi
           fi
-          echo "Releasing $VERSION as tag v$VERSION from $(git rev-parse HEAD)"
+          if [ "$PLUGIN" = all ]; then
+            RELEASE_TAG="v$VERSION"
+            RELEASED='^v?[0-9]+\.[0-9]+\.[0-9]+$'
+          else
+            RELEASE_TAG="$PLUGIN-v$VERSION"
+            RELEASED="^(v?|$PLUGIN-v)[0-9]+\.[0-9]+\.[0-9]+$"
+          fi
+          PREVIOUS="$( { git tag --list | grep -E "$RELEASED" \
+              | sed -E 's/^([a-z0-9]+-)?v?([0-9]+\.[0-9]+\.[0-9]+)$/\2 &/'; echo "$VERSION ~"; } \
+              | sort -s -V -k1,1 | sed -n '/ ~$/q;p' | tail -n1 | cut -d' ' -f2)"
+          echo "Releasing $PLUGIN at $VERSION as tag $RELEASE_TAG after ${PREVIOUS:-no earlier tag} from $(git rev-parse HEAD)"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$RELEASE_TAG" >> "$GITHUB_OUTPUT"
+          echo "previous=$PREVIOUS" >> "$GITHUB_OUTPUT"
+          echo "plugin=$PLUGIN" >> "$GITHUB_OUTPUT"
 
       - name: Set up JDK 25
         uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
@@ -73,6 +97,19 @@ jobs:
                -Djenesis.project.metadata=project.properties \
                build/jenesis/Make.java stage
 
+      - name: Select what is released
+        if: steps.version.outputs.plugin != 'all'
+        env:
+          PLUGIN: ${{ steps.version.outputs.plugin }}
+        run: |
+          STAGED=target/stage/maven/output/build/jenesis
+          if [ ! -d "$STAGED/build.jenesis.plugin.$PLUGIN" ]; then
+            echo "Nothing was staged as build.jenesis.plugin.$PLUGIN under $STAGED." >&2
+            exit 1
+          fi
+          find "$STAGED" -mindepth 1 -maxdepth 1 -type d ! -name "build.jenesis.plugin.$PLUGIN" -exec rm -rf {} +
+          find target/stage/maven/output -type f | sort
+
       - name: JReleaser deploy
         uses: jreleaser/release-action@90ac653bb9c79d11179e65d81499f3f34527dcd5 # 2.5.0
         with:
@@ -80,6 +117,8 @@ jobs:
           arguments: full-release
         env:
           JRELEASER_PROJECT_VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_PREVIOUS_TAG: ${{ steps.version.outputs.previous }}
           JRELEASER_REPRODUCIBLE: "true"
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}

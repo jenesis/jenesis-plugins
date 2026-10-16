@@ -101,5 +101,8 @@ Classes named `*RunTest` download and run the real tool, so they need the networ
 ## Releasing
 
 A release is a manual run of the release workflow from the Actions tab: its optional `sha` input names the
-commit and its optional `tag` input the tag (`vX.Y.Z`; default: the next minor of the latest tag). Every
-plugin is released with the same version.
+commit, its optional `tag` input the version (`vX.Y.Z`; default: the next minor of the latest tag), and its
+optional `plugin` input what is released - `all`, the default, releases every plugin and the harness under the
+tag `vX.Y.Z`, while the name of a folder under `plugins/`, or `harness`, releases that one alone under the tag
+`<name>-vX.Y.Z`. Every release takes a version of its own, so a plugin released alone never shares a version
+with a different build of itself.
