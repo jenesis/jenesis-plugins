@@ -8,8 +8,8 @@
  * @jenesis.release 25
  * @jenesis.alias org.jacoco.cli org.jacoco/org.jacoco.cli
  * @jenesis.pin args4j/args4j 2.0.28 SHA-256/11b029a602e787e2bc08eb3b77eda1a4f5e8b263d22e3c5d6220cd5c51f30b18
- * @jenesis.pin build.jenesis 0.16.0 SHA-256/66f7e019964cccb9e3fb6b8d2a3734ab32b9a2e53825292da2cf8008f9ff82dd
- * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/66f7e019964cccb9e3fb6b8d2a3734ab32b9a2e53825292da2cf8008f9ff82dd
+ * @jenesis.pin build.jenesis 0.16.0 SHA-256/e40b9f6e68188ee3944e15847498c57383c0bedf689b721e6de44c21fd27c45a
+ * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/e40b9f6e68188ee3944e15847498c57383c0bedf689b721e6de44c21fd27c45a
  * @jenesis.pin org.jacoco/org.jacoco.cli 0.8.15 SHA-256/be5e57a018398b0476e8a3837cc7a0a1e075259ba8a00f349d2b86f854230c23
  * @jenesis.pin org.jacoco/org.jacoco.core 0.8.15 SHA-256/ade1e0fdb4cd80d8537b57c6edb70a1360c47fdc518c20c65314517479bc4d0d
  * @jenesis.pin org.jacoco/org.jacoco.report 0.8.15 SHA-256/66a79e36edc77a1ebf6689e76a976e12ab4f1af515cbd09555840fba775714f4

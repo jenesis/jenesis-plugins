@@ -24,7 +24,7 @@ How a plugin's tool runs, from `ProcessHandler.java`, `ProcessBuildStep.java`, `
 
 | Mode | Handler | Warm-eligible | Plugins |
 |---|---|---|---|
-| `main` in a JVM | `OfProcess.ofJavaMain()` | yes, under `jenesis.process.daemon` | antlr, avro, checkstyle, codenarc, detekt, forbiddenapis, jacoco (report), japicmp, ksp, ktlint (check), openapi, pmd, revapi (launcher source), scalafmt (check), scalastyle, spotbugs, wsimport, xjc |
+| `main` in a JVM | `OfProcess.ofJavaMain()` | yes, under `jenesis.process.mode=daemon` | antlr, avro, checkstyle, codenarc, detekt, forbiddenapis, jacoco (report), japicmp, ksp, ktlint (check), openapi, pmd, revapi (launcher source), scalafmt (check), scalastyle, spotbugs, wsimport, xjc |
 | `main` in a JVM, shared | `ofJavaMain().shared(true)` | yes | kotlin, incremental only: the plugin's own `IncrementalKotlinCompiler` drives the Kotlin Build Tools API (`createInProcessExecutionPolicy`) inside that worker |
 | always forked | `OfProcess.ofJavaHome("bin/java")` | no | groovy (compile, groovydoc), kotlin (non-incremental, Dokka), scala (compile, incremental Zinc via the plugin's `IncrementalScalaCompiler`, scaladoc), pitest |
 | always forked | `FormatBuildStep` (engine) uses `ofJavaHome` | no | eclipse, googlejavaformat, palantir, ktfmt, ktlint (format), scalafmt (format) |
@@ -225,11 +225,11 @@ Consistent with the build tool's conventions (immutable records with withers, se
    - `worker` - must run in a JVM of its own, which may be warm;
    - `process` - must run in a fresh JVM.
    The engine maps that to a placement: `classloader` runs in the build JVM; `worker` runs in the warm worker
-   when `jenesis.process.daemon` is on and forks otherwise; `process` always forks. A task with JVM options
+   when `jenesis.process.mode` is `daemon` and forks otherwise; `process` always forks. A task with JVM options
    (heap, `--add-exports`) is never placed in the build JVM. Whether a user may force a stronger isolation
    (for memory, or to work around a misbehaving tool) is an open question below; if added it is one
    `jenesis.process.*` property, in the `configuration` catalogue and the documentation in the same commit.
-5. **Interaction with `jenesis.process.daemon`.** In-process placement leaves no JVM running, so it is
+5. **Interaction with `jenesis.process.mode=daemon`.** In-process placement leaves no JVM running, so it is
    compatible with the default of no warm workers outside the daemon, and it gives a build without the daemon
    reuse within the build (one class loading and JIT warm-up for all modules), which it lacks today. Under the
    daemon the cached loaders persist across builds, as mvnd caches plugin realms. The worker path stays for
