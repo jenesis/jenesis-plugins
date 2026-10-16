@@ -6,8 +6,8 @@
  * running it in a JVM of its own.
  *
  * @jenesis.release 25
- * @jenesis.pin build.jenesis 0.16.0 SHA-256/a22c9db778650090c36c1c71f906d25be063e4253ab23a79c4451683467d4541
- * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/a22c9db778650090c36c1c71f906d25be063e4253ab23a79c4451683467d4541
+ * @jenesis.pin build.jenesis 0.16.0 SHA-256/d41b8394f702433a8ac7cc9ffae90b988da7fb336de7a6173395749c5154fd41
+ * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/d41b8394f702433a8ac7cc9ffae90b988da7fb336de7a6173395749c5154fd41
  * @jenesis.pin com.google.errorprone/error_prone_annotations 2.47.0 SHA-256/5364bc6f22e72e98195e406a58d3ba1c09ffa11dea0729592cb870dc2de4056d
  * @jenesis.pin com.google.googlejavaformat 1.37.0 SHA-256/49874ad1d6b1006d2f8660482135609eb124888e0046c3dbfefc706a0387c700
  * @jenesis.pin com.google.googlejavaformat/google-java-format 1.37.0 SHA-256/49874ad1d6b1006d2f8660482135609eb124888e0046c3dbfefc706a0387c700
