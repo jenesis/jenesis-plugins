@@ -12,6 +12,7 @@
 module build.jenesis.plugin.eclipse {
 
     requires build.jenesis;
+    requires java.xml;
 
     exports build.jenesis.plugin.eclipse;
 

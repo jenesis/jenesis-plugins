@@ -17,13 +17,13 @@ import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.FormatBuildStep;
 import build.jenesis.step.ProcessBuildStep;
+import build.jenesis.step.ProcessHandler;
 
 public class EclipseJavaFormatModule implements BuildExecutorModule {
 
     public static final String FORMAT = "format", PROFILE = "eclipse-formatter.xml";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies", CONFIGURATION = "profile";
     private static final String MAVEN_GROUP = "org.eclipse.jdt", MAVEN_ARTIFACT = "org.eclipse.jdt.core";
-    private static final String LAUNCHER = "EclipseFormatter.java", SOURCE = "EclipseFormatter.source";
 
     private final Dependencies dependencies;
     private final Pinning pinning;
@@ -153,16 +153,10 @@ public class EclipseJavaFormatModule implements BuildExecutorModule {
                                        Path config,
                                        List<String> files,
                                        boolean verify) throws IOException {
-            Path launcher = context.supplement().resolve(LAUNCHER);
-            try (InputStream in = EclipseJavaFormatModule.class.getResourceAsStream(SOURCE)) {
-                if (in == null) {
-                    throw new IllegalStateException("The Eclipse formatter plugin does not carry " + SOURCE);
-                }
-                Files.copy(in, launcher, StandardCopyOption.REPLACE_EXISTING);
-            }
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    launcher.toString(),
+                    "-cp", ProcessHandler.OfProcess.driver(EclipseJavaFormatDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    EclipseJavaFormatDriver.class.getName(),
                     verify ? "verify" : "rewrite",
                     config == null ? "" : config.toString()));
             commands.addAll(files);

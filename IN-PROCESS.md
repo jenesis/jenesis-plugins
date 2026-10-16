@@ -24,14 +24,14 @@ How a plugin's tool runs, from `ProcessHandler.java`, `ProcessBuildStep.java`, `
 
 | Mode | Handler | Warm-eligible | Plugins |
 |---|---|---|---|
-| `main` in a JVM | `OfProcess.ofJavaMain()` | yes, under `jenesis.process.mode=daemon` | antlr, avro, checkstyle, codenarc, detekt, forbiddenapis, jacoco (report), japicmp, ksp, ktlint (check), openapi, pmd, revapi (launcher source), scalafmt (check), scalastyle, spotbugs, wsimport, xjc |
+| `main` in a JVM | `OfProcess.ofJavaMain()` | yes, under `jenesis.process.mode=daemon` | antlr, avro, checkstyle, codenarc, detekt, forbiddenapis, jacoco (report), japicmp, ksp, ktlint (check), openapi, pmd, revapi (driver), scalafmt (check), scalastyle, spotbugs, wsimport, xjc |
 | `main` in a JVM, shared | `ofJavaMain().shared(true)` | yes | kotlin, incremental only: the plugin's own `IncrementalKotlinCompiler` drives the Kotlin Build Tools API (`createInProcessExecutionPolicy`) inside that worker |
 | always forked | `OfProcess.ofJavaHome("bin/java")` | no | groovy (compile, groovydoc), kotlin (non-incremental, Dokka), scala (compile, incremental Zinc via the plugin's `IncrementalScalaCompiler`, scaladoc), pitest |
 | always forked | `FormatBuildStep` (engine) uses `ofJavaHome` | no | eclipse, googlejavaformat, palantir, ktfmt, ktlint (format), scalafmt (format) |
 | native binary | `OfProcess.ofStaged()` | no | protoc |
 | build JVM | `URLClassLoader` on the platform loader, `ToolProvider`, context class loader set, `Permits` acquired | n/a | jreleaser |
 
-Corrections to the background statement: the eclipse launcher is a format step and is therefore always
+Corrections to the background statement: the eclipse formatter is a format step and is therefore always
 forked, never warm. "Parts of Kotlin run inside the build JVM" is not borne out by the sources: the
 class-loader code in `IncrementalKotlinCompiler` runs inside the warm worker (or a fork), not the build JVM;
 only JReleaser runs in the build JVM. The engine's own JDK tools (`javac`, `javadoc`, `jar`, `jlink`) run in
@@ -54,14 +54,14 @@ Which tool `main` methods exit on success, read from source:
 
 | Exits on every run | Exits only on failure or findings | Returns normally |
 |---|---|---|
-| Checkstyle `Main` (`Runtime.getRuntime().exit(exitStatus)`), PMD `PmdCli` (`System.exit(mainWithoutExit(args))`), ANTLR `Tool.main` (`exit(0)` unless `-XdbgST`), Avro tools `Main`, JaCoCo CLI `Main`, detekt 1.23.7 `Main` (`exitProcess`), ktlint 1.5.0 (`exitKtLintProcess(0/1)`), xjc `Driver.main`, wsimport `WsImport.main`, scalastyle `Main`, scalafmt 3.8.3 `Cli.main`, google-java-format and palantir `Main`, ktfmt 0.64 `Main` | forbiddenapis `CliMain`, CodeNarc (`systemExit(1)` on error), OpenAPI generator, japicmp `JApiCmp`, eclipse launcher (verify failures) | revapi launcher, Kotlin's `IncrementalKotlinCompiler` |
+| Checkstyle `Main` (`Runtime.getRuntime().exit(exitStatus)`), PMD `PmdCli` (`System.exit(mainWithoutExit(args))`), ANTLR `Tool.main` (`exit(0)` unless `-XdbgST`), Avro tools `Main`, JaCoCo CLI `Main`, detekt 1.23.7 `Main` (`exitProcess`), ktlint 1.5.0 (`exitKtLintProcess(0/1)`), xjc `Driver.main`, wsimport `WsImport.main`, scalastyle `Main`, scalafmt 3.8.3 `Cli.main`, google-java-format and palantir `Main`, ktfmt 0.64 `Main` | forbiddenapis `CliMain`, CodeNarc (`systemExit(1)` on error), OpenAPI generator, japicmp `JApiCmp` | eclipse and revapi drivers, Kotlin's `IncrementalKotlinCompiler` |
 
 SpotBugs: `FindBugs.java` has three `System.exit` calls on its run path; whether success exits is
 **unverified**. KSP's `KSPJvmMain`: **unverified**.
 
 Consequence: under the daemon, Checkstyle, PMD, ANTLR, Avro, JaCoCo, detekt, ktlint, xjc, wsimport, scalastyle
 and scalafmt start a new worker for every call and get no warm reuse. Fixing that does not need in-process
-execution: a small launcher per plugin that calls the tool's non-exiting entry (the eclipse/revapi pattern)
+execution: a small launcher per plugin that calls the tool's non-exiting entry (the `<Tool>Driver` pattern)
 makes the warm worker effective, and the same launcher is what an in-process placement would load.
 
 Plugins receive `build.jenesis.Permits` (`acquire()`/`release()`, a `Semaphore` behind `Permits.of(n)`),
@@ -165,13 +165,13 @@ Version is the one the plugin's `*RunTest` pins; the plugins themselves resolve 
 | pmd | PMD 7.7.0 | `ofJavaMain`, `PmdCli` exits always | `PmdAnalysis.create(PMDConfiguration)`, `performAnalysisAndCollectReport()` | reporter/renderer API exists; `mainWithoutExit` is package-private | build JVM |
 | forbiddenapis | 3.11 | `ofJavaMain` | `de.thetaphi.forbiddenapis.Checker(Logger, ClassLoader, Option...)`, `parseSignaturesFile`, `addClassesToCheck`, `run` | needs a loader over the checked class path | build JVM |
 | japicmp | 0.26.2 | `ofJavaMain` with forked JVM options | `JarArchiveComparator` + output generators | japicmp's own `ForkedOptions` (heap) lose meaning in process | build JVM, fork when JVM options are set |
-| revapi | 0.15.1 | launcher source, `ofJavaMain` | `org.revapi.Revapi` (launcher already uses it) | extension discovery via `ServiceLoader` on the loader | build JVM |
+| revapi | 0.15.1 | driver by reflection, `ofJavaMain` | `org.revapi.Revapi` (the driver already uses it) | extension discovery via `ServiceLoader` on the loader | build JVM |
 | jacoco (report) | 0.8.14 | `ofJavaMain`, CLI `Main` exits always | `ExecFileLoader`, `Analyzer`, `CoverageBuilder`, `XMLFormatter`/`HTMLFormatter` | none known; agent side stays in the test JVM | build JVM |
 | antlr | 4.13.2 | `ofJavaMain`, `Tool.main` exits always | `new Tool(args)`, `addListener(ANTLRToolListener)`, `processGrammarsOnCommandLine()`; override `exit` | `Tool.exit` calls `System.exit`; error output via listener | build JVM |
 | avro | 1.12.2 (avro-tools) | `ofJavaMain`, `Main` exits always | `org.apache.avro.compiler.specific.SpecificCompiler` | would resolve `avro-compiler` rather than the avro-tools CLI bundle | build JVM |
 | openapi | 7.25.0 | `ofJavaMain` | `CodegenConfigurator` + `DefaultGenerator.opts(...).generate()` | large closure (Swagger parser, templating), memory per run **unverified** | build JVM, measure |
 | codenarc | CodeNarc 3.5.0 (Groovy 3.0.9) | `ofJavaMain` | `org.codenarc.CodeNarcRunner.execute()` | brings a Groovy runtime; Groovy metaclass caches per loader | worker, build JVM after measuring |
-| eclipse | JDT core 3.47.0 | format step, forked, launcher source | `ToolFactory.createCodeFormatter(options, M_FORMAT_EXISTING)` (launcher already uses it) | JDT core outside OSGi; statics in `JavaCore` **unverified** | build JVM |
+| eclipse | JDT core 3.47.0 | format step, driver by reflection | `ToolFactory.createCodeFormatter(options, M_FORMAT_EXISTING)` (the driver already uses it) | JDT core outside OSGi; statics in `JavaCore` **unverified** | build JVM |
 | ktfmt | 0.64 | format step, forked | `com.facebook.ktfmt.format.Formatter.format(FormattingOptions, String)` | embeds `kotlin-compiler-embeddable` 2.3.20 (PSI, IntelliJ core statics) | worker |
 | scalafmt | 3.8.3 | check `ofJavaMain`, format forked; `Cli.main` exits always | `org.scalafmt.interfaces.Scalafmt.create(ClassLoader)` (`scalafmt-dynamic` resolves the core per configured version through its own Maven download unless configured otherwise - **unverified** whether it can be kept off the network), or `Cli.mainWithOptions` | dynamic module downloads conflict with Jenesis resolution and pinning | worker via `mainWithOptions` |
 | scalastyle | 1.5.1 | `ofJavaMain`, `Main` exits always | `new ScalastyleChecker(cl).checkFiles(configuration, files)` (Scala API) | Scala API from Java is awkward; small tool | worker via launcher |
@@ -206,12 +206,10 @@ Notes:
 Consistent with the build tool's conventions (immutable records with withers, settings read in
 `ofEnvironment`, fail loudly, no third-party dependency in the engine):
 
-1. **A task, not a `main`.** A plugin ships a task source (as `EclipseFormatter.source` and
-   `RevapiCheck.source` do) implementing a JDK-only contract, for example a `ToolProvider`
+1. **A task, not a `main`.** A plugin ships a task class that reaches the tool by reflection (as
+   `EclipseJavaFormatDriver` and `RevapiDriver` do) implementing a JDK-only contract, for example a `ToolProvider`
    (`run(PrintWriter out, PrintWriter err, String... args)`), which is in `java.base` and already used for
-   JReleaser and the engine's JDK tools. The engine compiles it once against the resolved tool jars with the
-   in-process `javac`, keyed by the source digest and the jars' identities, as `Worker.invoke` already does for
-   `.java` launchers.
+   JReleaser and the engine's JDK tools.
 2. **A loader per tool closure.** A `URLClassLoader` over the tool jars plus the compiled task, parented on
    the platform loader, so neither the engine nor the plugin layer leaks in. Cached for the life of the JVM
    under the same key `JavaWorker` uses (java, options, jar identities); context class loader set for the

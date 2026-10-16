@@ -26,7 +26,6 @@ public class RevapiModule implements BuildExecutorModule {
     static final String SETTING = "artifact.revapi", REPORT = BuildStep.REPORTS + "revapi/revapi.json";
     private static final String MAVEN_GROUP = "org.revapi";
     private static final List<String> EXTENSIONS = List.of("revapi-java", "revapi-basic-features", "revapi-reporter-json");
-    private static final String LAUNCHER = "RevapiCheck.java", SOURCE = "RevapiCheck.source";
 
     private final Dependencies dependencies;
     private final Pinning pinning;
@@ -215,21 +214,15 @@ public class RevapiModule implements BuildExecutorModule {
             }
             Path report = context.next().resolve(REPORT);
             Files.createDirectories(report.getParent());
-            Path launcher = context.supplement().resolve(LAUNCHER);
-            try (InputStream in = RevapiModule.class.getResourceAsStream(SOURCE)) {
-                if (in == null) {
-                    throw new IllegalStateException("The revapi plugin does not carry " + SOURCE);
-                }
-                Files.copy(in, launcher, StandardCopyOption.REPLACE_EXISTING);
-            }
             if (analysis != null && !(Json.parse(Files.readString(analysis)) instanceof List<?>)) {
                 throw new IllegalArgumentException(analysis + " is no JSON array - write revapi's configuration as an"
                         + " array of {\"extension\": ..., \"configuration\": ...} objects");
             }
             String configuration = analysis == null ? "-" : analysis.toString();
             List<String> commands = new ArrayList<>(List.of(
-                    "-cp", String.join(File.pathSeparator, jars),
-                    launcher.toString(),
+                    "-cp", ProcessHandler.OfProcess.driver(RevapiDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, jars),
+                    RevapiDriver.class.getName(),
                     report.toString(),
                     severity.name(),
                     configuration,
