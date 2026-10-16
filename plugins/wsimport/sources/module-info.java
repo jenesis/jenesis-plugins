@@ -5,8 +5,8 @@
  * the repositories of the build that loads the plugin and running it in a JVM of its own.
  *
  * @jenesis.release 25
- * @jenesis.pin build.jenesis 0.16.0 SHA-256/bf8d90a8e3251fcb2519e11793ab87a68f37419f12a6b3275f9dd1d263149c98
- * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/bf8d90a8e3251fcb2519e11793ab87a68f37419f12a6b3275f9dd1d263149c98
+ * @jenesis.pin build.jenesis 0.16.0 SHA-256/6c7ca48b61d71ca04a929bfc937f49ca5ba899c083b0a011fc29115d44b522c4
+ * @jenesis.pin build.jenesis/build.jenesis 0.16.0 SHA-256/6c7ca48b61d71ca04a929bfc937f49ca5ba899c083b0a011fc29115d44b522c4
  * @jenesis.pin com.fasterxml.woodstox/woodstox-core 7.2.0 SHA-256/689f5be95f9bb369d6c0e8db99a99f930b0c48d6a69b46151782b5816c7ea820
  * @jenesis.pin com.sun.tools.ws 4.0.5 SHA-256/7eb07d9fdb654264579173d6a98898f550f083cc80abd0043252e46f122f9ecd
  * @jenesis.pin com.sun.xml.bind/jaxb-core 4.0.9 SHA-256/209eb94452d89644380e398e4ac126974718eeb3aa94ed1786654837ebcd3097
