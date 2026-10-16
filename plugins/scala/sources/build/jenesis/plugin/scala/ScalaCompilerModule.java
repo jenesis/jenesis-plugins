@@ -27,7 +27,6 @@ public class ScalaCompilerModule implements BuildExecutorModule {
     private static final String REQUIRED = "required",
             RESOLUTION = "dependencies",
             ZINC_RESOLUTION = "zinc",
-            INCREMENTAL = "incremental/",
             STATE = "state.properties";
     private static final List<String> PREFERRED_PREFIXES = List.of("maven", "module");
     private static final String MODULE_NAME = "org.scala.lang.scala3.compiler",
@@ -257,7 +256,7 @@ public class ScalaCompilerModule implements BuildExecutorModule {
                 return super.apply(executor, context, arguments);
             }
             return super.apply(executor, context, arguments).thenComposeAsync(result -> {
-                Path compiled = context.next().resolve(INCREMENTAL + CLASSES), target = context.next().resolve(CLASSES);
+                Path compiled = context.persistent().resolve(CLASSES), target = context.next().resolve(CLASSES);
                 if (!result.next() || !Files.isDirectory(compiled)) {
                     return CompletableFuture.completedStage(result);
                 }
@@ -274,7 +273,7 @@ public class ScalaCompilerModule implements BuildExecutorModule {
                             }
                             Path published = target.resolve(compiled.relativize(file));
                             Files.createDirectories(published.getParent());
-                            BuildStep.linkOrCopy(published, file);
+                            Files.copy(file, published, StandardCopyOption.COPY_ATTRIBUTES);
                             return FileVisitResult.CONTINUE;
                         }
                     });
@@ -436,28 +435,19 @@ public class ScalaCompilerModule implements BuildExecutorModule {
             }
             scalac.forEach(option -> commands.addAll(List.of(IncrementalScalaCompiler.SCALAC, option)));
             javac.forEach(option -> commands.addAll(List.of(IncrementalScalaCompiler.JAVAC, option)));
-            Path state = Files.createDirectories(context.next().resolve(INCREMENTAL));
+            Path state = context.persistent();
             SequencedProperties configuration = new SequencedProperties();
             configuration.setProperty("configuration", String.join("\n", jars) + "\n" + String.join("\n", engine)
                     + "\n" + String.join("\n", scalac) + "\n" + String.join("\n", javac));
             configuration.setProperty("state", state.toAbsolutePath().toString());
-            Path previous = context.previous() == null ? null : context.previous().resolve(INCREMENTAL);
-            if (previous != null
-                    && Files.isRegularFile(previous.resolve(STATE))
-                    && SequencedProperties.ofFiles(previous.resolve(STATE)).equals(configuration)) {
-                Files.walkFileTree(previous, new SimpleFileVisitor<>() {
-                    @Override
-                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                        Files.createDirectories(state.resolve(previous.relativize(dir)));
-                        return FileVisitResult.CONTINUE;
+            if (context.previous() == null
+                    || !Files.isRegularFile(state.resolve(STATE))
+                    || !SequencedProperties.ofFiles(state.resolve(STATE)).equals(configuration)) {
+                try (Stream<Path> stale = Files.walk(state)) {
+                    for (Path file : stale.filter(file -> !file.equals(state)).sorted(Comparator.reverseOrder()).toList()) {
+                        Files.delete(file);
                     }
-
-                    @Override
-                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                        Files.copy(file, state.resolve(previous.relativize(file)), StandardCopyOption.COPY_ATTRIBUTES);
-                        return FileVisitResult.CONTINUE;
-                    }
-                });
+                }
             }
             configuration.store(state.resolve(STATE));
             commands.addAll(List.of(

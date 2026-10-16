@@ -59,6 +59,10 @@ rule there applies here as well; this file adds what is particular to the plugin
   tool, and reaches it by reflection where it is private or has a shape Java cannot name. The step hands the folder
   `ProcessHandler.OfProcess.driver(<Tool>Driver.class)` writes ahead of the tool's jars, which holds the driver's own
   class files alone, so the driver touches nothing of the plugin beside it.
+- A step that keeps state for its own next run - the caches of Kotlin's incremental compiler, Zinc's analysis, KSP's
+  caches - keeps it in `context.persistent()` and never in its output, which every dependent would be handed. It
+  starts from an empty folder whenever the build hands no previous output, clears it when the configuration it
+  recorded there no longer matches, and writes the same output from an empty folder as from a full one.
 
 - Every plugin folder carries a short `README.md`: one sentence on what it does, the file that activates it with an
   example, a table of the values it takes, the file it reads, and the setting that switches it off. The root

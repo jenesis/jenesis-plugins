@@ -25,7 +25,6 @@ public class KotlinCompilerModule implements BuildExecutorModule {
     public static final String OUTPUT = "classes", RESOLVED = "artifacts";
     private static final String REQUIRED = "required",
             COMPILED = "compiled",
-            INCREMENTAL = "incremental/",
             STATE = "state.properties",
             LISTING = "sources.properties";
     private static final List<String> PREFERRED_PREFIXES = List.of("maven", "module");
@@ -290,15 +289,22 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             SequencedProperties state = new SequencedProperties();
             state.setProperty("configuration", String.join("\n", configuration));
             state.setProperty("destination", target.toAbsolutePath().toString());
-            Path working = Files.createDirectories(context.next().resolve(INCREMENTAL));
-            Path previous = context.previous() == null ? null : context.previous().resolve(INCREMENTAL);
-            boolean rebuild = previous == null
-                    || !Files.isRegularFile(previous.resolve(STATE))
-                    || !Files.isRegularFile(previous.resolve(LISTING))
-                    || !SequencedProperties.ofFiles(previous.resolve(STATE)).equals(state);
-            List<String> commands = new ArrayList<>(List.of(IncrementalKotlinCompiler.WORKING, working.resolve("caches").toString(),
+            Path working = context.persistent();
+            boolean rebuild = context.previous() == null
+                    || !Files.isRegularFile(working.resolve(STATE))
+                    || !Files.isRegularFile(working.resolve(LISTING))
+                    || !SequencedProperties.ofFiles(working.resolve(STATE)).equals(state);
+            Path caches = working.resolve("caches");
+            List<String> commands = new ArrayList<>(List.of(IncrementalKotlinCompiler.WORKING, caches.toString(),
                     IncrementalKotlinCompiler.SNAPSHOTS, working.resolve("snapshots").toString()));
             if (rebuild) {
+                if (Files.isDirectory(caches)) {
+                    try (Stream<Path> files = Files.walk(caches)) {
+                        for (Path file : files.sorted(Comparator.reverseOrder()).toList()) {
+                            Files.delete(file);
+                        }
+                    }
+                }
                 commands.add(IncrementalKotlinCompiler.REBUILD);
             } else {
                 Path classes = context.previous().resolve(BuildStep.CLASSES);
@@ -323,25 +329,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                         }
                     });
                 }
-                for (String folder : List.of("caches", "snapshots")) {
-                    Path source = previous.resolve(folder);
-                    if (Files.isDirectory(source)) {
-                        Files.walkFileTree(source, new SimpleFileVisitor<>() {
-                            @Override
-                            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                                Files.createDirectories(working.resolve(folder).resolve(source.relativize(dir)));
-                                return FileVisitResult.CONTINUE;
-                            }
-
-                            @Override
-                            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                                Files.copy(file, working.resolve(folder).resolve(source.relativize(file)));
-                                return FileVisitResult.CONTINUE;
-                            }
-                        });
-                    }
-                }
-                SequencedProperties recorded = SequencedProperties.ofFiles(previous.resolve(LISTING));
+                SequencedProperties recorded = SequencedProperties.ofFiles(working.resolve(LISTING));
                 for (String file : sources.files()) {
                     if (!listing.getProperty(file).equals(recorded.getProperty(file))) {
                         commands.add(IncrementalKotlinCompiler.MODIFIED);

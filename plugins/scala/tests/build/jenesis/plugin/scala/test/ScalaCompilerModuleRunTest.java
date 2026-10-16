@@ -182,9 +182,10 @@ public class ScalaCompilerModuleRunTest {
         Path classes = classes();
         FileTime untouched = Files.getLastModifiedTime(classes.resolve("sample/Untouched.class")),
                 user = Files.getLastModifiedTime(classes.resolve("sample/User.class"));
-        assertThat(root.resolve("scala/classes/output/incremental/analysis.bin"))
-                .as("Zinc records its analysis beside the classes it compiled")
+        assertThat(root.resolve("scala/classes/persistent/analysis.bin"))
+                .as("Zinc keeps its analysis for the next run, outside the output the step hands on")
                 .isNotEmptyFile();
+        assertThat(root.resolve("scala/classes/output/incremental")).doesNotExist();
         assertThat(classes.resolve("sample/Removed.class")).isNotEmptyFile();
         assertThat(classes.resolve("sample/Edited.tasty")).isNotEmptyFile();
         assertThat(classes.resolve("sample/Greeter.class"))

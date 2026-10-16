@@ -21,7 +21,7 @@ public class KspModule implements BuildExecutorModule {
 
     public static final String GENERATE = "generate";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies", PROCESSORS = "processors",
-            INCREMENTAL = "incremental", STATE = "state.properties", LISTING = "listing.properties",
+            STATE = "state.properties", LISTING = "listing.properties",
             CLASSES = "classes.properties";
     private static final String MAVEN_GROUP = "com.google.devtools.ksp", MAVEN_ARTIFACT = "symbol-processing-aa-embeddable";
 
@@ -219,7 +219,7 @@ public class KspModule implements BuildExecutorModule {
             List<String> commands = new ArrayList<>(forked.jvm()), declared = forked.program();
             Path next = context.next().toAbsolutePath(),
                     supplement = context.supplement().toAbsolutePath(),
-                    working = Files.createDirectories(next.resolve(INCREMENTAL)),
+                    working = context.persistent().toAbsolutePath(),
                     generated = Files.createDirectories(next.resolve(BuildStep.SOURCES)),
                     resources = Files.createDirectories(next.resolve(BuildStep.RESOURCES));
             String sourceRoots = String.join(File.pathSeparator, roots);
@@ -251,29 +251,21 @@ public class KspModule implements BuildExecutorModule {
                     }
                 }
             }
-            Path previous = context.previous() == null ? null : context.previous().resolve(INCREMENTAL);
-            boolean incremental = previous != null
-                    && Files.isRegularFile(previous.resolve(STATE))
-                    && Files.isRegularFile(previous.resolve(LISTING))
-                    && Files.isRegularFile(previous.resolve(CLASSES))
-                    && SequencedProperties.ofFiles(previous.resolve(STATE)).equals(state);
+            boolean incremental = context.previous() != null
+                    && Files.isRegularFile(working.resolve(STATE))
+                    && Files.isRegularFile(working.resolve(LISTING))
+                    && Files.isRegularFile(working.resolve(CLASSES))
+                    && SequencedProperties.ofFiles(working.resolve(STATE)).equals(state);
             List<String> modified = new ArrayList<>(), removed = new ArrayList<>(), changed = new ArrayList<>();
-            if (incremental) {
-                Path caches = previous.resolve("caches");
-                if (Files.isDirectory(caches)) {
-                    try (Stream<Path> files = Files.walk(caches)) {
-                        for (Path file : files.toList()) {
-                            Path copied = working.resolve("caches").resolve(caches.relativize(file).toString());
-                            if (Files.isDirectory(file)) {
-                                Files.createDirectories(copied);
-                            } else {
-                                Files.copy(file, copied, StandardCopyOption.COPY_ATTRIBUTES);
-                            }
-                        }
+            if (!incremental) {
+                try (Stream<Path> files = Files.walk(working)) {
+                    for (Path file : files.filter(file -> !file.equals(working)).sorted(Comparator.reverseOrder()).toList()) {
+                        Files.delete(file);
                     }
                 }
-                SequencedProperties recorded = SequencedProperties.ofFiles(previous.resolve(LISTING)),
-                        compiled = SequencedProperties.ofFiles(previous.resolve(CLASSES));
+            } else {
+                SequencedProperties recorded = SequencedProperties.ofFiles(working.resolve(LISTING)),
+                        compiled = SequencedProperties.ofFiles(working.resolve(CLASSES));
                 for (String file : listing.stringPropertyNames()) {
                     if (!listing.getProperty(file).equals(recorded.getProperty(file))) {
                         modified.add(file);
