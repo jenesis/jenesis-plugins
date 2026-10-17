@@ -33,7 +33,6 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             MAVEN_ARTIFACT = "kotlin-compiler-embeddable",
             INCREMENTAL_MODULE_NAME = "kotlin.build.tools.impl",
             INCREMENTAL_MAVEN_ARTIFACT = "kotlin-build-tools-impl",
-            MAIN_CLASS = "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler",
             MODULE_OPTION = "-module-name";
 
     private final Map<String, Resolver> resolvers;
@@ -200,7 +199,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                         boolean incremental,
                         String tool,
                         String group) {
-            this(terms, includeResources, incremental, tool, group, ProcessHandler.OfProcess.ofJavaHome("bin/java"));
+            this(terms, includeResources, incremental, tool, group, ProcessHandler.OfProcess.ofJavaMain());
         }
 
         private Compile(ProcessBuildStep.Terms terms,
@@ -218,7 +217,11 @@ public class KotlinCompilerModule implements BuildExecutorModule {
 
         @Override
         protected ProcessHandler handler(BuildStepContext context, List<String> commands) throws IOException {
-            return incremental ? warm(commands) : super.handler(context, commands);
+            if (incremental) {
+                return warm(commands);
+            }
+            ProcessHandler handler = super.handler(context, commands);
+            return handler instanceof ProcessHandler.OfProcess process ? process.shared(true) : handler;
         }
 
         private ProcessHandler warm(List<String> commands) {
@@ -383,7 +386,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                         : command(properties(arguments), target, Integer.toString(release), sources, classpath, friends, files);
                 chain = chain.thenComposeAsync(_ -> {
                     try {
-                        ProcessHandler handler = incremental ? warm(commands) : factory.apply(commands);
+                        ProcessHandler handler = handler(context, commands);
                         Path output = context.supplement().resolve("output-" + release),
                                 error = context.supplement().resolve("error-" + release);
                         Files.writeString(context.supplement().resolve("command-" + release), shell(handler.commands()));
@@ -530,14 +533,15 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                                      Sources sources,
                                      List<String> classpath,
                                      List<String> friends,
-                                     List<String> files) {
+                                     List<String> files) throws IOException {
             ForkedOptions forked = forked(properties);
             List<String> commands = new ArrayList<>(forked.jvm()), options = forked.program();
             List<String> arguments = arguments(release, sources, classpath, friends, options);
             commands.addAll(List.of(
                     "-cp",
-                    String.join(File.pathSeparator, sources.jars()),
-                    MAIN_CLASS,
+                    ProcessHandler.OfProcess.driver(KotlincDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, sources.jars()),
+                    KotlincDriver.class.getName(),
                     "-d",
                     target.toString()));
             commands.addAll(arguments);
