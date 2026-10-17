@@ -1,14 +1,12 @@
 name: Build Jenesis Plugins
 
-# The plugins pin a build.jenesis that provides BuildModuleFactory, which the next release of
-# build.jenesis carries: enable push and pull_request once their pins name that release.
 on:
-#  push:
-#    paths-ignore:
-#      - '**/*.md'
-#  pull_request:
-#    paths-ignore:
-#      - '**/*.md'
+  push:
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
   workflow_dispatch:
 
 permissions:
