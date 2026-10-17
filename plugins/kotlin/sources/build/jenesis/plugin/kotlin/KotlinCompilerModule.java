@@ -431,7 +431,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                     plugins = new ArrayList<>();
             NavigableMap<Integer, List<String>> versioned = new TreeMap<>();
             SequencedMap<String, Path> internal = new LinkedHashMap<>();
-            String release = null, tested = null, project = null, artifact = null;
+            String release = null, tested = null, project = null, artifact = null, name = null;
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
@@ -448,7 +448,9 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                 Dependencies.internal(argument.folder()).forEach(internal::putIfAbsent);
                 Path module = argument.folder().resolve(BuildStep.MODULE);
                 if (Files.isRegularFile(module)) {
-                    tested = SequencedProperties.ofFiles(module).value("test");
+                    SequencedProperties loaded = SequencedProperties.ofFiles(module);
+                    tested = loaded.value("test");
+                    name = loaded.value("module");
                 }
                 Path metadata = argument.folder().resolve(BuildStep.METADATA);
                 if (Files.isRegularFile(metadata)) {
@@ -524,7 +526,8 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                     }
                 }
             }
-            return new Sources(files, jars, classpath, plugins, friends, versioned, release);
+            String named = artifact != null ? artifact : name != null ? name : "main";
+            return new Sources(files, jars, classpath, plugins, friends, versioned, release, tested == null ? named : named + "_test");
         }
 
         private List<String> command(SequencedMap<String, SequencedMap<String, String>> properties,
@@ -555,11 +558,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                                      List<String> classpath,
                                      List<String> friends) {
             ForkedOptions forked = forked(properties);
-            List<String> options = new ArrayList<>(forked.program()), virtualMachine = forked.jvm();
-            if (!options.contains(MODULE_OPTION)) {
-                options.addAll(List.of(MODULE_OPTION, "main"));
-            }
-            return new Incremental(virtualMachine, arguments(release, sources, classpath, friends, options));
+            return new Incremental(forked.jvm(), arguments(release, sources, classpath, friends, forked.program()));
         }
 
         private static List<String> arguments(String release,
@@ -594,6 +593,9 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             if (!friends.isEmpty() && options.stream().noneMatch(option -> option.startsWith("-Xfriend-paths"))) {
                 arguments.add("-Xfriend-paths=" + String.join(",", friends));
             }
+            if (!options.contains(MODULE_OPTION)) {
+                arguments.addAll(List.of(MODULE_OPTION, sources.module()));
+            }
             arguments.addAll(options);
             return arguments;
         }
@@ -626,6 +628,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                            List<String> plugins,
                            List<String> friends,
                            NavigableMap<Integer, List<String>> versioned,
-                           String release) {
+                           String release,
+                           String module) {
     }
 }
