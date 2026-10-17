@@ -48,8 +48,8 @@ as its settings file, which then stands in for `~/.jreleaser/config.properties`;
 environment variables. Its output lands in the step's own folder, never in the project.
 A version ending in `-SNAPSHOT` is not deployed: the staged Maven tree names a snapshot as Maven installs one,
 `artifact-1.0.0-SNAPSHOT.jar`, without the timestamp JReleaser's Maven deployers read from every file name. The build
-releases a snapshot into a repository of its own with `jenesis.deploy.uri` instead, which stamps every file as Maven
-deploys it.
+releases a snapshot with `jenesis.deploy.uri` instead, which stamps every file as Maven deploys it, into Maven
+Central's snapshot repository as into any other.
 JReleaser resolves in the tool group of the plugin, `jreleaser:tool/…`. `pin` runs last, after a dry release, so it
 resolves JReleaser and writes the line that pins it, `jreleaser\:tool/maven/org.jreleaser/jreleaser-tool-provider=<version>
 SHA-256/<hex>`, into `jenesis.plugins.pin.properties` with the rest.
