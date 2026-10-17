@@ -3,7 +3,7 @@
 ![build](https://github.com/jenesis/jenesis-plugins/actions/workflows/build.yml/badge.svg)
 
 > ### [Jenesis](https://jenesis.build) - a modern Java build tool
-> _Java-native config, plugin-free, with `module-info.java` treated as a feature, not an afterthought._
+> _Java-native config, everything the JDK provides built in, with `module-info.java` treated as a feature, not an afterthought._
 
 **The plugins of the Jenesis build tool that run a tool it has to download anyway.** Each plugin is a Java module
 that provides a `build.jenesis.BuildModuleFactory`, an `ObservabilityFactory` for one that observes the tests, or a
