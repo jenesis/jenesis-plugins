@@ -354,10 +354,10 @@ public class KotlinCompilerModuleRunTest {
         assertThat(command.indexOf("-Xss4m"))
                 .as("a -J line goes to the JVM that runs kotlinc, ahead of its main class")
                 .isNotNegative()
-                .isLessThan(command.indexOf("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler"));
+                .isLessThan(command.indexOf("build.jenesis.plugin.kotlin.KotlincDriver"));
         assertThat(command.indexOf("-api-version"))
                 .as("a compiler argument follows kotlinc's main class")
-                .isGreaterThan(command.indexOf("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler"));
+                .isGreaterThan(command.indexOf("build.jenesis.plugin.kotlin.KotlincDriver"));
     }
 
     @Test
