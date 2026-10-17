@@ -323,6 +323,39 @@ public class KotlinCompilerModuleRunTest {
     }
 
     @Test
+    public void names_the_kotlin_module_after_the_artifact_as_the_kotlin_maven_plugin_does() throws IOException {
+        assertModuleNamedAfterArtifact(false);
+    }
+
+    @Test
+    public void names_the_kotlin_module_after_the_artifact_when_compiling_incrementally() throws IOException {
+        assertModuleNamedAfterArtifact(true);
+    }
+
+    private void assertModuleNamedAfterArtifact(boolean incremental) throws IOException {
+        Files.writeString(sources(project).resolve("Sample.kt"), """
+                package sample
+                class Sample {
+                    internal fun hidden(): String = "hidden"
+                }
+                """);
+        SequencedProperties metadata = new SequencedProperties();
+        metadata.setProperty("project", "group");
+        metadata.setProperty("artifact", "sample-artifact");
+        metadata.store(project.resolve(BuildStep.METADATA));
+
+        Path classes = compile(kotlin -> kotlin.incremental(incremental));
+
+        assertThat(classes.resolve("META-INF/sample-artifact.kotlin_module"))
+                .as("each module carries a module file of its own name, never kotlinc's default main")
+                .isNotEmptyFile();
+        assertThat(ClassFile.of().parse(classes.resolve("sample/Sample.class")).methods().stream()
+                .map(method -> method.methodName().stringValue()))
+                .as("an internal member is mangled with the module's name")
+                .contains("hidden$sample_artifact");
+    }
+
+    @Test
     public void hands_the_lines_of_process_kotlinc_properties_to_kotlinc_and_its_j_lines_to_the_jvm() throws IOException {
         Files.writeString(sources(project).resolve("Sample.kt"), """
                 package sample
