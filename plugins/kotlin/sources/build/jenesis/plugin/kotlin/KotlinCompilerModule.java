@@ -33,7 +33,6 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             MAVEN_ARTIFACT = "kotlin-compiler-embeddable",
             INCREMENTAL_MODULE_NAME = "kotlin.build.tools.impl",
             INCREMENTAL_MAVEN_ARTIFACT = "kotlin-build-tools-impl",
-            MAIN_CLASS = "org.jetbrains.kotlin.cli.jvm.K2JVMCompiler",
             MODULE_OPTION = "-module-name";
 
     private final Map<String, Resolver> resolvers;
@@ -200,7 +199,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                         boolean incremental,
                         String tool,
                         String group) {
-            this(terms, includeResources, incremental, tool, group, ProcessHandler.OfProcess.ofJavaHome("bin/java"));
+            this(terms, includeResources, incremental, tool, group, ProcessHandler.OfProcess.ofJavaMain());
         }
 
         private Compile(ProcessBuildStep.Terms terms,
@@ -218,7 +217,11 @@ public class KotlinCompilerModule implements BuildExecutorModule {
 
         @Override
         protected ProcessHandler handler(BuildStepContext context, List<String> commands) throws IOException {
-            return incremental ? warm(commands) : super.handler(context, commands);
+            if (incremental) {
+                return warm(commands);
+            }
+            ProcessHandler handler = super.handler(context, commands);
+            return handler instanceof ProcessHandler.OfProcess process ? process.shared(true) : handler;
         }
 
         private ProcessHandler warm(List<String> commands) {
@@ -383,7 +386,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                         : command(properties(arguments), target, Integer.toString(release), sources, classpath, friends, files);
                 chain = chain.thenComposeAsync(_ -> {
                     try {
-                        ProcessHandler handler = incremental ? warm(commands) : factory.apply(commands);
+                        ProcessHandler handler = handler(context, commands);
                         Path output = context.supplement().resolve("output-" + release),
                                 error = context.supplement().resolve("error-" + release);
                         Files.writeString(context.supplement().resolve("command-" + release), shell(handler.commands()));
@@ -428,7 +431,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                     plugins = new ArrayList<>();
             NavigableMap<Integer, List<String>> versioned = new TreeMap<>();
             SequencedMap<String, Path> internal = new LinkedHashMap<>();
-            String release = null, tested = null, project = null, artifact = null;
+            String release = null, tested = null, project = null, artifact = null, name = null;
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
@@ -445,7 +448,9 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                 Dependencies.internal(argument.folder()).forEach(internal::putIfAbsent);
                 Path module = argument.folder().resolve(BuildStep.MODULE);
                 if (Files.isRegularFile(module)) {
-                    tested = SequencedProperties.ofFiles(module).value("test");
+                    SequencedProperties loaded = SequencedProperties.ofFiles(module);
+                    tested = loaded.value("test");
+                    name = loaded.value("module");
                 }
                 Path metadata = argument.folder().resolve(BuildStep.METADATA);
                 if (Files.isRegularFile(metadata)) {
@@ -521,7 +526,8 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                     }
                 }
             }
-            return new Sources(files, jars, classpath, plugins, friends, versioned, release);
+            String named = artifact != null ? artifact : name != null ? name : "main";
+            return new Sources(files, jars, classpath, plugins, friends, versioned, release, tested == null ? named : named + "_test");
         }
 
         private List<String> command(SequencedMap<String, SequencedMap<String, String>> properties,
@@ -530,14 +536,15 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                                      Sources sources,
                                      List<String> classpath,
                                      List<String> friends,
-                                     List<String> files) {
+                                     List<String> files) throws IOException {
             ForkedOptions forked = forked(properties);
             List<String> commands = new ArrayList<>(forked.jvm()), options = forked.program();
             List<String> arguments = arguments(release, sources, classpath, friends, options);
             commands.addAll(List.of(
                     "-cp",
-                    String.join(File.pathSeparator, sources.jars()),
-                    MAIN_CLASS,
+                    ProcessHandler.OfProcess.driver(KotlincDriver.class) + File.pathSeparator
+                            + String.join(File.pathSeparator, sources.jars()),
+                    KotlincDriver.class.getName(),
                     "-d",
                     target.toString()));
             commands.addAll(arguments);
@@ -551,11 +558,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                                      List<String> classpath,
                                      List<String> friends) {
             ForkedOptions forked = forked(properties);
-            List<String> options = new ArrayList<>(forked.program()), virtualMachine = forked.jvm();
-            if (!options.contains(MODULE_OPTION)) {
-                options.addAll(List.of(MODULE_OPTION, "main"));
-            }
-            return new Incremental(virtualMachine, arguments(release, sources, classpath, friends, options));
+            return new Incremental(forked.jvm(), arguments(release, sources, classpath, friends, forked.program()));
         }
 
         private static List<String> arguments(String release,
@@ -590,6 +593,9 @@ public class KotlinCompilerModule implements BuildExecutorModule {
             if (!friends.isEmpty() && options.stream().noneMatch(option -> option.startsWith("-Xfriend-paths"))) {
                 arguments.add("-Xfriend-paths=" + String.join(",", friends));
             }
+            if (!options.contains(MODULE_OPTION)) {
+                arguments.addAll(List.of(MODULE_OPTION, sources.module()));
+            }
             arguments.addAll(options);
             return arguments;
         }
@@ -622,6 +628,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                            List<String> plugins,
                            List<String> friends,
                            NavigableMap<Integer, List<String>> versioned,
-                           String release) {
+                           String release,
+                           String module) {
     }
 }
