@@ -40,7 +40,7 @@ setting that switches it off.
 | [`ktfmt`](plugins/ktfmt/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Kotlin sources of a module with ktfmt. |
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |
-| [`openrewrite`](plugins/openrewrite/) | Verifies, or with `-Djenesis.format.rewrite=true` applies, the OpenRewrite recipes a project names to the Java sources of a module. |
+| [`openrewrite`](plugins/openrewrite/) | Verifies, or with `-Djenesis.format.rewrite=true` applies, the OpenRewrite recipes a project declares to the Java sources of a module. |
 | [`palantir`](plugins/palantir/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with Palantir Java Format. |
 | [`pitest`](plugins/pitest/) | Runs PIT mutation testing over the code a test module tests, reporting which mutants its tests kill. |
 | [`pmd`](plugins/pmd/) | Checks the Java sources of a module with PMD. |
@@ -55,10 +55,13 @@ setting that switches it off.
 
 Each is the module `build.jenesis.plugin.<folder>`, published as `build.jenesis:build.jenesis.plugin.<folder>`. A
 project does not name it: the build tool discovers each plugin by itself, as it discovered the tool when the tool was
-built in, where a configuration folder of a module holds the tool's own file - an `antlr.properties`, a
-`checkstyle.xml`, a `javaformat.properties` naming its formatter - or, for a language, where a module holds a source of
-it. The build resolves the plugin there by its module name and pins it in the group of its name, `antlr` for this
-file:
+built in, where a configuration folder of a module holds its `<tool>.properties` - an `antlr.properties`, a
+`checkstyle.properties`, a `javaformat.properties` naming its formatter - or, for a language, where a module holds a
+source of it. The properties name the tool's own file as `configuration=<path>`, relative to them, and fail the build
+naming the key where they leave it out. Where no configuration folder holds the properties, the tool's one conventional
+file there - a `checkstyle.xml`, an `.editorconfig`, a `jreleaser.yml` - switches it on alone, handed to the plugin as
+if the properties named it. The build resolves the plugin by its module name and pins it in the group of its name, `antlr` for
+this file:
 
 ```properties
 # build.jenesis/antlr.properties
@@ -71,13 +74,14 @@ A setting of its tool switches a plugin off, as `-Djenesis.generate.antlr=false`
 none. `jenesis.plugins.properties` and `plugin-<name>.properties` remain for a plugin of the project's own or of a
 third party, and name none of these.
 
-A plugin reads only the files the build binds for it: the tool's own file and what it names beside it - the
-`${config_loc}/<path>` files of a `checkstyle.xml`, the `signatures` of a `forbiddenapis.properties`, the `profile` of
-an Eclipse `javaformat.properties` - and, for a generator, what its file binds with `@<input>[/<target>]=<path>` lines,
+A plugin reads only the files the build binds for it: the tool's own file its properties name and what that names
+beside it - the `${config_loc}/<path>` files of a Checkstyle configuration, the `signatures` of a
+`forbiddenapis.properties`, the `profile` of an Eclipse `javaformat.properties` - and, for a generator, what its file
+binds with `@<input>[/<target>]=<path>` lines,
 each path resolved against the module's own folder; a folder stays within the project, while a file may lie
 outside it, so that several projects share one. A value is resolved before the plugin sees it, `@<key>` standing
 for `-Djenesis.variable.<key>`, and a plugin refuses a value it does not take, naming those it does. Checkstyle takes
-every line of a `checkstyle.properties` beside its `checkstyle.xml` as a property its configuration expands.
+every other line of its `checkstyle.properties` as a property its configuration expands.
 
 A plugin that offers more than one provider names each, and the build wires each at its own hook point, as ktlint's
 `@check` at `check` and its `@format` at `format`. A plugin resolves its tool in a group named after it - `antlr:tool`

@@ -124,6 +124,34 @@ public class OpenRewriteModuleRunTest {
                 .doesNotContain("import java.util.Map;");
     }
 
+    @Test
+    public void runs_every_recipe_its_rewrite_yml_declares_when_it_names_none() throws IOException {
+        Path sample = sample(UNUSED);
+        Files.writeString(project.resolve(OpenRewriteModule.CONFIGURATION), """
+                type: specs.openrewrite.org/v1beta/recipe
+                name: sample.Cleanup
+                displayName: Sample cleanup
+                recipeList:
+                  - org.openrewrite.java.RemoveUnusedImports
+                """);
+
+        newExecutor(false, List.of()).execute();
+
+        assertThat(Files.readString(sample))
+                .as("a rewrite.yml alone runs the recipes it declares")
+                .doesNotContain("import java.util.Map;");
+    }
+
+    @Test
+    public void refuses_to_run_without_a_recipe_or_a_rewrite_yml() throws IOException {
+        sample(UNUSED);
+
+        assertThatThrownBy(newExecutor(false, List.of())::execute)
+                .rootCause()
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("names no recipe and is handed no rewrite.yml");
+    }
+
     private Path sample(String content) throws IOException {
         SequencedProperties versions = new SequencedProperties();
         versions.load(new StringReader(PINS));

@@ -14,7 +14,7 @@ its values:
 
 | Value | Meaning |
 |---|---|
-| `profile` | the formatter profile Eclipse exports, a file beside `javaformat.properties` |
+| `profile` | the formatter profile Eclipse exports, relative to `javaformat.properties` |
 
 Any other value is refused.
 

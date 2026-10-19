@@ -3,15 +3,23 @@
 Converts the AsciiDoc documents of a project to HTML with AsciidoctorJ and stages them with the files that belong to
 no module.
 
+```
+docs/
+|-- index.adoc
+`-- guide/getting-started.adoc
+```
+
 ```properties
 # build.jenesis/asciidoctor.properties
+documents=../docs
 attribute.toc=left
 ```
 
 The build discovers the plugin by itself where the project's configuration folder holds an `asciidoctor.properties`,
-and resolves it as `build.jenesis.plugin.asciidoctor`. It runs once for the whole project, after every module is
-built, and binds the project's `docs/` folder unless a line `@docs=<folder>` binds another. The lines of the file are
-its values:
+and resolves it as `build.jenesis.plugin.asciidoctor`; documents alone switch nothing on. It runs once for the whole
+project, after every module is built. The file names the folder of documents as `documents=<folder>`, relative to
+`asciidoctor.properties` - `../src/docs/asciidoc` where the Maven and Gradle plugins of Asciidoctor read them - which is
+required: properties that leave it out fail the build, naming the key to add. Its other lines are the plugin's values:
 
 | Value | Meaning |
 |---|---|

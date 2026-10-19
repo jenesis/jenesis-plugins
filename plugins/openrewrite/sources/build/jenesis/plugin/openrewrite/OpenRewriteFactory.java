@@ -24,20 +24,15 @@ public class OpenRewriteFactory implements BuildModuleFactory {
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             if (!entry.getKey().equals(RECIPES)) {
                 throw new IllegalArgumentException("The OpenRewrite plugin takes no value " + entry.getKey()
-                        + " - its one value is " + RECIPES + ", the comma-separated recipes to run, which "
-                        + OpenRewriteModule.CONFIGURATION + " can declare, and jenesis.format.rewrite applies them");
+                        + " - its one value is " + RECIPES + ", the comma-separated recipes to run, every recipe "
+                        + OpenRewriteModule.CONFIGURATION + " declares by default, and jenesis.format.rewrite applies them");
             }
             values.setProperty(entry.getKey(), entry.getValue());
         }
         List<String> recipes = values.entries(RECIPES);
-        if (recipes == null || recipes.isEmpty()) {
-            throw new IllegalArgumentException("The OpenRewrite plugin names no recipe - write " + RECIPES
-                    + "=<recipe>[,<recipe>...], such as " + RECIPES + "=org.openrewrite.java.RemoveUnusedImports, or a"
-                    + " recipe that " + OpenRewriteModule.CONFIGURATION + " declares");
-        }
         return OpenRewriteModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)
                 .tool(group + ":tool")
-                .recipes(recipes);
+                .recipes(recipes == null ? List.of() : recipes);
     }
 }

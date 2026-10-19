@@ -41,10 +41,11 @@ rule there applies here as well; this file adds what is particular to the plugin
   `@jenesis.plugin <group>:tool`, and KSP's processors `@jenesis.plugin ksp:processor`. A `.properties` file is a
   key with a `:` escaped, `kotlin\:dokka/maven/…`, as `pin` writes it, so a test that writes its pins by hand
   escapes it too.
-- A plugin's values are the lines of whichever file the build reads them from - the tool's own `antlr.properties`,
-  the `checkstyle.properties` beside a `checkstyle.xml` - and the factory validates them itself, because the build
-  checks none: it refuses a value it does not take with an `IllegalArgumentException` that names it and what would
-  be valid, and requires every value it needs; a plugin configured by settings alone takes no values. A value
+- A plugin's values are the lines of whichever file the build reads them from - the `antlr.properties`, the
+  `checkstyle.properties` that switches Checkstyle on, less the `configuration` naming its `checkstyle.xml` - and the
+  factory validates them itself, because the build checks none: it refuses a value it does not take with an
+  `IllegalArgumentException` that names it and what would be valid, and requires every value it needs; a plugin
+  configured by settings alone takes no values. A value
   arrives resolved, and never as a path: a file the plugin reads is one the build binds - the tool's own file and
   what it names beside it, or what a line binds as `@<input>[/<target>]=<path>` - which the plugin finds among its
   arguments by the name its tool gives it (`pmd.xml`, `checkstyle.xml`, `revapi.json`), so it reads nothing the

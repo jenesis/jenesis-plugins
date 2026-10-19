@@ -15,7 +15,7 @@ its values:
 | Value | Meaning |
 |---|---|
 | `bundled` | comma-separated bundled signatures, such as `jdk-unsafe`, `jdk-deprecated`, `jdk-internal` (checked against the release the classes were compiled for) or `jdk-system-out` |
-| `signatures` | comma-separated names of signatures files beside `forbiddenapis.properties` |
+| `signatures` | comma-separated signatures files, relative to `forbiddenapis.properties` |
 | `suppress` | comma-separated annotations that suppress a finding, such as `**.SuppressForbidden` |
 | `includes`, `excludes` | comma-separated patterns of the classes that are checked |
 | `warn` | comma-separated signatures that are reported as warnings rather than as findings |

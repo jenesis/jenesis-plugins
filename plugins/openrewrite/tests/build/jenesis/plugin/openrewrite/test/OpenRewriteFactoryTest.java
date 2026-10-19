@@ -57,11 +57,8 @@ public class OpenRewriteFactoryTest {
     }
 
     @Test
-    public void refuses_to_run_without_a_recipe() {
-        assertThatThrownBy(() -> create(Map.of()))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("names no recipe")
-                .hasMessageContaining("recipes=");
+    public void takes_no_recipe_to_run_those_its_rewrite_yml_declares() {
+        assertThat(create(Map.of())).isNotNull();
     }
 
     @Test

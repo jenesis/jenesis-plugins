@@ -59,7 +59,17 @@ public final class OpenRewriteDriver {
                         .getConstructor(InputStream.class, URI.class, Properties.class)
                         .newInstance(input, config.toUri(), new Properties());
                 builder = builderType.getMethod("load", resourceLoaderType).invoke(builder, resources);
+                if (recipes.isEmpty()) {
+                    for (Object declared : (Collection<?>) resourceLoaderType.getMethod("listRecipes").invoke(resources)) {
+                        recipes.add((String) recipeType.getMethod("getName").invoke(declared));
+                    }
+                }
             }
+        }
+        if (recipes.isEmpty()) {
+            System.err.println("No recipe is named, and " + (config == null ? "no rewrite.yml is handed"
+                    : config.getFileName() + " declares none") + " - declare one there, or name it as recipes=<recipe>");
+            return 1;
         }
         Object environment = builderType.getMethod("build").invoke(builder);
         Object recipe = environmentType.getMethod("activateRecipes", Collection.class).invoke(environment, recipes);
