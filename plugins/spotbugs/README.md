@@ -11,11 +11,18 @@ Analyses the compiled classes of a module with SpotBugs.
 </FindBugsFilter>
 ```
 
-The build discovers the plugin by itself in every module where a configuration folder holds a `spotbugs-exclude.xml`,
-and resolves it there as `build.jenesis.plugin.spotbugs`.
+```properties
+# build.jenesis/spotbugs.properties
+configuration=spotbugs-exclude.xml
+```
 
-It takes no values.
+The build discovers the plugin by itself in every module where a configuration folder holds a `spotbugs.properties`,
+and resolves it there as `build.jenesis.plugin.spotbugs`; where none is found, a `spotbugs-exclude.xml` of a
+configuration folder switches it on alone, as the exclusion filter. The file
+may name an exclusion filter as `configuration=<path>`, relative to `spotbugs.properties`; without one, SpotBugs reports
+every finding. Its other lines are the plugin's values; it takes none.
 
-It reads the `spotbugs-exclude.xml` filter, which the build binds.
+It reads the filter that `configuration` names, handed to SpotBugs as `spotbugs-exclude.xml` whatever its name, which
+the build binds.
 
 `-Djenesis.validator.spotbugs` sets how findings are treated, as for every checker of the build.

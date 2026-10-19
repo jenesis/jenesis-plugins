@@ -101,10 +101,6 @@ public class OpenRewriteModule implements BuildExecutorModule {
 
     @Override
     public void accept(BuildExecutor buildExecutor, SequencedMap<String, Path> inherited) {
-        if (recipes.isEmpty()) {
-            throw new IllegalStateException("The OpenRewrite module names no recipe to run - name the recipes, such as"
-                    + " org.openrewrite.java.RemoveUnusedImports");
-        }
         buildExecutor.addStep(REQUIRED, new Requires(tool), inherited.sequencedKeySet());
         SequencedSet<String> resolveInputs = new LinkedHashSet<>();
         resolveInputs.add(REQUIRED);
@@ -193,13 +189,20 @@ public class OpenRewriteModule implements BuildExecutorModule {
             if (jars.isEmpty()) {
                 throw new IllegalStateException("No OpenRewrite jars resolved upstream of the OpenRewrite step");
             }
+            if (recipes.isEmpty() && config == null) {
+                throw new IllegalStateException("The OpenRewrite plugin names no recipe and is handed no "
+                        + CONFIGURATION + " - declare the recipes in " + CONFIGURATION + ", or name them as recipes="
+                        + "<recipe>[,<recipe>...], such as recipes=org.openrewrite.java.RemoveUnusedImports");
+            }
             List<String> commands = new ArrayList<>(List.of(
                     "-cp",
                     ProcessHandler.OfProcess.driver(OpenRewriteDriver.class) + File.pathSeparator
                             + String.join(File.pathSeparator, jars),
-                    OpenRewriteDriver.class.getName(),
-                    "--recipes",
-                    String.join(",", recipes)));
+                    OpenRewriteDriver.class.getName()));
+            if (!recipes.isEmpty()) {
+                commands.add("--recipes");
+                commands.add(String.join(",", recipes));
+            }
             if (config != null) {
                 commands.add("--config");
                 commands.add(config.toString());

@@ -49,7 +49,7 @@ public class ForbiddenApisFactory implements BuildModuleFactory {
         if (bundled.isEmpty() && signatures.isEmpty()) {
             throw new IllegalArgumentException("The forbiddenapis plugin names no signatures - set " + BUNDLED
                     + "=<bundled signatures, as jdk-unsafe,jdk-deprecated> or " + SIGNATURES
-                    + "=<files of signatures bound as @<input>/<file>=<path>>");
+                    + "=<files of signatures, relative to forbiddenapis.properties>");
         }
         if (Enforcement.ofEnvironment(environment, ForbiddenApisModule.SETTING) == Enforcement.IGNORE) {
             return (_, _) -> { };

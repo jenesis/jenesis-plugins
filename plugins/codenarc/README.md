@@ -9,11 +9,20 @@ Checks the Groovy sources of a module with CodeNarc.
 </ruleset>
 ```
 
-The build discovers the plugin by itself in every module where a configuration folder holds a `codenarc.xml`, and
-resolves it there as `build.jenesis.plugin.codenarc`.
+```properties
+# build.jenesis/codenarc.properties
+configuration=codenarc.xml
+```
 
-It takes no values.
+The build discovers the plugin by itself in every module where a configuration folder holds a `codenarc.properties`,
+and resolves it there as `build.jenesis.plugin.codenarc`; where none is found, a `codenarc.xml` of a configuration
+folder switches it on alone, as if the properties named it. The file names the
+rule set as `configuration=<path>`, relative to `codenarc.properties`, which is required: properties that leave it out
+fail the build, naming the key to add.
 
-It reads the `codenarc.xml` rule set, which the build binds.
+Its other lines are the plugin's values; it takes none.
+
+It reads the rule set that `configuration` names, handed to CodeNarc as `codenarc.xml` whatever its name, which the
+build binds.
 
 `-Djenesis.source.codenarc` sets how findings are treated, as for every checker of the build.

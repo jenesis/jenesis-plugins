@@ -16,26 +16,30 @@ release:
 
 ```properties
 # build.jenesis/jreleaser.properties
+configuration=../jreleaser.yml
 JRELEASER_GITHUB_TOKEN=@github.token
 ```
 
-The build discovers the plugin by itself where a `jreleaser.yml`, `.yaml`, `.toml` or `.json` lies at the project's
-root, and resolves it as `build.jenesis.plugin.jreleaser`. The lines of a `jreleaser.properties` in the configuration
-folder, which may be left out, are its values:
+The build discovers the plugin by itself where the project's configuration folder holds a `jreleaser.properties`, and
+resolves it as `build.jenesis.plugin.jreleaser`; where none is found, a `jreleaser.yml` (or `.yaml`, `.toml`,
+`.json`) of the configuration folder switches it on alone. A file at the project root is never read, so a project that
+releases with JReleaser's own command keeps its file there without the build running it. The file names the JReleaser
+configuration, and its other lines are the plugin's values:
 
-| Value | Meaning |
+| Key | Meaning |
 |---|---|
+| `configuration` | the JReleaser configuration - a `.yml`, `.yaml`, `.toml` or `.json` - relative to `jreleaser.properties`; required |
 | `command` | the JReleaser command to run, `full-release` by default |
 | `JRELEASER_*` | a setting JReleaser reads, such as `JRELEASER_GITHUB_TOKEN=@github.token` |
 
-Any other value is refused. JReleaser runs with `--dry-run` unless the command line passes
+Any other value is refused, and properties that name no `configuration` fail the build, naming the key to add. JReleaser runs with `--dry-run` unless the command line passes
 `-Djenesis.release.publish=true`, which no file may set:
 
 ```shell
 java -Djenesis.release.publish=true -Djenesis.project.version=1.2.3 build/jenesis/Make.java release
 ```
 
-It reads the JReleaser configuration at the project's root, which the build binds. Every `release` and every `pin`
+It reads the JReleaser configuration that `configuration` names, which the build binds. Every `release` and every `pin`
 runs it, dry unless the command line publishes, and `-Djenesis.release.jreleaser=false` switches it off.
 
 JReleaser runs in the project's root with the version the build resolved, `-Djenesis.project.version` included. Every

@@ -15,7 +15,7 @@ The build discovers the plugin by itself in every module but a test module where
 |---|---|
 | `baseline` | the release to compare with, as `<groupId>/<artifactId>[/<version>]` |
 | `severity` | the least severity reported: `equivalent`, `non-breaking`, `potentially-breaking` (the default) or `breaking` |
-| `configuration` | a `revapi.json` beside `revapi.properties`, revapi's own configuration as a JSON array |
+| `configuration` | revapi's own configuration as a JSON array, relative to `revapi.properties` |
 
 Any other value is refused.
 
