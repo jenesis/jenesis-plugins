@@ -39,6 +39,7 @@ setting that switches it off.
 | [`ktfmt`](plugins/ktfmt/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Kotlin sources of a module with ktfmt. |
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |
+| [`openrewrite`](plugins/openrewrite/) | Verifies, or with `-Djenesis.format.rewrite=true` applies, the OpenRewrite recipes a project names to the Java sources of a module. |
 | [`palantir`](plugins/palantir/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with Palantir Java Format. |
 | [`pitest`](plugins/pitest/) | Runs PIT mutation testing over the code a test module tests, reporting which mutants its tests kill. |
 | [`pmd`](plugins/pmd/) | Checks the Java sources of a module with PMD. |
