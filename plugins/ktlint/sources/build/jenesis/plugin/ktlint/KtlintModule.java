@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
@@ -24,7 +23,7 @@ public class KtlintModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "source.ktlint";
+    static final String STRICT = "strict.ktlint";
     private static final String REPORT = BuildStep.REPORTS + "ktlint/ktlint-report.xml";
     private static final String MAVEN_GROUP = "com.pinterest.ktlint", MAVEN_ARTIFACT = "ktlint-cli";
 
@@ -49,7 +48,7 @@ public class KtlintModule implements BuildExecutorModule {
         return new KtlintModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
                 "ktlint",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "ktlint"));
     }
 
@@ -139,7 +138,7 @@ public class KtlintModule implements BuildExecutorModule {
                                           SequencedMap<String, BuildStepArgument> arguments) throws IOException {
             Path report = context.next().resolve(REPORT);
             return Findings.ofXml("ktlint", report, "error")
-                    .acceptable(code, context, true, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, true, strict, STRICT, terms.reporting());
         }
 
         @Override

@@ -10,7 +10,8 @@ external-link.coroutines=https://kotlinlang.org/api/kotlinx.coroutines
 ```
 
 The build discovers the plugin by itself in every module that holds a `.kt` source, and resolves it there as
-`build.jenesis.plugin.kotlin`; a build compiles no Kotlin without it. Dokka takes its values from the lines of a
+`build.jenesis.plugin.kotlin`; a build compiles no Kotlin without it, and `-Djenesis.language.kotlin=false` leaves it
+out, so a module holding a `.kt` source then fails the build. Dokka takes its values from the lines of a
 `dokka.properties` in a configuration folder, if one is there:
 
 | Value | Meaning |

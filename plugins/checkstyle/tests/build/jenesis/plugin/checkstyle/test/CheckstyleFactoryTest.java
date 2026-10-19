@@ -71,26 +71,4 @@ public class CheckstyleFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("config_loc");
     }
-
-    @Test
-    public void wires_nothing_when_its_setting_says_ignore() throws IOException {
-        BuildExecutor executor = BuildExecutor.of(root,
-                Duration.ZERO,
-                new HashDigestFunction("MD5"),
-                BuildStepHashFunction.ofSerializationDigest("MD5"),
-                BuildExecutorCallback.nop(),
-                BuildExecutorCache.nop(),
-                false,
-                false,
-                0);
-        executor.addSource("project", project);
-        executor.addModule("checkstyle", new CheckstyleFactory().create(new Environment(Map.of("source.checkstyle", "ignore")),
-                new LinkedHashMap<>(),
-                Permits.of(1),
-                "checkstyle",
-                Map.of(),
-                Map.of()), "project");
-
-        assertThat(executor.execute().sequencedKeySet()).noneMatch(key -> key.startsWith("checkstyle/"));
-    }
 }

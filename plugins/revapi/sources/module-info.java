@@ -2,7 +2,7 @@
  * Jenesis revapi plugin
  *
  * Analyses the API of a module against the release it names as its baseline with revapi, at the severity its
- * plugin-revapi.properties selects, resolving revapi from the repositories of the build that loads the plugin and running it
+ * revapi.properties selects, resolving revapi from the repositories of the build that loads the plugin and running it
  * in a JVM of its own.
  *
  * @jenesis.release 25

@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
@@ -24,7 +23,7 @@ public class DetektModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "source.detekt";
+    static final String STRICT = "strict.detekt";
     private static final String REPORT = BuildStep.REPORTS + "detekt/detekt-report.xml";
     private static final String MAVEN_GROUP = "io.gitlab.arturbosch.detekt", MAVEN_ARTIFACT = "detekt-cli";
 
@@ -52,7 +51,7 @@ public class DetektModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "detekt",
                 "detekt.yml",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "detekt"));
     }
 
@@ -151,7 +150,7 @@ public class DetektModule implements BuildExecutorModule {
                                           SequencedMap<String, BuildStepArgument> arguments) throws IOException {
             Path report = context.next().resolve(REPORT);
             return Findings.ofXml("detekt", report, "error")
-                    .acceptable(code, context, true, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, true, strict, STRICT, terms.reporting());
         }
 
         @Override

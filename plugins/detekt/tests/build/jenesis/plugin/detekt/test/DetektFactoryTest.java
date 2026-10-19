@@ -61,26 +61,4 @@ public class DetektFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("unknown");
     }
-
-    @Test
-    public void wires_nothing_when_its_setting_says_ignore() throws IOException {
-        BuildExecutor executor = BuildExecutor.of(root,
-                Duration.ZERO,
-                new HashDigestFunction("MD5"),
-                BuildStepHashFunction.ofSerializationDigest("MD5"),
-                BuildExecutorCallback.nop(),
-                BuildExecutorCache.nop(),
-                false,
-                false,
-                0);
-        executor.addSource("project", project);
-        executor.addModule("detekt", new DetektFactory().create(new Environment(Map.of("source.detekt", "ignore")),
-                new LinkedHashMap<>(),
-                Permits.of(1),
-                "detekt",
-                Map.of(),
-                Map.of()), "project");
-
-        assertThat(executor.execute().sequencedKeySet()).noneMatch(key -> key.startsWith("detekt/"));
-    }
 }

@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
@@ -24,7 +23,7 @@ public class CodeNarcModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "source.codenarc";
+    static final String STRICT = "strict.codenarc";
     private static final String REPORT = BuildStep.REPORTS + "codenarc/codenarc-report.xml";
 
     private final Dependencies dependencies;
@@ -51,7 +50,7 @@ public class CodeNarcModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "codenarc",
                 "codenarc.xml",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "codenarc"));
     }
 
@@ -152,7 +151,7 @@ public class CodeNarcModule implements BuildExecutorModule {
                                           SequencedMap<String, BuildStepArgument> arguments) throws IOException {
             Path report = context.next().resolve(REPORT);
             return Findings.ofXml("codenarc", report, "Violation")
-                    .acceptable(code, context, false, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, false, strict, STRICT, terms.reporting());
         }
 
         @Override

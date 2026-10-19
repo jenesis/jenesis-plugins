@@ -25,4 +25,4 @@ Any other value is refused.
 It reads no file. PIT runs the tests with the JUnit Platform launcher of the version the test module pins for
 `org.junit.platform/junit-platform-engine` or `junit-platform-commons`, or else of the version its tests resolved.
 
-`-Djenesis.mutate.pitest=false` switches it off.
+`-Djenesis.observe.pitest=false` switches it off.

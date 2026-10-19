@@ -70,9 +70,11 @@ arguments=-visitor
 @grammars/antlr=../grammar
 ```
 
-A setting of its tool switches a plugin off, as `-Djenesis.generate.antlr=false` does this one; a language plugin has
-none. `jenesis.plugins.properties` and `plugin-<name>.properties` remain for a plugin of the project's own or of a
-third party, and name none of these.
+A plugin is switched off by a setting named after the part of the build it belongs to, `check`, `format`, `validate`,
+`artifact`, `generate`, `language`, `observe`, `documentation` or `release`, as `-Djenesis.generate.antlr=false` switches
+off this one. `jenesis.plugins.properties` and `plugin-<name>.properties` remain for a plugin of the project's own or of
+a third party, which runs and resolves as `plugin.<name>` and which `-Djenesis.plugin.<name>=false` switches off, so it
+runs beside a plugin here of the same name without either touching the other.
 
 A plugin reads only the files the build binds for it: the tool's own file its properties name and what that names
 beside it - the `${config_loc}/<path>` files of a Checkstyle configuration, the `signatures` of a

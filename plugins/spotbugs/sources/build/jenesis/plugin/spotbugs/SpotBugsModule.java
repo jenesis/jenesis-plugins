@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
 import build.jenesis.step.ProcessBuildStep;
@@ -23,7 +22,7 @@ public class SpotBugsModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "validator.spotbugs";
+    static final String STRICT = "strict.spotbugs";
     private static final String REPORT = BuildStep.REPORTS + "spotbugs/spotbugs-report.xml";
     private static final String MAVEN_GROUP = "com.github.spotbugs", MAVEN_ARTIFACT = "spotbugs";
 
@@ -54,7 +53,7 @@ public class SpotBugsModule implements BuildExecutorModule {
                 "spotbugs",
                 "main",
                 "spotbugs-exclude.xml",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "spotbugs"));
     }
 
@@ -162,7 +161,7 @@ public class SpotBugsModule implements BuildExecutorModule {
                                           SequencedMap<String, BuildStepArgument> arguments) throws IOException {
             Path report = context.next().resolve(REPORT);
             return Findings.ofXml("spotbugs", report, "BugInstance")
-                    .acceptable(code, context, false, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, false, strict, STRICT, terms.reporting());
         }
 
         @Override

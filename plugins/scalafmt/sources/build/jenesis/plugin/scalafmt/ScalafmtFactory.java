@@ -8,7 +8,6 @@ import build.jenesis.Environment;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
-import build.jenesis.project.Enforcement;
 
 @BuildModuleName("check")
 public class ScalafmtFactory implements BuildModuleFactory {
@@ -24,9 +23,6 @@ public class ScalafmtFactory implements BuildModuleFactory {
             throw new IllegalArgumentException("The scalafmt check takes no values, but was handed "
                     + properties.sequencedKeySet()
                     + ": set jenesis.source.scalafmt instead");
-        }
-        if (Enforcement.ofEnvironment(environment, ScalafmtModule.SETTING) == Enforcement.IGNORE) {
-            return (_, _) -> { };
         }
         return ScalafmtModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)

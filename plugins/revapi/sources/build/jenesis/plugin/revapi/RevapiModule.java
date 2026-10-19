@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
 import build.jenesis.step.ProcessBuildStep;
@@ -23,7 +22,7 @@ public class RevapiModule implements BuildExecutorModule {
 
     public static final String COMPARE = "compare", CONFIGURATION = "revapi.properties", ANALYSIS = "revapi.json";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "artifact.revapi", REPORT = BuildStep.REPORTS + "revapi/revapi.json";
+    static final String STRICT = "strict.revapi", REPORT = BuildStep.REPORTS + "revapi/revapi.json";
     private static final String MAVEN_GROUP = "org.revapi";
     private static final List<String> EXTENSIONS = List.of("revapi-java", "revapi-basic-features", "revapi-reporter-json");
 
@@ -57,7 +56,7 @@ public class RevapiModule implements BuildExecutorModule {
                 "main",
                 null,
                 Severity.POTENTIALLY_BREAKING,
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "revapi"));
     }
 
@@ -179,7 +178,7 @@ public class RevapiModule implements BuildExecutorModule {
             }
             return new Findings("revapi", report, Json.parse(Files.readString(report)) instanceof List<?> found
                     ? found.size()
-                    : -1).acceptable(code, context, false, strict, SETTING, terms.reporting());
+                    : -1).acceptable(code, context, false, strict, STRICT, terms.reporting());
         }
 
         @Override

@@ -45,7 +45,7 @@ public class SpotBugsModuleTest {
                 Map.of()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("[effort]")
-                .hasMessageContaining("jenesis.validator.spotbugs");
+                .hasMessageContaining("jenesis.strict.spotbugs");
     }
 
     @Test

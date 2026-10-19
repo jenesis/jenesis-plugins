@@ -233,7 +233,8 @@ public class JReleaserModule implements BuildExecutorModule {
             }
             if (configuration == null) {
                 throw new IllegalStateException("The JReleaser step is handed no configuration - bind one of "
-                        + CONFIGURATIONS + " in plugin-<name>.properties, as @jreleaser=jreleaser.yml");
+                        + CONFIGURATIONS + " as configuration= in jreleaser.properties, or as @jreleaser=jreleaser.yml where"
+                        + " jenesis.plugins.properties names the plugin");
             }
             if (jars.isEmpty()) {
                 throw new IllegalStateException("No JReleaser jar resolved upstream of the JReleaser step");

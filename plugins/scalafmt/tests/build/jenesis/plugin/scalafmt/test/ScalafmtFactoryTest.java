@@ -61,26 +61,4 @@ public class ScalafmtFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("unknown");
     }
-
-    @Test
-    public void wires_nothing_when_its_setting_says_ignore() throws IOException {
-        BuildExecutor executor = BuildExecutor.of(root,
-                Duration.ZERO,
-                new HashDigestFunction("MD5"),
-                BuildStepHashFunction.ofSerializationDigest("MD5"),
-                BuildExecutorCallback.nop(),
-                BuildExecutorCache.nop(),
-                false,
-                false,
-                0);
-        executor.addSource("project", project);
-        executor.addModule("scalafmt", new ScalafmtFactory().create(new Environment(Map.of("source.scalafmt", "ignore")),
-                new LinkedHashMap<>(),
-                Permits.of(1),
-                "scalafmt",
-                Map.of(),
-                Map.of()), "project");
-
-        assertThat(executor.execute().sequencedKeySet()).noneMatch(key -> key.startsWith("scalafmt/"));
-    }
 }
