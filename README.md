@@ -56,7 +56,7 @@ setting that switches it off.
 Each is the module `build.jenesis.plugin.<folder>`, published as `build.jenesis:build.jenesis.plugin.<folder>`. A
 project does not name it: the build tool discovers each plugin by itself, as it discovered the tool when the tool was
 built in, where a configuration folder of a module holds its `<tool>.properties` - an `antlr.properties`, a
-`checkstyle.properties`, a `javaformat.properties` naming its formatter - or, for a language, where a module holds a
+`checkstyle.properties`, a `googlejavaformat.properties` - or, for a language, where a module holds a
 source of it. The properties name the tool's own file as `configuration=<path>`, relative to them, and fail the build
 naming the key where they leave it out. Where no configuration folder holds the properties, the tool's one conventional
 file there - a `checkstyle.xml`, an `.editorconfig`, a `jreleaser.yml` - switches it on alone, handed to the plugin as
@@ -78,7 +78,7 @@ runs beside a plugin here of the same name without either touching the other.
 
 A plugin reads only the files the build binds for it: the tool's own file its properties name and what that names
 beside it - the `${config_loc}/<path>` files of a Checkstyle configuration, the `signatures` of a
-`forbiddenapis.properties`, the `profile` of an Eclipse `javaformat.properties` - and, for a generator, what its file
+`forbiddenapis.properties`, the profile an `eclipse.properties` names - and, for a generator, what its file
 binds with `@<input>[/<target>]=<path>` lines,
 each path resolved against the module's own folder; a folder stays within the project, while a file may lie
 outside it, so that several projects share one. A value is resolved before the plugin sees it, `@<key>` standing
