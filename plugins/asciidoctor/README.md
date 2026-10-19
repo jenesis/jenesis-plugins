@@ -36,4 +36,4 @@ neither the time nor the version it was converted with, and a document that incl
 build.
 
 AsciidoctorJ resolves in the tool group of the plugin, `asciidoctor:tool/…`, and `pin` writes its closure, JRuby
-included, into `jenesis.plugins.pin.properties`. `-Djenesis.project.asciidoctor=false` switches it off.
+included, into `jenesis.plugins.pin.properties`. `-Djenesis.documentation.asciidoctor=false` switches it off.

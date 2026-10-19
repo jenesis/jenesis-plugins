@@ -3,7 +3,7 @@
  *
  * Compiles the Kotlin sources of a module with kotlinc ahead of javac, in one JVM the build keeps warm under
  * jenesis.process.mode=daemon and incrementally where jenesis.kotlin.incremental asks for it, and documents them
- * with Dokka, configured by the dokka values of its plugin-kotlin.properties, resolving both tools from the
+ * with Dokka, configured by the values of a dokka.properties, resolving both tools from the
  * repositories of the build that loads the plugin.
  *
  * @jenesis.release 25

@@ -7,7 +7,6 @@ import build.jenesis.Environment;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
-import build.jenesis.project.Enforcement;
 
 public class PmdFactory implements BuildModuleFactory {
 
@@ -22,9 +21,6 @@ public class PmdFactory implements BuildModuleFactory {
             throw new IllegalArgumentException("The PMD plugin takes no values, but was handed "
                     + properties.sequencedKeySet()
                     + ": set jenesis.source.pmd and jenesis.pmd.priority instead");
-        }
-        if (Enforcement.ofEnvironment(environment, PmdModule.SETTING) == Enforcement.IGNORE) {
-            return (_, _) -> { };
         }
         return PmdModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group + ":tool");
     }

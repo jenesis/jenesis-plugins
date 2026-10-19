@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
 import build.jenesis.step.ProcessBuildStep;
@@ -23,7 +22,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "validator.forbiddenapis";
+    static final String STRICT = "strict.forbiddenapis";
     private static final String REPORT = BuildStep.REPORTS + "forbiddenapis/forbiddenapis.txt";
     private static final String MAVEN_GROUP = "de.thetaphi", MAVEN_ARTIFACT = "forbiddenapis";
     private static final Set<String> VERSIONED = Set.of("jdk-unsafe", "jdk-deprecated", "jdk-internal");
@@ -68,7 +67,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "forbiddenapis",
                 "main",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 List.of(),
                 List.of(),
                 List.of(),
@@ -467,7 +466,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
             Files.createDirectories(report.getParent());
             Files.write(report, findings);
             return new Findings("forbiddenapis", report, findings.size())
-                    .acceptable(code, context, true, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, true, strict, STRICT, terms.reporting());
         }
 
         @Override

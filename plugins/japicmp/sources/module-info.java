@@ -2,7 +2,7 @@
  * Jenesis japicmp plugin
  *
  * Compares the API of a module with the release it names as its baseline using japicmp, reporting or failing on the
- * changes its plugin-japicmp.properties selects, resolving the tool from the repositories of the build that loads the
+ * changes its japicmp.properties selects, resolving the tool from the repositories of the build that loads the
  * plugin and running it in a JVM of its own.
  *
  * @jenesis.release 25

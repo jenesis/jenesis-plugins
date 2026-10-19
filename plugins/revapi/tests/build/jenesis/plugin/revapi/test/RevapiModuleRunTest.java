@@ -85,7 +85,7 @@ public class RevapiModuleRunTest {
                 .rootCause()
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("revapi found")
-                .hasMessageContaining("jenesis.artifact.revapi=strict");
+                .hasMessageContaining("jenesis.strict.revapi is true");
     }
 
     private RevapiModule module() {

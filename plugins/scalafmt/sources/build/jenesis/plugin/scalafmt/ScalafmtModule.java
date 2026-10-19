@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
@@ -24,7 +23,7 @@ public class ScalafmtModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "source.scalafmt";
+    static final String STRICT = "strict.scalafmt";
     private static final String MAVEN_GROUP = "org.scalameta", MAVEN_ARTIFACT = "scalafmt-cli_2.13";
     private static final int TEST_ERROR = 1;
 
@@ -52,7 +51,7 @@ public class ScalafmtModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "scalafmt",
                 ".scalafmt.conf",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "scalafmt"));
     }
 
@@ -161,7 +160,7 @@ public class ScalafmtModule implements BuildExecutorModule {
                 }
             }
             return new Findings("scalafmt", diff, findings)
-                    .acceptable(code, context, true, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, true, strict, STRICT, terms.reporting());
         }
 
         @Override

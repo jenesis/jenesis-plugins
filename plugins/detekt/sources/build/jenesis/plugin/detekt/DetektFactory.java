@@ -7,7 +7,6 @@ import build.jenesis.Environment;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
-import build.jenesis.project.Enforcement;
 
 public class DetektFactory implements BuildModuleFactory {
 
@@ -22,9 +21,6 @@ public class DetektFactory implements BuildModuleFactory {
             throw new IllegalArgumentException("The detekt plugin takes no values, but was handed "
                     + properties.sequencedKeySet()
                     + ": set jenesis.source.detekt instead");
-        }
-        if (Enforcement.ofEnvironment(environment, DetektModule.SETTING) == Enforcement.IGNORE) {
-            return (_, _) -> { };
         }
         return DetektModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)

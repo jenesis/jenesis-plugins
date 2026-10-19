@@ -53,7 +53,7 @@ public class ForbiddenApisModuleRunTest {
                 .rootCause()
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("forbiddenapis found 2 findings")
-                .hasMessageContaining("jenesis.validator.forbiddenapis=strict");
+                .hasMessageContaining("jenesis.strict.forbiddenapis is true");
     }
 
     private void compile() throws IOException {

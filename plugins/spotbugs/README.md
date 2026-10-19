@@ -25,4 +25,5 @@ every finding. Its other lines are the plugin's values; it takes none.
 It reads the filter that `configuration` names, handed to SpotBugs as `spotbugs-exclude.xml` whatever its name, which
 the build binds.
 
-`-Djenesis.validator.spotbugs` sets how findings are treated, as for every checker of the build.
+`-Djenesis.validate.spotbugs=false` switches it off, and `-Djenesis.strict.spotbugs=true` fails the build on its findings rather
+than reporting them, as for every checker of the build.

@@ -30,4 +30,5 @@ Its other lines are the plugin's values; it takes none.
 It reads the configuration that `configuration` names, handed to Scalastyle as `scalastyle-config.xml` whatever its name, which the
 build binds.
 
-`-Djenesis.source.scalastyle` sets how findings are treated, as for every checker of the build.
+`-Djenesis.check.scalastyle=false` switches it off, and `-Djenesis.strict.scalastyle=true` fails the build on its findings rather
+than reporting them, as for every checker of the build.

@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
@@ -25,7 +24,7 @@ public class CheckstyleModule implements BuildExecutorModule {
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
     private static final String PROPERTIES = "checkstyle.properties", CONFIG_LOC_KEY = "config_loc";
-    static final String SETTING = "source.checkstyle";
+    static final String STRICT = "strict.checkstyle";
     private static final String REPORT = BuildStep.REPORTS + "checkstyle/checkstyle-report.xml";
     private static final String MAVEN_GROUP = "com.puppycrawl.tools", MAVEN_ARTIFACT = "checkstyle";
 
@@ -55,7 +54,7 @@ public class CheckstyleModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "checkstyle",
                 "checkstyle.xml",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 Collections.emptySortedMap(),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "checkstyle"));
     }
@@ -202,7 +201,7 @@ public class CheckstyleModule implements BuildExecutorModule {
                                           SequencedMap<String, BuildStepArgument> arguments) throws IOException {
             Path report = context.next().resolve(REPORT);
             return Findings.ofXml("checkstyle", report, "error")
-                    .acceptable(code, context, true, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, true, strict, STRICT, terms.reporting());
         }
 
         @Override

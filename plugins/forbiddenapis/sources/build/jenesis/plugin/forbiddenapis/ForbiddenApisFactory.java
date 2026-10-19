@@ -7,7 +7,6 @@ import build.jenesis.Environment;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
-import build.jenesis.project.Enforcement;
 import build.jenesis.SequencedProperties;
 
 public class ForbiddenApisFactory implements BuildModuleFactory {
@@ -50,9 +49,6 @@ public class ForbiddenApisFactory implements BuildModuleFactory {
             throw new IllegalArgumentException("The forbiddenapis plugin names no signatures - set " + BUNDLED
                     + "=<bundled signatures, as jdk-unsafe,jdk-deprecated> or " + SIGNATURES
                     + "=<files of signatures, relative to forbiddenapis.properties>");
-        }
-        if (Enforcement.ofEnvironment(environment, ForbiddenApisModule.SETTING) == Enforcement.IGNORE) {
-            return (_, _) -> { };
         }
         return ForbiddenApisModule.ofEnvironment(environment, repositories, resolvers)
                 .permits(permits)

@@ -25,4 +25,5 @@ Its other lines are the plugin's values; it takes none.
 It reads the rule set that `configuration` names, handed to PMD as `pmd.xml` whatever its name, which the
 build binds.
 
-`-Djenesis.source.pmd` and `-Djenesis.pmd.priority` set how findings are treated, as for every checker of the build.
+`-Djenesis.check.pmd=false` switches it off, and `-Djenesis.strict.pmd=true` fails the build on its findings rather
+than reporting them, as for every checker of the build; `-Djenesis.pmd.priority` sets the lowest rule priority PMD runs.

@@ -13,7 +13,6 @@ import build.jenesis.Pinning;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
-import build.jenesis.project.Enforcement;
 import build.jenesis.step.Bind;
 import build.jenesis.step.Dependencies;
 import build.jenesis.step.Findings;
@@ -24,7 +23,7 @@ public class PmdModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String SETTING = "source.pmd", PRIORITY = "pmd.priority";
+    static final String STRICT = "strict.pmd", PRIORITY = "pmd.priority";
     private static final String REPORT = BuildStep.REPORTS + "pmd/pmd-report.xml";
     private static final String MAVEN_GROUP = "net.sourceforge.pmd", MAVEN_ARTIFACT = "pmd-dist";
 
@@ -54,7 +53,7 @@ public class PmdModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "pmd",
                 "pmd.xml",
-                Enforcement.ofEnvironment(environment, SETTING) == Enforcement.STRICT,
+                environment.flag(STRICT, false),
                 environment.number(PRIORITY, 5),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "pmd"));
     }
@@ -167,7 +166,7 @@ public class PmdModule implements BuildExecutorModule {
                                           SequencedMap<String, BuildStepArgument> arguments) throws IOException {
             Path report = context.next().resolve(REPORT);
             return Findings.ofXml("pmd", report, "violation")
-                    .acceptable(code, context, true, strict, SETTING, terms.reporting());
+                    .acceptable(code, context, true, strict, STRICT, terms.reporting());
         }
 
         @Override

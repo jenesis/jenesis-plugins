@@ -27,4 +27,5 @@ Its other lines are the plugin's values; it takes none.
 It reads the configuration that `configuration` names, handed to detekt as `detekt.yml` whatever its name, which the
 build binds.
 
-`-Djenesis.source.detekt` sets how findings are treated, as for every checker of the build.
+`-Djenesis.check.detekt=false` switches it off, and `-Djenesis.strict.detekt=true` fails the build on its findings rather
+than reporting them, as for every checker of the build.

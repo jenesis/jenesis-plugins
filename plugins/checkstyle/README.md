@@ -37,5 +37,5 @@ It reads the configuration, handed to Checkstyle as `checkstyle.xml` whatever it
 `${config_loc}/<path>` beside it, all of which the build binds. Properties that name no `configuration` fail the build,
 naming the key to add.
 
-`-Djenesis.source.checkstyle` - `ignore`, `report` or `strict` - sets how findings are treated, as for every checker of
-the build.
+`-Djenesis.check.checkstyle=false` switches it off, and `-Djenesis.strict.checkstyle=true` fails the build on its
+findings rather than reporting them, as for every checker of the build.

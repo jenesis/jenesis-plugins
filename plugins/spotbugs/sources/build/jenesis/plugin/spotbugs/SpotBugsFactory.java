@@ -7,7 +7,6 @@ import build.jenesis.Environment;
 import build.jenesis.Permits;
 import build.jenesis.Repository;
 import build.jenesis.Resolver;
-import build.jenesis.project.Enforcement;
 
 public class SpotBugsFactory implements BuildModuleFactory {
 
@@ -21,10 +20,7 @@ public class SpotBugsFactory implements BuildModuleFactory {
         if (!properties.isEmpty()) {
             throw new IllegalArgumentException("The SpotBugs plugin takes no values, but was handed "
                     + properties.sequencedKeySet()
-                    + ": set jenesis.validator.spotbugs instead");
-        }
-        if (Enforcement.ofEnvironment(environment, SpotBugsModule.SETTING) == Enforcement.IGNORE) {
-            return (_, _) -> { };
+                    + " - remove them, as SpotBugs reads jenesis.strict.spotbugs alone");
         }
         return SpotBugsModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group + ":tool");
     }
