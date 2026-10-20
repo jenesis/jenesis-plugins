@@ -18,7 +18,7 @@ public class JReleaserExampleTest {
                 .write("build.jenesis/jreleaser.properties", """
                         command=config
                         JRELEASER_GITHUB_TOKEN=unused
-                        @jreleaser=jreleaser.yml
+                        configuration=../jreleaser.yml
                         """)
                 .write("jreleaser.yml", """
                         project:

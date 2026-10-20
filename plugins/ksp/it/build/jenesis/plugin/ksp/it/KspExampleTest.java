@@ -34,7 +34,7 @@ public class KspExampleTest {
                             <artifactId>example</artifactId>
                             <version>1.0.0</version>
 
-                            <!--jenesis.plugin ksp:processor maven/com.squareup.moshi/moshi-kotlin-codegen-->
+                            <!--jenesis.plugin plugin.ksp:processor maven/com.squareup.moshi/moshi-kotlin-codegen-->
 
                             <build>
                                 <sourceDirectory>sources</sourceDirectory>
