@@ -114,6 +114,15 @@ jobs:
           find "$STAGED" -mindepth 1 -maxdepth 1 -type d ! -name "build.jenesis.plugin.$PLUGIN" -exec rm -rf {} +
           find target/stage/maven/output -type f | sort
 
+      - name: Tag the released commit
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if [ "$(git rev-parse -q --verify "refs/tags/$TAG^{commit}")" != "$(git rev-parse HEAD)" ]; then
+            git tag "$TAG"
+            git push origin "refs/tags/$TAG"
+          fi
+
       - name: JReleaser deploy
         uses: jreleaser/release-action@90ac653bb9c79d11179e65d81499f3f34527dcd5 # 2.5.0
         with:
