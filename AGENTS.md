@@ -19,7 +19,9 @@ rule there applies here as well; this file adds what is particular to the plugin
 
 - A plugin is `plugins/<tool>/sources/module-info.java`, module `build.jenesis.plugin.<tool>`, which `requires
   build.jenesis`, exports its package and `provides build.jenesis.BuildModuleFactory`. Its tests are
-  `plugins/<tool>/tests/`, the `@jenesis.test build.jenesis.plugin.<tool>` module.
+  `plugins/<tool>/tests/`, the `@jenesis.test build.jenesis.plugin.<tool>` module. The empty
+  `build.jenesis/classpath.properties` has the build write each plugin's `META-INF/services` from its `provides`, so
+  a plugin named by its Maven coordinate, which loads on a class path, is found there too.
 - A plugin that observes the tests, as JaCoCo does, provides a `build.jenesis.ObservabilityFactory` instead and is
   wired at the hook point `observe`: its `Observation` pairs the `ObservabilityEngine` that joins the tests' JVM, named
   after the group it was handed so that the agent it names resolves in `<group>:agent`, with the module that reports
