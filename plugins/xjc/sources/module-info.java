@@ -5,8 +5,8 @@
  * build that loads the plugin and running it in a JVM of its own.
  *
  * @jenesis.release 25
- * @jenesis.pin build.jenesis 0.16.1 SHA-256/2c74e5fd279e77d855cdf13719e443e0b3f0864e097486e03d065d39be0ce37b
- * @jenesis.pin build.jenesis/build.jenesis 0.16.1 SHA-256/2c74e5fd279e77d855cdf13719e443e0b3f0864e097486e03d065d39be0ce37b
+ * @jenesis.pin build.jenesis 0.17.0 SHA-256/a875ab473238e7191332698fab64db7b4a4d7a484da6beb313a4a4beb10c60fc
+ * @jenesis.pin build.jenesis/build.jenesis 0.17.0 SHA-256/a875ab473238e7191332698fab64db7b4a4d7a484da6beb313a4a4beb10c60fc
  * @jenesis.pin com.sun.istack/istack-commons-runtime 4.1.2 SHA-256/7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee
  * @jenesis.pin com.sun.istack/istack-commons-tools 4.1.2 SHA-256/85b4fe7ad6fdfc64a586133f039d3de7b51db2c8111a1aa98a267891e27f386f
  * @jenesis.pin com.sun.xml.bind.external/relaxng-datatype 4.0.9 SHA-256/89933721c2dc654049ebea84a33e2f3d36e918e5871ccb6f08df1960779c5cb9
