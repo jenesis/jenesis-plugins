@@ -24,6 +24,7 @@ setting that switches it off.
 |---|---|
 | [`antlr`](plugins/antlr/) | Generates a lexer and parser from ANTLR `.g4` grammars into the sources of a module. |
 | [`asciidoctor`](plugins/asciidoctor/) | Converts the AsciiDoc documents of a project to HTML with AsciidoctorJ and stages them with the files that belong to no module. |
+| [`asyncprofiler`](plugins/asyncprofiler/) | Profiles a module's tests with async-profiler, attached as an agent to the JVM the tests run in, and writes what it sampled to the reports of the test step. |
 | [`avro`](plugins/avro/) | Generates Java sources from Avro schemas (`.avsc`) and protocols (`.avpr`). |
 | [`checkstyle`](plugins/checkstyle/) | Checks the Java sources of a module with Checkstyle. |
 | [`codenarc`](plugins/codenarc/) | Checks the Groovy sources of a module with CodeNarc. |
