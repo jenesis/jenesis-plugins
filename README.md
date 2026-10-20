@@ -32,6 +32,7 @@ setting that switches it off.
 | [`eclipse`](plugins/eclipse/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Eclipse formatter. |
 | [`forbiddenapis`](plugins/forbiddenapis/) | Checks the compiled classes of a module with forbiddenapis against bundled signatures and signatures files of the project. |
 | [`googlejavaformat`](plugins/googlejavaformat/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with google-java-format. |
+| [`gradleplugin`](plugins/gradleplugin/) | Stages the marker of every Gradle plugin a staged jar declares, so that a build resolves the plugin by its ID from the Maven repository the project is published to. |
 | [`groovy`](plugins/groovy/) | Compiles the Groovy sources of a module with groovyc, after javac and against the classes it wrote, and documents them with Groovydoc. |
 | [`jacoco`](plugins/jacoco/) | Measures the code coverage of a module's tests with the JaCoCo agent and reports it, failing the build where a limit is not met. |
 | [`japicmp`](plugins/japicmp/) | Compares the API of a module with a released baseline using japicmp. |
