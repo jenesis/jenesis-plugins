@@ -15,9 +15,7 @@ public class MavenPluginExampleTest {
     @Test
     public void writes_the_descriptor_of_the_mojos_a_module_declares_into_its_jar() throws IOException {
         ExampleProject project = ExampleProject.of(folder, MavenPluginFactory.class)
-                .write("jenesis.plugins.properties",
-                        "mavenplugin+binary/transform=build.jenesis.plugin.mavenplugin\n")
-                .write("src/main/build.jenesis/plugin-mavenplugin.properties", "goalprefix=greet\n")
+                .write("src/main/build.jenesis/mavenplugin.properties", "goalprefix=greet\n")
                 .write("pom.xml", """
                         <project xmlns="http://maven.apache.org/POM/4.0.0">
                           <modelVersion>4.0.0</modelVersion>
