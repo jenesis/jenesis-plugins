@@ -22,12 +22,19 @@ public class ScalastyleModuleRunTest {
 
     private static final String PINS = """
             scalastyle/maven/com.beautiful-scala/scalastyle_2.13 1.5.1 SHA-256/469254118554648963ebeb2e8c0be0f4c093b8099ed05794b70de3c37e3ba7a1
+            scalastyle/maven/com.beautiful-scala/scalastyle_2.13/pom/1.5.1 1.5.1 SHA-256/5ca54a97bea7a6e2172f594333e255fc710bd27733e30538fa82cd569977d022
             scalastyle/maven/com.typesafe/config 1.4.1 SHA-256/4c0aa7e223c75c8840c41fc183d4cd3118140a1ee503e3e08ce66ed2794c948f
+            scalastyle/maven/com.typesafe/config/pom/1.4.1 1.4.1 SHA-256/bfee1f21d2807622729f8e122684132c72378f3739b95763f2ef97dc261322a6
             scalastyle/maven/org.scala-lang.modules/scala-collection-compat_2.13 2.5.0 SHA-256/93f8bf202ac28c4ca13562e31f6881a7770768e12b056b568139f37c025a3841
+            scalastyle/maven/org.scala-lang.modules/scala-collection-compat_2.13/pom/2.5.0 2.5.0 SHA-256/cbdfad14df17290a9b81770cb826f74e107450ceb96018656763342a6f577683
             scalastyle/maven/org.scala-lang.modules/scala-parser-combinators_2.13 1.1.2 SHA-256/5c285b72e6dc0a98e99ae0a1ceeb4027dab9adfa441844046bd3f19e0efdcb54
+            scalastyle/maven/org.scala-lang.modules/scala-parser-combinators_2.13/pom/1.1.2 1.1.2 SHA-256/5c856fefc046a88de0118ac5e45cddf638975fa980c007d242633276f7266f02
             scalastyle/maven/org.scala-lang.modules/scala-xml_2.13 1.2.0 SHA-256/213d2b7840bed5d1a1d5abfa1d72d7c7454473a6f77ea329fff0574910056fd3
+            scalastyle/maven/org.scala-lang.modules/scala-xml_2.13/pom/1.2.0 1.2.0 SHA-256/cc95389302eb1608eb08fc1a30ef262a2ba7333b9e3ae40edaa82524f2f3bbc3
             scalastyle/maven/org.scala-lang/scala-library 2.13.6 SHA-256/f19ed732e150d3537794fd3fe42ee18470a3f707efd499ecd05a99e727ff6c8a
+            scalastyle/maven/org.scala-lang/scala-library/pom/2.13.6 2.13.6 SHA-256/8021cd27867f1503c906e5a9881933309f2ad7daca20ca13c96b81fbdc5ec9e8
             scalastyle/maven/org.scalariform/scalariform_2.13 0.2.10 SHA-256/76b6266960750e560b5a3cbbaa58074e909d0da50adf138b6e83555781bb2596
+            scalastyle/maven/org.scalariform/scalariform_2.13/pom/0.2.10 0.2.10 SHA-256/fa615f392c69c1acddd8bd7385a35cec8d043e51c2eee3b4dd48defe550c2a10
             """;
     private static final String VERSION = "1.5.1";
     private static final String CONFIG = """

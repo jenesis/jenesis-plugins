@@ -1,6 +1,7 @@
 package build.jenesis.plugin.scala;
 
 import module java.base;
+import build.jenesis.Environment.Setting;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassFile;
 import build.jenesis.BuildExecutor;
@@ -27,7 +28,8 @@ public class ScalaCompilerModule implements BuildExecutorModule {
     private static final String REQUIRED = "required",
             RESOLUTION = "dependencies",
             ZINC_RESOLUTION = "zinc",
-            STATE = "state.properties";
+            STATE = "state.properties",
+            PENDING = "state.pending";
     private static final List<String> PREFERRED_PREFIXES = List.of("maven", "module");
     private static final String MODULE_NAME = "org.scala.lang.scala3.compiler",
             MAVEN_GROUP = "org.scala-lang",
@@ -65,7 +67,7 @@ public class ScalaCompilerModule implements BuildExecutorModule {
         return new ScalaCompilerModule(resolvers,
                 Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
-                environment.flag("scala.incremental", false),
+                environment.flag("scala.incremental", false, Setting.PROJECT),
                 "scalac",
                 "zinc",
                 "main",
@@ -236,6 +238,19 @@ public class ScalaCompilerModule implements BuildExecutorModule {
             this.tool = tool;
             this.zinc = zinc;
             this.group = group;
+        }
+
+        @Override
+        public boolean acceptableExitCode(int code,
+                                          Executor executor,
+                                          BuildStepContext context,
+                                          SequencedMap<String, BuildStepArgument> arguments) throws IOException {
+            boolean acceptable = super.acceptableExitCode(code, executor, context, arguments);
+            Path pending = context.persistent().resolve(PENDING);
+            if (acceptable && Files.isRegularFile(pending)) {
+                Files.move(pending, context.persistent().resolve(STATE), StandardCopyOption.REPLACE_EXISTING);
+            }
+            return acceptable;
         }
 
         @Override
@@ -454,7 +469,8 @@ public class ScalaCompilerModule implements BuildExecutorModule {
                     }
                 }
             }
-            configuration.store(state.resolve(STATE));
+            Files.deleteIfExists(state.resolve(STATE));
+            configuration.store(state.resolve(PENDING));
             commands.addAll(List.of(
                     IncrementalScalaCompiler.ANALYSIS,
                     state.resolve("analysis.bin").toString(),

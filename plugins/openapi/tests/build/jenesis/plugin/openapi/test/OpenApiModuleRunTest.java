@@ -20,7 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OpenApiModuleRunTest {
 
     private static final String PINS = """
+            openapi/maven/org.junit/junit-bom/pom/5.10.2 5.10.2 SHA-256/169dd904a4b0f6520cffe658cc62292bfe9f3c14a989fa92120724cde43a9968
             openapi/maven/org.openapitools/openapi-generator-cli 7.25.0 SHA-256/41ce4f6b07f196676439d710759fa1ced7a08066d06ff1bf314681470289efae
+            openapi/maven/org.openapitools/openapi-generator-cli/pom/7.25.0 7.25.0 SHA-256/8fd322115776682468db4887ede1a0e432bd859efc5570efe68d826fff20f109
+            openapi/maven/org.openapitools/openapi-generator-project/pom/7.25.0 7.25.0 SHA-256/1a7083fe73ee36210e7b65ce3b0e233cbef85d6f79c953578dd7287006acf68a
+            openapi/maven/org.sonatype.oss/oss-parent/pom/5 5 SHA-256/1678d4120a585d8a630131aeec4c524d928398583b7eab616ee7d5a87f520d3d
             """;
     private static final String SPECIFICATION = """
             openapi: 3.0.3
