@@ -26,6 +26,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
     private static final String REQUIRED = "required",
             COMPILED = "compiled",
             STATE = "state.properties",
+            PENDING = "state.pending",
             LISTING = "sources.properties";
     private static final List<String> PREFERRED_PREFIXES = List.of("maven", "module");
     private static final String MODULE_NAME = "kotlin.compiler.embeddable",
@@ -216,6 +217,19 @@ public class KotlinCompilerModule implements BuildExecutorModule {
         }
 
         @Override
+        public boolean acceptableExitCode(int code,
+                                          Executor executor,
+                                          BuildStepContext context,
+                                          SequencedMap<String, BuildStepArgument> arguments) throws IOException {
+            boolean acceptable = super.acceptableExitCode(code, executor, context, arguments);
+            Path pending = context.persistent().resolve(PENDING);
+            if (acceptable && Files.isRegularFile(pending)) {
+                Files.move(pending, context.persistent().resolve(STATE), StandardCopyOption.REPLACE_EXISTING);
+            }
+            return acceptable;
+        }
+
+        @Override
         protected ProcessHandler handler(BuildStepContext context, List<String> commands) throws IOException {
             if (incremental) {
                 return warm(commands);
@@ -348,7 +362,8 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                     }
                 }
             }
-            state.store(working.resolve(STATE));
+            Files.deleteIfExists(working.resolve(STATE));
+            state.store(working.resolve(PENDING));
             listing.store(working.resolve(LISTING));
             return CompletableFuture.completedStage(compilation.commands(sources.jars(), commands, target, sources.files()));
         }
