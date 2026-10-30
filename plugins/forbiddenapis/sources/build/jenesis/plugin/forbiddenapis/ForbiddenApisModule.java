@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -67,7 +68,7 @@ public class ForbiddenApisModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "forbiddenapis",
                 "main",
-                environment.flag(STRICT, false),
+                environment.flag(STRICT, false, Setting.PROJECT),
                 List.of(),
                 List.of(),
                 List.of(),

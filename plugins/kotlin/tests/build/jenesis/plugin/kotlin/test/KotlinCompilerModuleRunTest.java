@@ -26,19 +26,34 @@ public class KotlinCompilerModuleRunTest {
     private static final String KOTLIN_VERSION = "2.3.21",
             PINS = """
             kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-api 2.3.21 SHA-256/b2e5cc2666c100079ed343618528eb820dcfa5095095e30f2dd19c60dff7e462
+            kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-api/pom/2.3.21 2.3.21 SHA-256/71f8a5ff3e40e719104f5330e283320e19d858834ef92d12bfa0d066dbc371d7
             kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-cri-impl 2.3.21 SHA-256/cff0a9b665851a325c2195857e2e1a5a747954c9437d00de0ba15519a4294c46
+            kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-cri-impl/pom/2.3.21 2.3.21 SHA-256/67553bcb21e9c1167700ec3277ac7fab972e6b2b368f95bf6d467e0464dbda33
             kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-impl 2.3.21 SHA-256/2cd70396404a0e43c05aaf79a8b35ff3a8ff2e296aedf770f6e5923fbfacae3b
+            kotlin/maven/org.jetbrains.kotlin/kotlin-build-tools-impl/pom/2.3.21 2.3.21 SHA-256/d05f6323c17f961868956831f9d5afad311035b18c3f543ffd2f3c846693d952
             kotlin/maven/org.jetbrains.kotlin/kotlin-compiler-embeddable 2.3.21 SHA-256/d3e70fb011675e77ef00f1a68918d3cd91eed26058977d1e3ea2a37a293233af
+            kotlin/maven/org.jetbrains.kotlin/kotlin-compiler-embeddable/pom/2.3.21 2.3.21 SHA-256/9523c8feadcb17f42d04ffa97fe2a9c08e5db18f090f6db903dca5c36c7ae5c4
             kotlin/maven/org.jetbrains.kotlin/kotlin-compiler-runner 2.3.21 SHA-256/6db7086229db89d07183a9b476e0992f86120dbc21f66092cd124c7ed6d74434
+            kotlin/maven/org.jetbrains.kotlin/kotlin-compiler-runner/pom/2.3.21 2.3.21 SHA-256/1fa5485ee9cccc8e93399534b1c52a075fcd463d69a229c9caa601cc091dc288
             kotlin/maven/org.jetbrains.kotlin/kotlin-daemon-client 2.3.21 SHA-256/fa767c9b40d069f164c617a6e6bd302643c7ba8c0792e8ed9e412c18f84b50be
+            kotlin/maven/org.jetbrains.kotlin/kotlin-daemon-client/pom/2.3.21 2.3.21 SHA-256/d70aa131e10d9c40d44ffb3d88c85cac54a64a30542179f847f803ec71ae1bad
             kotlin/maven/org.jetbrains.kotlin/kotlin-daemon-embeddable 2.3.21 SHA-256/222fc10a3c22e74d30369bf8a0ca6c4f9372eac7d4a0081e290c256fa4d30fb2
+            kotlin/maven/org.jetbrains.kotlin/kotlin-daemon-embeddable/pom/2.3.21 2.3.21 SHA-256/f5c57776c5ec3504a416364164600b0cbe85ebea8f16ebef607eadaf0fd6bf43
             kotlin/maven/org.jetbrains.kotlin/kotlin-reflect 1.6.10 SHA-256/3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203
+            kotlin/maven/org.jetbrains.kotlin/kotlin-reflect/pom/1.6.10 1.6.10 SHA-256/57905524274a00ae028aaccc27283f6bc5925a934a046c1cc5d06c8ee4d6d5a9
             kotlin/maven/org.jetbrains.kotlin/kotlin-script-runtime 2.3.21 SHA-256/ec61bf1229c837fa9f4255f34ca69816138b73158e7ae9b8d964cf92ca6dfd2e
+            kotlin/maven/org.jetbrains.kotlin/kotlin-script-runtime/pom/2.3.21 2.3.21 SHA-256/2cf5d1123d8a628bcc5ee74f5b07b08c55a87ad4e9c91e13db83bb5a2ff6aa2d
             kotlin/maven/org.jetbrains.kotlin/kotlin-stdlib 2.3.21 SHA-256/6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a
+            kotlin/maven/org.jetbrains.kotlin/kotlin-stdlib/pom/2.3.21 2.3.21 SHA-256/3e0b48daa14dc73f8029d8d9e15ed32940377caf7b915510f88d33219b350186
+            kotlin/maven/org.jetbrains.kotlinx/kotlinx-coroutines-bom/pom/1.8.0 1.8.0 SHA-256/1239e9dbe1397cd5971342956b2511bc3ace7b641842e4372a088dcfa8b9ad55
             kotlin/maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm 1.8.0 SHA-256/9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5
+            kotlin/maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/pom/1.8.0 1.8.0 SHA-256/a5633abd53467ceb91622d81f2e982080877145e0b76e1b75788715434885d0b
             kotlin/maven/org.jetbrains/annotations 13.0 SHA-256/ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478
+            kotlin/maven/org.jetbrains/annotations/pom/13.0 13.0 SHA-256/965aeb2bedff369819bdde1bf7a0b3b89b8247dd69c88b86375d76163bb8c397
             main/maven/org.jetbrains.kotlin/kotlin-stdlib 2.3.21 SHA-256/6f64eac736db9434dd6925b4a518b9d1d17177652320c37916cf9ba3ce7d7d7a
+            main/maven/org.jetbrains.kotlin/kotlin-stdlib/pom/2.3.21 2.3.21 SHA-256/3e0b48daa14dc73f8029d8d9e15ed32940377caf7b915510f88d33219b350186
             main/maven/org.jetbrains/annotations 13.0 SHA-256/ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478
+            main/maven/org.jetbrains/annotations/pom/13.0 13.0 SHA-256/965aeb2bedff369819bdde1bf7a0b3b89b8247dd69c88b86375d76163bb8c397
             """;
 
     @TempDir

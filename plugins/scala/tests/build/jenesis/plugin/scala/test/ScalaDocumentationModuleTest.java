@@ -76,8 +76,9 @@ public class ScalaDocumentationModuleTest {
         executor.addSource("input", input);
         executor.addModule("scaladoc",
                 new ScalaDocumentationModule(Map.of(),
-                        Map.of("module", (_, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(),
+                        Map.of("module", (_, _, _, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(),
                                 List.of(),
+                                new LinkedHashMap<>(),
                                 new LinkedHashMap<>())))
                         .factory(commands -> {
                             captured.add(commands);

@@ -67,9 +67,10 @@ public class GroovyCompilerModuleTest {
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);
         executor.addModule("groovy",
-                new GroovyCompilerModule(Map.of(), Map.of("maven", (_, _, _, _, _, _) -> new Resolver.Resolution(
+                new GroovyCompilerModule(Map.of(), Map.of("maven", (_, _, _, _, _, _, _, _) -> new Resolver.Resolution(
                         new LinkedHashMap<>(),
                         List.of(),
+                        new LinkedHashMap<>(),
                         new LinkedHashMap<>()))),
                 "project");
 

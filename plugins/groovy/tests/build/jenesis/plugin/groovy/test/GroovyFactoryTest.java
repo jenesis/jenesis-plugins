@@ -55,9 +55,10 @@ public class GroovyFactoryTest {
 
     @Test
     public void exposes_the_classes_alone() throws IOException {
-        Language language = create(Map.of(), Map.of("maven", (_, _, _, _, _, _) -> new Resolver.Resolution(
+        Language language = create(Map.of(), Map.of("maven", (_, _, _, _, _, _, _, _) -> new Resolver.Resolution(
                 new LinkedHashMap<>(),
                 List.of(),
+                new LinkedHashMap<>(),
                 new LinkedHashMap<>())));
         BuildExecutor executor = newExecutor();
         executor.addSource("project", project);

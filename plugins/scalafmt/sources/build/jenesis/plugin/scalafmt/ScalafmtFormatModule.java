@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -48,7 +49,7 @@ public class ScalafmtFormatModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "scalafmt-format",
                 ".scalafmt.conf",
-                !environment.flag("format.rewrite", false),
+                !environment.flag("format.rewrite", false, Setting.PROJECT),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "scalafmt-format"));
     }
 

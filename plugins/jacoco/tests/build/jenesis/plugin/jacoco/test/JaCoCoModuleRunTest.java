@@ -27,13 +27,25 @@ public class JaCoCoModuleRunTest {
 
     private static final String PINS = """
             jacoco/maven/args4j/args4j 2.0.28 SHA-256/11b029a602e787e2bc08eb3b77eda1a4f5e8b263d22e3c5d6220cd5c51f30b18
+            jacoco/maven/args4j/args4j-site/pom/2.0.28 2.0.28 SHA-256/79e151fb939f6c9c8d8f9ae59e5b0e7a862dd5a699b4d4954704e7ce25d4fac8
+            jacoco/maven/args4j/args4j/pom/2.0.28 2.0.28 SHA-256/1f821c93660b7fa573692c305ca97092eab647cefeccfcb3f54771117c3737d3
             jacoco/maven/org.jacoco/org.jacoco.agent/jar/runtime 0.8.14 SHA-256/3fb76eea65f81bd9415202bab34b6571728841dff1ab8e6bbe81adc2e299face
+            jacoco/maven/org.jacoco/org.jacoco.build/pom/0.8.14 0.8.14 SHA-256/87d059b35849df97779148fd7e52f63f1fcd03a4e7e64c2a61a6c9cce61a8de7
             jacoco/maven/org.jacoco/org.jacoco.cli 0.8.14 SHA-256/12d5d78351c638efeea71ac840f6a5cf7bcff89001ddb05eb89f956d1079a2c6
+            jacoco/maven/org.jacoco/org.jacoco.cli/pom/0.8.14 0.8.14 SHA-256/240a1cdc87a5510fde23fbe14067589823b6b057d88e17a8b6fb984a4f54fbdd
             jacoco/maven/org.jacoco/org.jacoco.core 0.8.14 SHA-256/28abbf0eea5a08e4f24097f2fbac663ca17c341c25c3a04d90d6cd325943c995
+            jacoco/maven/org.jacoco/org.jacoco.core/pom/0.8.14 0.8.14 SHA-256/7b75bae2c1779af544369833afe1d68f5a3955e91d166cb19dff886534b1ad6c
             jacoco/maven/org.jacoco/org.jacoco.report 0.8.14 SHA-256/a3e2026060ab8b8d5c650706406234bb4c033dfd5376afeb8b1666e8ed27c453
+            jacoco/maven/org.jacoco/org.jacoco.report/pom/0.8.14 0.8.14 SHA-256/e2ebf2c580f86afa7f75f43a28109dd894c42463928bc9911777e35275108e58
+            jacoco/maven/org.kohsuke/pom/pom/8 8 SHA-256/1efa02d3c0f11024319c6e258bb9c76f6255a8fa302a0d8001a253a4be8d7ce3
             jacoco/maven/org.ow2.asm/asm 9.9 SHA-256/03d99a74ad1ee5c71334ef67437f4ef4fe3488caa7c96d8645abc73c8e2017d4
+            jacoco/maven/org.ow2.asm/asm-bom/pom/9.9 9.9 SHA-256/0fa27336fa7b62923ca9bdc69526ebe712a3bfb1f7ee8bf76c4a0b3f85f19d62
             jacoco/maven/org.ow2.asm/asm-commons 9.9 SHA-256/db2f6f26150bbe7c126606b4a1151836bcc22a1e05a423b3585698bece995ff8
+            jacoco/maven/org.ow2.asm/asm-commons/pom/9.9 9.9 SHA-256/18a5d3ef1377e7544b3ca3210f261396b987f6010ef591d3872adae63119ee43
             jacoco/maven/org.ow2.asm/asm-tree 9.9 SHA-256/42178f3775c9c63f9e5e1446747d29b4eca4d91bd6e75e5c43cfa372a47d38c6
+            jacoco/maven/org.ow2.asm/asm-tree/pom/9.9 9.9 SHA-256/d01788ed8e6e8e24acaf6cb4a7bdcc2733416252faa00232959e3e2e9df1bf44
+            jacoco/maven/org.ow2.asm/asm/pom/9.9 9.9 SHA-256/cf861ef1e745d57154af79ae14df340ed5341e5dcd0157cefcd2eb7f1aa05c57
+            jacoco/maven/org.ow2/ow2/pom/1.5.1 1.5.1 SHA-256/321ddbb7ee6fe4f53dea6b4cd6db74154d6bfa42391c1f763b361b9f485acf05
             """;
 
     @TempDir
@@ -148,7 +160,7 @@ public class JaCoCoModuleRunTest {
         executor.addModule(
                 "test",
                 new TestModule(Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)), Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE)))
-                        .observe(new JaCoCo("jacoco"))
+                        .observe(List.of(new JaCoCo("jacoco")))
                         .isTest(candidate -> candidate.endsWith("CoveredTest"))
                         .jarsOnly(false),
                 "dependencies",

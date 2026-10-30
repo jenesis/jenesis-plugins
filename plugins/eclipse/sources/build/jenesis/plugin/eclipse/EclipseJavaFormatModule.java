@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -48,7 +49,7 @@ public class EclipseJavaFormatModule implements BuildExecutorModule {
         return new EclipseJavaFormatModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
                 "eclipse-java-format",
-                !environment.flag("format.rewrite", false),
+                !environment.flag("format.rewrite", false, Setting.PROJECT),
                 null,
                 ProcessBuildStep.Terms.ofEnvironment(environment, "eclipse-java-format"));
     }
