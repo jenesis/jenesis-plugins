@@ -6,10 +6,10 @@
  *
  * @jenesis.release 25
  * @jenesis.alias org.antlr.antlr4 org.antlr/antlr4
- * @jenesis.pin build.jenesis 0.17.0 SHA-256/d3f83ea608953c2cb1745b75d34b66a0f0a89dc78944f11430f2cfc9bcbe6437
- * @jenesis.pin build.jenesis/build.jenesis 0.17.0 SHA-256/d3f83ea608953c2cb1745b75d34b66a0f0a89dc78944f11430f2cfc9bcbe6437
+ * @jenesis.pin build.jenesis 0.18.0 SHA-256/35a94fc0761110ebcd2fa51b2226a3e7e0a942b14cd69d67cc584bf5f3519f70
+ * @jenesis.pin build.jenesis/build.jenesis 0.18.0 SHA-256/35a94fc0761110ebcd2fa51b2226a3e7e0a942b14cd69d67cc584bf5f3519f70
  * @jenesis.pin com.ibm.icu/icu4j 72.1 SHA-256/3df572b240a68d13b5cd778ad2393e885d26411434cd8f098ac5987ea2e64ce3
- * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.17.0 SHA-256/195b07a6b70f2d5088dc832758f0f84ad8c120928e9f3993ec8437c72f4fae01
+ * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.0 SHA-256/1b46b6334674d86f9ab07933724988c5c4033216b7029534124bff2a0390f5bb
  * @jenesis.pin maven/com.ibm.icu/icu4j/pom 72.1 SHA-256/3def2b29af4a19ad805cb153056925a89a903f92fbee1adee12ed2fc14c44ee8
  * @jenesis.pin maven/org.abego.treelayout/org.abego.treelayout.core/pom 1.0.3 SHA-256/a3b2b223794370355e792433af012fc993667c0331be2bacad84dbc09ace4a0c
  * @jenesis.pin maven/org.antlr/ST4/pom 4.3.4 SHA-256/9e7c1f3e489919440e8c13089e5963729d5b7f80f70233bfbae309c649abca3e

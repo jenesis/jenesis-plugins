@@ -5,8 +5,8 @@
  * the repositories of the build that loads the plugin and running it in a JVM of its own.
  *
  * @jenesis.release 25
- * @jenesis.pin build.jenesis 0.17.0 SHA-256/d3f83ea608953c2cb1745b75d34b66a0f0a89dc78944f11430f2cfc9bcbe6437
- * @jenesis.pin build.jenesis/build.jenesis 0.17.0 SHA-256/d3f83ea608953c2cb1745b75d34b66a0f0a89dc78944f11430f2cfc9bcbe6437
+ * @jenesis.pin build.jenesis 0.18.0 SHA-256/35a94fc0761110ebcd2fa51b2226a3e7e0a942b14cd69d67cc584bf5f3519f70
+ * @jenesis.pin build.jenesis/build.jenesis 0.18.0 SHA-256/35a94fc0761110ebcd2fa51b2226a3e7e0a942b14cd69d67cc584bf5f3519f70
  * @jenesis.pin com.fasterxml.woodstox/woodstox-core 7.2.0 SHA-256/689f5be95f9bb369d6c0e8db99a99f930b0c48d6a69b46151782b5816c7ea820
  * @jenesis.pin com.sun.tools.ws 4.0.5 SHA-256/7eb07d9fdb654264579173d6a98898f550f083cc80abd0043252e46f122f9ecd
  * @jenesis.pin com.sun.xml.bind/jaxb-core 4.0.9 SHA-256/209eb94452d89644380e398e4ac126974718eeb3aa94ed1786654837ebcd3097
@@ -24,7 +24,7 @@
  * @jenesis.pin jakarta.xml.bind/jakarta.xml.bind-api 4.0.5 SHA-256/5e489b6c874c4119e003ff1403db523ee3a8959ec499f3de29e77245efccf216
  * @jenesis.pin jakarta.xml.soap/jakarta.xml.soap-api 3.0.2 SHA-256/62ecd5c3b5c107779e5ffe84922594c381f7a8e397320a05c3ee3957b5b7863f
  * @jenesis.pin jakarta.xml.ws/jakarta.xml.ws-api 4.0.3 SHA-256/e2244d1046363f21a1dbb9485d592f6697b219b8086de70de759c7c5d725517f
- * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.17.0 SHA-256/195b07a6b70f2d5088dc832758f0f84ad8c120928e9f3993ec8437c72f4fae01
+ * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.0 SHA-256/1b46b6334674d86f9ab07933724988c5c4033216b7029534124bff2a0390f5bb
  * @jenesis.pin maven/com.fasterxml.woodstox/woodstox-core/pom 7.2.0 SHA-256/24a55f1439060131dfd62943245bfdf79c536ae4372fef5f9446b8a0121a3945
  * @jenesis.pin maven/com.fasterxml/oss-parent/pom 68 SHA-256/25eafd96dae242b6b5a7108f55b2c14015b828daa5abe234289fd6e774a1ce57
  * @jenesis.pin maven/com.fasterxml/oss-parent/pom 79 SHA-256/9206b7dd67fb138036576c3dfca947a2a8f3e2c4d2d9c1f2d1dea519b3a4dae1

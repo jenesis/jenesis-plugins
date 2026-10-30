@@ -71,8 +71,9 @@ public class ScalaFactoryTest {
                 Permits.of(1),
                 "language",
                 Map.of(),
-                Map.of("maven", (_, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(),
+                Map.of("maven", (_, _, _, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(),
                         List.of(),
+                        new LinkedHashMap<>(),
                         new LinkedHashMap<>())));
     }
 

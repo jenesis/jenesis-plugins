@@ -1,6 +1,7 @@
 package build.jenesis.plugin.scala;
 
 import module java.base;
+import build.jenesis.Environment.Setting;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassFile;
 import build.jenesis.BuildExecutor;
@@ -66,7 +67,7 @@ public class ScalaCompilerModule implements BuildExecutorModule {
         return new ScalaCompilerModule(resolvers,
                 Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
-                environment.flag("scala.incremental", false),
+                environment.flag("scala.incremental", false, Setting.PROJECT),
                 "scalac",
                 "zinc",
                 "main",

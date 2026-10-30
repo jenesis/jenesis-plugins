@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -48,7 +49,7 @@ public class KtlintModule implements BuildExecutorModule {
         return new KtlintModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
                 "ktlint",
-                environment.flag(STRICT, false),
+                environment.flag(STRICT, false, Setting.PROJECT),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "ktlint"));
     }
 
