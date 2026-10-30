@@ -24,6 +24,7 @@ public class KspModule implements BuildExecutorModule {
             DEPENDENCIES = "dependencies",
             PROCESSORS = "processors",
             STATE = "state.properties",
+            PENDING = "state.pending",
             LISTING = "listing.properties",
             CLASSES = "classes.properties";
     private static final String MAVEN_GROUP = "com.google.devtools.ksp", MAVEN_ARTIFACT = "symbol-processing-aa-embeddable";
@@ -163,6 +164,19 @@ public class KspModule implements BuildExecutorModule {
         }
 
         @Override
+        public boolean acceptableExitCode(int code,
+                                          Executor executor,
+                                          BuildStepContext context,
+                                          SequencedMap<String, BuildStepArgument> arguments) throws IOException {
+            boolean acceptable = super.acceptableExitCode(code, executor, context, arguments);
+            Path pending = context.persistent().resolve(PENDING);
+            if (acceptable && Files.isRegularFile(pending)) {
+                Files.move(pending, context.persistent().resolve(STATE), StandardCopyOption.REPLACE_EXISTING);
+            }
+            return acceptable;
+        }
+
+        @Override
         public CompletionStage<List<String>> process(Executor executor,
                                                      BuildStepContext context,
                                                      SequencedMap<String, BuildStepArgument> arguments,
@@ -290,7 +304,8 @@ public class KspModule implements BuildExecutorModule {
                     }
                 }
             }
-            state.store(working.resolve(STATE));
+            Files.deleteIfExists(working.resolve(STATE));
+            state.store(working.resolve(PENDING));
             listing.store(working.resolve(LISTING));
             classes.store(working.resolve(CLASSES));
             commands.addAll(List.of(
