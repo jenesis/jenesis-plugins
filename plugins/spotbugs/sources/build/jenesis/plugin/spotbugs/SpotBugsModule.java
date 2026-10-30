@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -53,7 +54,7 @@ public class SpotBugsModule implements BuildExecutorModule {
                 "spotbugs",
                 "main",
                 "spotbugs-exclude.xml",
-                environment.flag(STRICT, false),
+                environment.flag(STRICT, false, Setting.PROJECT),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "spotbugs"));
     }
 

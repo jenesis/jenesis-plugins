@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -53,8 +54,8 @@ public class PmdModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "pmd",
                 "pmd.xml",
-                environment.flag(STRICT, false),
-                environment.number(PRIORITY, 5),
+                environment.flag(STRICT, false, Setting.PROJECT),
+                environment.number(PRIORITY, 5, Setting.PROJECT),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "pmd"));
     }
 

@@ -164,7 +164,10 @@ public class ScalaCompilerModuleTest {
     }
 
     private static Resolver empty() {
-        return (_, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(), List.of(), new LinkedHashMap<>());
+        return (_, _, _, _, _, _, _, _) -> new Resolver.Resolution(new LinkedHashMap<>(),
+                List.of(),
+                new LinkedHashMap<>(),
+                new LinkedHashMap<>());
     }
 
     private BuildExecutor newExecutor() throws IOException {

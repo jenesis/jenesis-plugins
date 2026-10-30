@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -50,7 +51,7 @@ public class CodeNarcModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "codenarc",
                 "codenarc.xml",
-                environment.flag(STRICT, false),
+                environment.flag(STRICT, false, Setting.PROJECT),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "codenarc"));
     }
 

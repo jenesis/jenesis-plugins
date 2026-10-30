@@ -20,7 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AvroModuleRunTest {
 
     private static final String PINS = """
+            avro/maven/com.fasterxml.jackson/jackson-bom/pom/2.22.1 2.22.1 SHA-256/b366aa5fd26958e2308a4807e5d42b14706b001b3ccbf138e31b8698dc0ac0ec
+            avro/maven/com.fasterxml.jackson/jackson-parent/pom/2.22 2.22 SHA-256/7d45a7efb69df207bed7cc54b87a0bb012f10952c095570a273b49485da0d129
+            avro/maven/com.fasterxml/oss-parent/pom/79 79 SHA-256/9206b7dd67fb138036576c3dfca947a2a8f3e2c4d2d9c1f2d1dea519b3a4dae1
+            avro/maven/org.apache.avro/avro-parent/pom/1.12.2 1.12.2 SHA-256/ae436924d7acd1561984ee8b2a371aa92d47692a2f8f778e053eefd072225141
             avro/maven/org.apache.avro/avro-tools 1.12.2 SHA-256/6220e8bc089aaf917cdad4cd358bd651fc0394c0e5ddb8b36da402012c294a68
+            avro/maven/org.apache.avro/avro-tools/pom/1.12.2 1.12.2 SHA-256/f2d28fc9b71b85a77e53ca63632f767c93136dc7219592319c6e0e463398b448
+            avro/maven/org.apache.avro/avro-toplevel/pom/1.12.2 1.12.2 SHA-256/f2256409c5cd5f937c67a5389b1b803bdf09ee30412ae49ded3de322cbf378f2
+            avro/maven/org.apache/apache/pom/39 39 SHA-256/71752ed4c2435a1d8385fe0a4d330f39d04efec89f0d1ba5d1598d39f7397a44
             """;
     private static final String SCHEMA = """
             {

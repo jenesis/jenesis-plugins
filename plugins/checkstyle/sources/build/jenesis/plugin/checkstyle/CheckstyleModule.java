@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -54,7 +55,7 @@ public class CheckstyleModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "checkstyle",
                 "checkstyle.xml",
-                environment.flag(STRICT, false),
+                environment.flag(STRICT, false, Setting.PROJECT),
                 Collections.emptySortedMap(),
                 ProcessBuildStep.Terms.ofEnvironment(environment, "checkstyle"));
     }

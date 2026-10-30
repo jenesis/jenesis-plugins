@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.PathPlacement;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
@@ -66,7 +67,7 @@ public class KotlinCompilerModule implements BuildExecutorModule {
                 Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
                 true,
-                environment.flag("kotlin.incremental", false),
+                environment.flag("kotlin.incremental", false, Setting.PROJECT),
                 "kotlin",
                 "main",
                 null,

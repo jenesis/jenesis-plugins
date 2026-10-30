@@ -22,6 +22,7 @@ public class ForbiddenApisModuleRunTest {
 
     private static final String PINS = """
             forbiddenapis/maven/de.thetaphi/forbiddenapis 3.11 SHA-256/2d9243b165c566a5ca140be8dfd11ce7bf4ce00e07ccdc31d2c0719cd061c9c6
+            forbiddenapis/maven/de.thetaphi/forbiddenapis/pom/3.11 3.11 SHA-256/ff6e17eef5447cd8dbbe14bc502d962cc02175a045fa4a9485a937bd514ed9b7
             """;
 
     @TempDir

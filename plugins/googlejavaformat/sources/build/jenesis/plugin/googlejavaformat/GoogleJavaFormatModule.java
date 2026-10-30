@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -55,7 +56,7 @@ public class GoogleJavaFormatModule implements BuildExecutorModule {
         return new GoogleJavaFormatModule(Dependencies.ofEnvironment(environment, repositories, resolvers),
                 Pinning.ofEnvironment(environment),
                 "google-java-format",
-                !environment.flag("format.rewrite", false),
+                !environment.flag("format.rewrite", false, Setting.PROJECT),
                 false,
                 true,
                 true,

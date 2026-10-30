@@ -8,6 +8,7 @@ import build.jenesis.BuildStepArgument;
 import build.jenesis.BuildStepContext;
 import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
+import build.jenesis.Environment.Setting;
 import build.jenesis.Permits;
 import build.jenesis.Pinning;
 import build.jenesis.Repository;
@@ -57,7 +58,7 @@ public class JReleaserModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 NAME,
                 "full-release",
-                environment.flag("release.publish"),
+                environment.flag("release.publish", Setting.COMMAND),
                 Collections.emptyNavigableMap(),
                 null,
                 environment.out(),

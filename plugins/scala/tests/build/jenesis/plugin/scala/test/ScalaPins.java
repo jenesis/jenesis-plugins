@@ -8,121 +8,265 @@ final class ScalaPins {
 
     private static final String COMPILER = """
             scalac/maven/io.get-coursier/interface 1.0.29-M4 SHA-256/a9173f8348005f7a64ae4748854c473e8acdc3433afad0cd37d82167aec272fc
+            scalac/maven/io.get-coursier/interface/pom/1.0.29-M4 1.0.29-M4 SHA-256/5dd4b9a0674635e080e60717657da00f054f3dc9d501e8aae258b300f38a1440
             scalac/maven/org.jline/jline-native 4.3.1 SHA-256/ff94ab4bccc3c1549444082ce07a2760cbf1ad4dae04e43508597bd802bcb231
+            scalac/maven/org.jline/jline-native/pom/4.3.1 4.3.1 SHA-256/1ad8234488ac655d0c37a18a420650cf9beee99948ad640bc46d04457eb5a91f
+            scalac/maven/org.jline/jline-parent/pom/4.3.1 4.3.1 SHA-256/284ee13bf1de8025423e67a498c43c9c6901537cdc6348e4c99c7cb0c777e17c
             scalac/maven/org.jline/jline-reader 4.3.1 SHA-256/02aa899906086ce9d9c992bb05aed776045e5915a180e717dcb661fb87ab84d3
+            scalac/maven/org.jline/jline-reader/pom/4.3.1 4.3.1 SHA-256/d103af0d4916aefca9da65130822ae76a29b0c8746bbaf3780d05cdd24e8e976
             scalac/maven/org.jline/jline-terminal 4.3.1 SHA-256/272927363471fdbf2f38710befbfe866acc1ed3472062a8ced02b16686f27bcc
             scalac/maven/org.jline/jline-terminal-jni 4.3.1 SHA-256/1c4873798f36412827087013e424199bced29da7c8421f3850cfe7f31f274c1c
+            scalac/maven/org.jline/jline-terminal-jni/pom/4.3.1 4.3.1 SHA-256/9e9a719e83df952b2798e35af129cf2b8634ae12a075bac5e7ea528e8c097c5b
+            scalac/maven/org.jline/jline-terminal/pom/4.3.1 4.3.1 SHA-256/bf0929d98d1bfc1aca25920a4f6cce3b2f474b3add979280c8e337ddd736151c
             scalac/maven/org.ow2.asm/asm 9.10.1 SHA-256/ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb
             scalac/maven/org.ow2.asm/asm-analysis 9.10.1 SHA-256/dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc
+            scalac/maven/org.ow2.asm/asm-analysis/pom/9.10.1 9.10.1 SHA-256/534fbb85f643c2330691e92652ec40dd497b4f279ef13d829d85858905d33ba3
             scalac/maven/org.ow2.asm/asm-commons 9.10.1 SHA-256/6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895
+            scalac/maven/org.ow2.asm/asm-commons/pom/9.10.1 9.10.1 SHA-256/ceb2c43f3a273db88af8652d89ed6312f3e91a1a1e0ffc6f7823169278cf795c
             scalac/maven/org.ow2.asm/asm-tree 9.10.1 SHA-256/3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b
+            scalac/maven/org.ow2.asm/asm-tree/pom/9.10.1 9.10.1 SHA-256/963eebdea6e2e1ff25c9068b64a238e1585c99f8acd455595ac159a7f52b6c41
             scalac/maven/org.ow2.asm/asm-util 9.10.1 SHA-256/1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c
+            scalac/maven/org.ow2.asm/asm-util/pom/9.10.1 9.10.1 SHA-256/fcea2bad7868ed18949a2e71c40cf26de1516d16440e63f585c3e05d285c0d2b
+            scalac/maven/org.ow2.asm/asm/pom/9.10.1 9.10.1 SHA-256/e1b1c3832ca3ac0a9e563c405f4c760118b5556a4920daee14058886197e094d
+            scalac/maven/org.ow2/ow2/pom/1.5.1 1.5.1 SHA-256/321ddbb7ee6fe4f53dea6b4cd6db74154d6bfa42391c1f763b361b9f485acf05
             scalac/maven/org.scala-lang/scala-library 3.10.0 SHA-256/b47befb29e02bbc08a10bbd387b35cf80ff9bf04fda8fdf3dda6c8ad6895f325
+            scalac/maven/org.scala-lang/scala-library/pom/3.10.0 3.10.0 SHA-256/d0a2d6185a3e1d82bfce5fab23ffae2bb293c13961ac163797093a0530295b77
             scalac/maven/org.scala-lang/scala3-compiler_3 3.10.0 SHA-256/51e241938950723faebe420eb4d3bd4da3a1b686f6be574ad0ff4040a6b4bc1f
+            scalac/maven/org.scala-lang/scala3-compiler_3/pom/3.10.0 3.10.0 SHA-256/9bc0cfe42589b7e500bcb7b6b2e19d74f7b0f8d348f324337f39dec96aac164c
             scalac/maven/org.scala-lang/scala3-directives-parser_3 3.10.0 SHA-256/2d28f3366f452296134228b0a165ca33cf9a962ae97566085ba59c8031cc2b2b
+            scalac/maven/org.scala-lang/scala3-directives-parser_3/pom/3.10.0 3.10.0 SHA-256/664e2089b810fe0fd7dd1bb43808f256c68513d8b2af17c913da82f954b9f512
             scalac/maven/org.scala-lang/scala3-interfaces 3.10.0 SHA-256/2293237c57462efcc200e1cf9ec7b5764c17458b3886689cc16c5ec9a5552ddf
+            scalac/maven/org.scala-lang/scala3-interfaces/pom/3.10.0 3.10.0 SHA-256/f0d8c805eb64e12e413b0cee1ccd0f7304d4194e49d4b87850e54033f5f1c527
             scalac/maven/org.scala-lang/scala3-library_3 3.10.0 SHA-256/4daaede24ddfeea082bbed096ba0c492d99e8428632e9fd3c38f82cf7aad4b63
+            scalac/maven/org.scala-lang/scala3-library_3/pom/3.10.0 3.10.0 SHA-256/759d3716f18aa412f3c88fc40d3df1a2cf80d18620500476f0a65d52d852e1e8
             scalac/maven/org.scala-lang/scala3-repl_3 3.10.0 SHA-256/648c00039a5b4234ba5e618fe9df615c14cd87a679d3943d915f3ccd2a451f0f
+            scalac/maven/org.scala-lang/scala3-repl_3/pom/3.10.0 3.10.0 SHA-256/51b693726684433e983e8f6f52c10d20548e57e172265964733ee17eacc4dfd6
             scalac/maven/org.scala-lang/scala3-sbt-bridge 3.10.0 SHA-256/c74f713b223693b361a5204c2d319b926565cf394370462fe7777e20c9022439
+            scalac/maven/org.scala-lang/scala3-sbt-bridge/pom/3.10.0 3.10.0 SHA-256/49a0a941c34c370528a42104565f6f83c7ad64984a69b9c59ead27314341ac58
             scalac/maven/org.scala-lang/tasty-core_3 3.10.0 SHA-256/cd8088db4457e84610cfdf0381e8c2f92f409fb565ad5d792a3bdc7d37526058
+            scalac/maven/org.scala-lang/tasty-core_3/pom/3.10.0 3.10.0 SHA-256/d9b9cdd228583317c20fb33612669e5b8d3cf6ce8ab25fd4bd1d8c690de87227
             scalac/maven/org.scala-sbt/compiler-interface 1.12.0 SHA-256/92f487a505eafdd0a033e4ff4f38a81509a655c76257c64e6808dd873cc145c3
+            scalac/maven/org.scala-sbt/compiler-interface/pom/1.12.0 1.12.0 SHA-256/b5cfd5574ad88819d64e3d4b50f909d399bb836ba56883d37ef13d9d13b6c214
             scalac/maven/org.scala-sbt/util-interface 1.11.5 SHA-256/1fc950a9e1a35385e79316e23c120d4fd184f6a7af0274e00a703b0dc76376af
+            scalac/maven/org.scala-sbt/util-interface/pom/1.11.5 1.11.5 SHA-256/0dfcedd4814f3b87a2bc3f60e8103757b3f5424c5c72ddf910fb2be6ee00e259
             scalac/maven/org.slf4j/slf4j-api 1.7.36 SHA-256/d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0
+            scalac/maven/org.slf4j/slf4j-api/pom/1.7.36 1.7.36 SHA-256/fb046a9c229437928bb11c2d27c8b5d773eb8a25e60cbd253d985210dedc2684
+            scalac/maven/org.slf4j/slf4j-parent/pom/1.7.36 1.7.36 SHA-256/bb388d37fbcdd3cde64c3cede21838693218dc451f04040c5df360a78ed7e812
             """, ZINC = """
             zinc/maven/com.eed3si9n/shaded-jawn-parser_2.13 1.3.2 SHA-256/f3273384cb4b94d600187e72037b815ecdaa5b44528bb06ec8dc4704d4892884
+            zinc/maven/com.eed3si9n/shaded-jawn-parser_2.13/pom/1.3.2 1.3.2 SHA-256/033c70528bf354c2432c453f479b35feaa891ba1df1b9d4823bf5c7e8e49201a
             zinc/maven/com.eed3si9n/shaded-scalajson_2.13 1.0.0-M4 SHA-256/7b6b6d85727bd8abab940b559de8e32aa5081add29f7531c855bb0761ae8de67
+            zinc/maven/com.eed3si9n/shaded-scalajson_2.13/pom/1.0.0-M4 1.0.0-M4 SHA-256/256d22f6d5634dc4be9358c6ab692d81e511d468c3e7836db2833a3ed88a84f8
             zinc/maven/com.eed3si9n/sjson-new-core_2.13 0.9.0 SHA-256/67b5c99308d44fabd14402120c5b5ecbf7969b857cd4ce5229e07fdf851b2c7d
+            zinc/maven/com.eed3si9n/sjson-new-core_2.13/pom/0.9.0 0.9.0 SHA-256/185df6fb71d7d900e960277896adb790b36ba65d299ff29f27060ab3d65323ee
             zinc/maven/com.eed3si9n/sjson-new-scalajson_2.13 0.10.1 SHA-256/cdb3326ad10f4bae2752b1d6777859e74caa6b2f87b70a694fa23d03485b8e5d
+            zinc/maven/com.eed3si9n/sjson-new-scalajson_2.13/pom/0.10.1 0.10.1 SHA-256/eaed971997cc11d2c479d32369e49865f6105914da799bc18fd1699a496db48e
             zinc/maven/com.lmax/disruptor 3.4.2 SHA-256/f412ecbb235c2460b45e63584109723dea8d94b819c78c9bfc38f50cba8546c0
+            zinc/maven/com.lmax/disruptor/pom/3.4.2 3.4.2 SHA-256/7311e5e261ca62f259b2d14e6d6f1ce375a64718731a730fd7cec0228d50f5da
             zinc/maven/com.swoval/file-tree-views 2.1.12 SHA-256/fd7373889b7a92cf3e97db36c920ba272aec158a9387b3259fca9f2dfaeda914
+            zinc/maven/com.swoval/file-tree-views/pom/2.1.12 2.1.12 SHA-256/edd270dc776d1d85dd300e415cff9e0609757d7afeb223a6b187bad5b0abe746
             zinc/maven/io.github.java-diff-utils/java-diff-utils 4.16 SHA-256/620403030d676a4a27f780a3acec7438dee1b1651a1c804fa6bb11bb07399a6f
+            zinc/maven/io.github.java-diff-utils/java-diff-utils-parent/pom/4.16 4.16 SHA-256/a4344da58e53a8e8c57be19e923badf24b27dd42b07de6d446d2a659a456509a
+            zinc/maven/io.github.java-diff-utils/java-diff-utils/pom/4.16 4.16 SHA-256/434d598a1e1813111385235161627a4c4ebd62134f7054428d3e202b32cf39de
+            zinc/maven/net.openhft/java-parent-pom/pom/1.1.28 1.1.28 SHA-256/02199c347a9d2b9e6f5dbf8e13d4c34e8febfab90c9b81fba13a16e8208809bf
+            zinc/maven/net.openhft/root-parent-pom/pom/1.2.12 1.2.12 SHA-256/31802b4c86422d91ac5337dad705113535ca986f7cd7bc239701b9f9df967ccf
             zinc/maven/net.openhft/zero-allocation-hashing 0.16 SHA-256/3bc39c640cc8314575de4ebcb1a0bca540516d3c60d49f8de7d638b09868553d
+            zinc/maven/net.openhft/zero-allocation-hashing/pom/0.16 0.16 SHA-256/0949496963193655f81afb9dba28743444dd2a23a6f4933638a6991cfd728fc6
             zinc/maven/org.apache.logging.log4j/log4j-api 2.17.1 SHA-256/b0d8a4c8ab4fb8b1888d0095822703b0e6d4793c419550203da9e69196161de4
+            zinc/maven/org.apache.logging.log4j/log4j-api/pom/2.17.1 2.17.1 SHA-256/1e2acef3220b29be10ae099728b158b18d943f91a193cc4501bb42f929c1e88a
             zinc/maven/org.apache.logging.log4j/log4j-core 2.17.1 SHA-256/c967f223487980b9364e94a7c7f9a8a01fd3ee7c19bdbf0b0f9f8cb8511f3d41
+            zinc/maven/org.apache.logging.log4j/log4j-core/pom/2.17.1 2.17.1 SHA-256/0bbb3bf6d4d22a1bfa3c3c0927c29410af14a0fb26e3b02b93726f5c7e98aafd
+            zinc/maven/org.apache.logging.log4j/log4j/pom/2.17.1 2.17.1 SHA-256/967abc024443a9cb096935559af5e9ad6f0ff61375f84b27d440d2fa70806b09
+            zinc/maven/org.apache.logging/logging-parent/pom/3 3 SHA-256/763a2ec2b8094d4161deb6c264b1262085b9be30bf3a31c2ce137242e57722a7
+            zinc/maven/org.apache/apache/pom/23 23 SHA-256/bc10624e0623f36577fac5639ca2936d3240ed152fb6d8d533ab4d270543491c
             zinc/maven/org.fusesource.jansi/jansi 2.4.1 SHA-256/2e5e775a9dc58ffa6bbd6aa6f099d62f8b62dcdeb4c3c3bbbe5cf2301bc2dcc1
+            zinc/maven/org.fusesource.jansi/jansi/pom/2.4.1 2.4.1 SHA-256/3f98d979a4d3559f8779fbb004b34ae7516afadf510e11df7cc3cd073eb1bb3b
+            zinc/maven/org.fusesource/fusesource-pom/pom/1.12 1.12 SHA-256/c40d960daadcef7b01c1b1c6657afbac4fffb5e53168f8fcb0b28b84e6fdcca1
             zinc/maven/org.jline/jline-native 3.27.1 SHA-256/636646da40413e74963b3f4b40c9c5dcfb42f3d0ecf1b93d6ddf5c895effe422
+            zinc/maven/org.jline/jline-native/pom/3.27.1 3.27.1 SHA-256/9ffe28aecc9f546ec9695f2d521f67459b4b36917148c08d16f4556b383d328f
+            zinc/maven/org.jline/jline-parent/pom/3.27.1 3.27.1 SHA-256/e964fd076c20ce24ddb48dd737a08d6050347005e3e6eec82ff5eb043d561581
+            zinc/maven/org.jline/jline-parent/pom/3.29.0 3.29.0 SHA-256/7922efd3d870a7d7ae03b196c300e35c5de0228e59a5b012aea641e36d79928e
             zinc/maven/org.jline/jline-terminal 3.27.1 SHA-256/42b7b756506bca98b505938426a35c99082f7819c333ed25bd4114bfb0e3b5f2
             zinc/maven/org.jline/jline-terminal-jni 3.27.1 SHA-256/e4bc64f1e68e9fb25d80517338e76abca1e0145b82e389b5c2b2c7d71d150f82
+            zinc/maven/org.jline/jline-terminal-jni/pom/3.27.1 3.27.1 SHA-256/52448de3cbf55f80701484cb4a23b58cb1b0d8feaa86dbddc321360724369757
+            zinc/maven/org.jline/jline-terminal/pom/3.27.1 3.27.1 SHA-256/8478e79aa22ea6af79796443f8ed30fffa5dc647eb3d2d1860bac2e23f34d297
             zinc/maven/org.jline/jline/jar/jdk8 3.29.0 SHA-256/ed2680487642df95379f220c09c0f77e25095713387e2bc00c2d6581bb79c804
+            zinc/maven/org.jline/jline/pom/3.29.0 3.29.0 SHA-256/de40390a98007a1fa5c353d6d4f613280e095d3038558ecb5e7c231dbd126a70
             zinc/maven/org.scala-lang.modules/scala-parallel-collections_2.13 0.2.0 SHA-256/d15f22f1308b98e9ac52a3d1ac8d582d548d6d852b1116cbdf5a50f431246ed1
+            zinc/maven/org.scala-lang.modules/scala-parallel-collections_2.13/pom/0.2.0 0.2.0 SHA-256/2a95ee1db20ea67178d9b42b4ce09b147223aa3eea992c73f262adb5c9733919
             zinc/maven/org.scala-lang.modules/scala-parser-combinators_2.13 1.1.2 SHA-256/5c285b72e6dc0a98e99ae0a1ceeb4027dab9adfa441844046bd3f19e0efdcb54
+            zinc/maven/org.scala-lang.modules/scala-parser-combinators_2.13/pom/1.1.2 1.1.2 SHA-256/5c856fefc046a88de0118ac5e45cddf638975fa980c007d242633276f7266f02
             zinc/maven/org.scala-lang.modules/scala-xml_2.13 2.3.0 SHA-256/4b4d6698c74bff84a105102bbf58390980dc7bb8c40bdea4bc727040b3f966bd
+            zinc/maven/org.scala-lang.modules/scala-xml_2.13/pom/2.3.0 2.3.0 SHA-256/9e52b1e093853e146b0b75605af98543219193cad4ea50d07b94465f4afa815c
             zinc/maven/org.scala-lang/scala-compiler 2.13.18 SHA-256/2f15891fcae7aad30a3892194fb2abb6224cf7ce5d2bd90fba7f1c48682fca21
+            zinc/maven/org.scala-lang/scala-compiler/pom/2.13.18 2.13.18 SHA-256/eb02cef7faa0c4dee7be6a983e8ee93f7fe16ffc3e7c0163c597f1f5c441486a
             zinc/maven/org.scala-lang/scala-library 2.13.18 SHA-256/4e85d96ff7bc7dc627985523c3541b9917aaa08e956391380c42db21a2c4e5a0
+            zinc/maven/org.scala-lang/scala-library/pom/2.13.18 2.13.18 SHA-256/c3fb118214e12399857f4aeaa3033ab8b06f6edbeec9bfe4cb5f0101c034c21d
             zinc/maven/org.scala-lang/scala-reflect 2.13.18 SHA-256/6935ff1982b2ac93d695f15aa66921be2f602921277afe002f018fd8c7d6e29b
+            zinc/maven/org.scala-lang/scala-reflect/pom/2.13.18 2.13.18 SHA-256/039a53586af54d820caaaf916fa6223c1ae5b6ae04202c8a3bc982f8efaba75f
             zinc/maven/org.scala-sbt.jline/jline 2.14.7-sbt-9a88bc413e2b34a4580c001c654d1a7f4f65bf18 SHA-256/a0dbaa781954fa5ed015706d12d0044e018a5705da6791ec98a51fb365d66cb0
+            zinc/maven/org.scala-sbt.jline/jline/pom/2.14.7-sbt-9a88bc413e2b34a4580c001c654d1a7f4f65bf18 2.14.7-sbt-9a88bc413e2b34a4580c001c654d1a7f4f65bf18 SHA-256/7e279b887b4d30d1a8d4db657df6a86ead4f8f4ee6b2ffdd00b417eaf809f325
             zinc/maven/org.scala-sbt/collections_2.13 1.12.4 SHA-256/80e1800426dc9de5bd3dbd52e83237cd64b1278639f18fca4a4f1a74346dfb80
+            zinc/maven/org.scala-sbt/collections_2.13/pom/1.12.4 1.12.4 SHA-256/021c5036bb43249b47da4f94432005482262c2ea6ca823730f5593f6f1092e62
             zinc/maven/org.scala-sbt/compiler-bridge_2.13 1.12.1 SHA-256/4c608ed219494576266f421ff6863a9d4ffc3ed167093226f6fea5063cc88434
+            zinc/maven/org.scala-sbt/compiler-bridge_2.13/pom/1.12.1 1.12.1 SHA-256/00024b814505d127e7f9d9478b655327243900dc45f5a2602cacb86aa95d44a2
             zinc/maven/org.scala-sbt/compiler-interface 1.12.1 SHA-256/8571d6dae6c3f7f4e782d0bda16ca832e06f749f60cd0e1c66d28dba621c27a9
+            zinc/maven/org.scala-sbt/compiler-interface/pom/1.12.1 1.12.1 SHA-256/0f83465851547aed7ea367544f8d3a92c3e1c06664d1c264a58133d4ce773191
             zinc/maven/org.scala-sbt/core-macros_2.13 1.12.4 SHA-256/37d044a643bdeb0340a6fa0d657c247cec905d43485eb648f9585a7ed96a16af
+            zinc/maven/org.scala-sbt/core-macros_2.13/pom/1.12.4 1.12.4 SHA-256/31073aaac0513eb86b5cf1f8d0300c19cdf491afe176188d53326c231aa33208
             zinc/maven/org.scala-sbt/io_2.13 1.10.5 SHA-256/fb16f4fb3fa0043d303faf0cb6d1a6b4f539a77b34949398527d732a4c05df57
+            zinc/maven/org.scala-sbt/io_2.13/pom/1.10.5 1.10.5 SHA-256/af026f28dc971aca307f6151113d2d1e41be316cdfc88e13bd89fd8d160ac43f
             zinc/maven/org.scala-sbt/launcher-interface 1.4.4 SHA-256/aeb5bc134ecd37ca5532fd2630be65058b88fd7dd1c517cb4b52d316b52be2ce
+            zinc/maven/org.scala-sbt/launcher-interface/pom/1.4.4 1.4.4 SHA-256/e259f51112945677c3712cc701018f6f664630a493197c7d2d7b5c3b2091a2d4
             zinc/maven/org.scala-sbt/sbinary_2.13 0.5.1 SHA-256/29ffddb55471910f2c5f82a954683ce1fab3b094900b97adb1f777c44b1afccc
+            zinc/maven/org.scala-sbt/sbinary_2.13/pom/0.5.1 0.5.1 SHA-256/757e1ccb7d7add7a98ed97596893847988e862d952e125d29e56bb94cb49949b
             zinc/maven/org.scala-sbt/util-control_2.13 1.12.4 SHA-256/6d8a9f952618bd7166219da26dd22deee2e4f7dcf8bab305b8e0fdcb02400fab
+            zinc/maven/org.scala-sbt/util-control_2.13/pom/1.12.4 1.12.4 SHA-256/71ddf022190a667213773e881d1856bef92af497f775781078fcd170a5a5bcab
             zinc/maven/org.scala-sbt/util-interface 1.12.4 SHA-256/cd6916d1e622c3e662bf58d739babae022a582ec48107f5fb84b25cc56b0c3dc
+            zinc/maven/org.scala-sbt/util-interface/pom/1.12.4 1.12.4 SHA-256/d2b4db017fd0450a56ee1329eee06c285d90c51e31097f5011743bd7bb13c4f7
             zinc/maven/org.scala-sbt/util-logging_2.13 1.12.4 SHA-256/455ef5fc777ba780512a02c874178fb8f029de064c04f1e8de75c56b63a2a27f
+            zinc/maven/org.scala-sbt/util-logging_2.13/pom/1.12.4 1.12.4 SHA-256/161bee814f4231223704116f295e07877fbc2fbd75dee3ee2ed1abc07b63005c
             zinc/maven/org.scala-sbt/util-position_2.13 1.12.4 SHA-256/2a999002e13f9d4e147d580669429bfed495b6b2b4c27a2254ce2ded579d3ba9
+            zinc/maven/org.scala-sbt/util-position_2.13/pom/1.12.4 1.12.4 SHA-256/6870012541a249027bae7c80b0101c453b2284a139b45ac098224308c75df9ee
             zinc/maven/org.scala-sbt/util-relation_2.13 1.12.4 SHA-256/7c187a51584f50739d888d92add7592936888043546f47a916953e1e595f8d68
+            zinc/maven/org.scala-sbt/util-relation_2.13/pom/1.12.4 1.12.4 SHA-256/300ff68adc3c0e870ee4494523f145e92463230e74e96bf9ef27c9775db3a23d
             zinc/maven/org.scala-sbt/zinc-apiinfo_2.13 1.12.1 SHA-256/854b4241d7c4811c44a514743d85bb6410ae70dc70a95569ea7c300a09942e07
+            zinc/maven/org.scala-sbt/zinc-apiinfo_2.13/pom/1.12.1 1.12.1 SHA-256/ee454673297b3769cd09dd4508898cb0db4dfcf6c2ac6abdb2dfe4760fdceabf
             zinc/maven/org.scala-sbt/zinc-classfile_2.13 1.12.1 SHA-256/ca720b449b4d15c576f470a28911fe6c5768b5ec78a20a26d37b167f31253d81
+            zinc/maven/org.scala-sbt/zinc-classfile_2.13/pom/1.12.1 1.12.1 SHA-256/556c33e35d5d826b98e3462f9ae663294cd2e2d13631fbe4c169f76650ded046
             zinc/maven/org.scala-sbt/zinc-classpath_2.13 1.12.1 SHA-256/167ad63a8f06ac0c84edfc1b6f6be7a242989d725f5ea26f3ae53eb28a2ebde2
+            zinc/maven/org.scala-sbt/zinc-classpath_2.13/pom/1.12.1 1.12.1 SHA-256/c2f3629d699474036545d2f109e7a586dce6fa8cac121d088717df5559d73fbe
             zinc/maven/org.scala-sbt/zinc-compile-core_2.13 1.12.1 SHA-256/8d4c1fd49c1ade3725923960f00552f1717302bd5309b15a4b02957b277c8922
+            zinc/maven/org.scala-sbt/zinc-compile-core_2.13/pom/1.12.1 1.12.1 SHA-256/e8ffc99e45d531df531a1e47cfff68be7fdda757d0d4ddaa53460d1aea542911
             zinc/maven/org.scala-sbt/zinc-core_2.13 1.12.1 SHA-256/66f2c043d06f4b9b1f39653e614a82b59a6cd7e6778a06078b63054ce6db77b1
+            zinc/maven/org.scala-sbt/zinc-core_2.13/pom/1.12.1 1.12.1 SHA-256/531482aca5f7221c0b3b6a38fb822fbd1409573f23d05cb15d6ab92a2409b594
             zinc/maven/org.scala-sbt/zinc-persist-core-assembly 1.12.1 SHA-256/1f029e2ab30d11544b8e553bf57d1e20a6e93d69298c2ef229438ab58ad4fddb
+            zinc/maven/org.scala-sbt/zinc-persist-core-assembly/pom/1.12.1 1.12.1 SHA-256/fcf45899723ac96d576c3c48aa1380237fed2a54efac43385505aeb11a076a79
             zinc/maven/org.scala-sbt/zinc-persist_2.13 1.12.1 SHA-256/b8864e40d7499ece209c7fd66aef35ebab87f45ec2d7f211b3bdb0974948d381
+            zinc/maven/org.scala-sbt/zinc-persist_2.13/pom/1.12.1 1.12.1 SHA-256/42e4488144ca7c53337dabab871d9e074dc896203620d7da822b8ec326f3ddcf
             zinc/maven/org.scala-sbt/zinc_2.13 1.12.1 SHA-256/eb0ef70fe9ad0944bd0bfabf8ca69921047c4adce354b19b2ff3f0c3d86f1a1b
+            zinc/maven/org.scala-sbt/zinc_2.13/pom/1.12.1 1.12.1 SHA-256/7851f63889fa8edf35ba0aa820452f7a41ab818ed5c0ac96bee912a5a386fe59
             """, SCALADOC = """
             scaladoc/maven/com.fasterxml.jackson.core/jackson-annotations 2.21 SHA-256/53ca085f4a150f703f49e1aabd935bd03b43e1ea3d55d135438292af22cef56b
+            scaladoc/maven/com.fasterxml.jackson.core/jackson-annotations/pom/2.21 2.21 SHA-256/71cac5392151e2a528cc9a09179f0a334179f05c52f8e596cf58ddf12bb27f2b
             scaladoc/maven/com.fasterxml.jackson.core/jackson-core 2.13.2 SHA-256/9bfa278ad05179fb68087851caf607652702ca25424bec8358a3716e751405c8
+            scaladoc/maven/com.fasterxml.jackson.core/jackson-core/pom/2.13.2 2.13.2 SHA-256/7bdeb19b730522c1f0f651fe0d797b141c386a1e56feaae621f1955cf2faf021
             scaladoc/maven/com.fasterxml.jackson.core/jackson-databind 2.13.4.2 SHA-256/ba1a368137f9b92f48dd07f299ff7a782a69487b853ef5578215426fcde8f08b
+            scaladoc/maven/com.fasterxml.jackson.core/jackson-databind/pom/2.13.4.2 2.13.4.2 SHA-256/5026062f36c6ad718dae4f024d1cd89f98df3146dc1e8cf2e4c2bcbf978185be
             scaladoc/maven/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 2.13.2 SHA-256/cf5034791afbbec5139d539c1a94194f172d52a516ad9c25aad5f235a937c747
+            scaladoc/maven/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/pom/2.13.2 2.13.2 SHA-256/656519b4b9f83b3c9681fa2ad4185878d0f801ca066de6ae759c8cf5af0a1a26
+            scaladoc/maven/com.fasterxml.jackson.module/jackson-modules-java8/pom/2.13.2 2.13.2 SHA-256/f221a49c7286d64079c261d4737b5e396752de29c47c22a25f3be47c67492861
+            scaladoc/maven/com.fasterxml.jackson/jackson-base/pom/2.13.2 2.13.2 SHA-256/32cfe9eb0c630db42822e567d9a36463edae3a6a4950b95d33b0ed31a68f19a6
+            scaladoc/maven/com.fasterxml.jackson/jackson-base/pom/2.13.4 2.13.4 SHA-256/98b08346fa922deb37afb02713d50a6c56848250374c64198153a3f9dcb79879
+            scaladoc/maven/com.fasterxml.jackson/jackson-bom/pom/2.13.2 2.13.2 SHA-256/05e57b016bdc58d739b2536e23816800936947d5155c2d03fa8e43dfed63b6be
+            scaladoc/maven/com.fasterxml.jackson/jackson-bom/pom/2.13.4 2.13.4 SHA-256/435e9493ddaa96e51995be83b31376ebffd2b37361d8567e1ea14e1c64c3f0d7
+            scaladoc/maven/com.fasterxml.jackson/jackson-parent/pom/2.13 2.13 SHA-256/2bba89978172af1effcb4d143d09921a3f3082ca4dcf122b1ded98bf55b2ad57
+            scaladoc/maven/com.fasterxml.jackson/jackson-parent/pom/2.21 2.21 SHA-256/3851df627faeb46887b956104630b74a8bbb5f7de22e974cf15982e20e0373de
+            scaladoc/maven/com.fasterxml/oss-parent/pom/43 43 SHA-256/e5585cc1c37079b2e3817a8997945736f158831844d59d0e4d3a45b27611f926
+            scaladoc/maven/com.fasterxml/oss-parent/pom/75 75 SHA-256/fcbbf1c18c9047e6917d384f2064e21b42a58fc85fb0523a9e2e015eff7c619d
+            scaladoc/maven/com.fasterxml/oss-parent/pom/79 79 SHA-256/9206b7dd67fb138036576c3dfca947a2a8f3e2c4d2d9c1f2d1dea519b3a4dae1
             scaladoc/maven/com.vladsch.flexmark/flexmark 0.64.8 SHA-256/3133878d108f0e1964d7d427f379a7433e1b71a45f9f3c1fab7ed0ac0301d3b0
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-anchorlink 0.64.8 SHA-256/36d6849df8548a71b0f87eb97d3690864b960a8e4979fedf865418c8903453a6
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-anchorlink/pom/0.64.8 0.64.8 SHA-256/a0b3de04e43620beb22f8d9e1b9cf244d3c68bd679e1aa3f80ae6332d36da8bb
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-autolink 0.64.8 SHA-256/4850d6f895ec3f2932635829d74ff9a2fb00918965bb91c000ab497d603e11b8
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-autolink/pom/0.64.8 0.64.8 SHA-256/a4084cd7c370f2db566d182c5839dd910767011062eccc51cdbd07b5129bd64a
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-emoji 0.64.8 SHA-256/012d2db51463afd84702627e493fedce42eb7deb1bae309ddcefd181ab283cbe
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-emoji/pom/0.64.8 0.64.8 SHA-256/375752600eca50639a7bd1f21672b6f36b0315b602a0e70a0f3a0645967140a9
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-gfm-strikethrough 0.64.8 SHA-256/fc6cad026fbd036b3ffd0448264360a5f1b572756ef3427ff022715b7fc5f1c3
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-gfm-strikethrough/pom/0.64.8 0.64.8 SHA-256/dbd892340d1637239a7f66c5e5219210b7cd417d1fd771ce93a965b03f718288
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-gfm-tasklist 0.64.8 SHA-256/c86754ba8f0ffe997fa448da2a6ab2cfdbea9b381884cfed6f74bf513b77f5a9
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-gfm-tasklist/pom/0.64.8 0.64.8 SHA-256/82b4ae194ebc72a0837c5859f65a9ba839b186fdfac56da898b4088e7ac3c8b8
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-ins 0.64.8 SHA-256/5b61b83c31cb0bd3273cbf12aed3887b63b8bdc6dfa17b03ecf479cf1ce176bd
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-ins/pom/0.64.8 0.64.8 SHA-256/4cf640cc39e506dcc2bc5ed293464e89eb7dbb75fc72186582b7b633cce25b21
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-superscript 0.64.8 SHA-256/457933324d1ca9f283bc15a1842777c6df0385f318fcceade4de41621395e402
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-superscript/pom/0.64.8 0.64.8 SHA-256/f897ef3aeb6432c37fb8880172053116d11af38ae4709c908aa70154cd261a1e
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-tables 0.64.8 SHA-256/cdf82d26e112e96ade7e370138aeb16920b7e2d411d20c6c15cb1acfacd1ef1f
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-tables/pom/0.64.8 0.64.8 SHA-256/f8b9ee8741591312fc2353e47cc8cc6d922e7764489d83abad7d15f33537dcf5
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-wikilink 0.64.8 SHA-256/f32ef779eefb4c3b80d5bebf3c4b7ad7206fc46e083a5901cf51db7b4535ff79
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-wikilink/pom/0.64.8 0.64.8 SHA-256/56bfacea6133f64f85df422bea263ff5448a3560b17d2217c3c2d2bc944fb5ba
             scaladoc/maven/com.vladsch.flexmark/flexmark-ext-yaml-front-matter 0.64.8 SHA-256/6c60b85db4cc851301c1a52d712dc0909c5d2da9bd17ebae4d97a3a03afe22ee
+            scaladoc/maven/com.vladsch.flexmark/flexmark-ext-yaml-front-matter/pom/0.64.8 0.64.8 SHA-256/f11291fcb7db8222101ef8a9009e038b047a5d2fcf95674a51cfdc35111a6b98
+            scaladoc/maven/com.vladsch.flexmark/flexmark-java/pom/0.64.8 0.64.8 SHA-256/407bf752f3762aa908c5fc4d664b893994d1b783aa20a2966a43f86c155eb433
             scaladoc/maven/com.vladsch.flexmark/flexmark-jira-converter 0.64.8 SHA-256/ccc1c3a9659a104b75a53a2321e9c1d4cedb05acd867d4366d8b8e1647bd37dd
+            scaladoc/maven/com.vladsch.flexmark/flexmark-jira-converter/pom/0.64.8 0.64.8 SHA-256/68eebaf15436edec7bf0330842070dd223aa71741c697d7bc9029511d946e082
             scaladoc/maven/com.vladsch.flexmark/flexmark-util 0.64.8 SHA-256/1e24c891dac9532bb722be7122c7026fb47868c3de36c02400eed8e9ad535727
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-ast 0.64.8 SHA-256/a5342f644c6a5f37d502f225c3a0cb699c263621c82e720d9c08eba5a9f3b8d3
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-ast/pom/0.64.8 0.64.8 SHA-256/33920f703f27690feaabb08a434ecef20d3bddba4c6dc17d9b51180025072133
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-builder 0.64.8 SHA-256/afb9c88d9f652451e75f1ab069ad7ddd791d712eb211c51d8d2a83494240875d
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-builder/pom/0.64.8 0.64.8 SHA-256/1112ad85d98b874b497954fa7b2491f405dbe01da4b28d31f5754ccc5b6a2fa1
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-collection 0.64.8 SHA-256/031ff01408d0f54c6235db18d451dc6e6b15b859b0ec1e40ff3429a82375082a
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-collection/pom/0.64.8 0.64.8 SHA-256/c472c240dee615b92a21241c1b42f39bfe3865895c30286e95623cd9405e726b
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-data 0.64.8 SHA-256/83ceb5989ab0205054bf1b42446f55cb6da14c10aa7c2bda05d6a2504670f353
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-data/pom/0.64.8 0.64.8 SHA-256/dba97509af7abd6c1204dc0b3f62b4869cf1a8e37c9e9d66356e10ab24e485f1
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-dependency 0.64.8 SHA-256/e41adb5e8144699b61b78d50eb004eeb7de84f90c4c63626609e6cee5ea28b42
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-dependency/pom/0.64.8 0.64.8 SHA-256/d0490ffb44edf34a50a6b9fa9eb5c3dd73d3f7078e1f4de8aee5219b22144556
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-format 0.64.8 SHA-256/6c9ac87686474edf0117b3f838d9dcb3b965fa72be4998d2177b598013679f73
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-format/pom/0.64.8 0.64.8 SHA-256/abe07a00ffeb6ebf8be83a02cce4d27691e7454951be76adb5e57daa626248e1
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-html 0.64.8 SHA-256/5b19e6506aff7913c74ad725af7c2b8a9f23958e6324bf0710c5a645a4663017
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-html/pom/0.64.8 0.64.8 SHA-256/412393f0352df8699683829a6910ce217ed1b52c9ab9c619220d4e33d5b49fba
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-misc 0.64.8 SHA-256/74472ca81a9080e51ea1a4f11c270898e3d6c242c92275fab47eb993806c8f2b
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-misc/pom/0.64.8 0.64.8 SHA-256/ee4cc1699660a3433e609032db46abfb4c934e51a63f7a5839ec1f8b6a95c0e1
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-options 0.64.8 SHA-256/2489f41e9caf1d9f8061833b311b25403925cbb631fff2b8c069192804d6fc88
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-options/pom/0.64.8 0.64.8 SHA-256/180e43378771cdc56194386043c5d7f43b2aec45bd37d089c26615d00b398b60
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-sequence 0.64.8 SHA-256/6e22976fe4e9b8de94fd529991ecb2d79cc482aad94985367470a93be1d82631
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-sequence/pom/0.64.8 0.64.8 SHA-256/6ceab4120f6855bb7d21e5720e156ea20a9691e51137d6468f4b9067352f83ef
             scaladoc/maven/com.vladsch.flexmark/flexmark-util-visitor 0.64.8 SHA-256/d9b3002a833a078c45e139568b306dab0ac117ff9046c6a1f9e180c0154563fc
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util-visitor/pom/0.64.8 0.64.8 SHA-256/fa45a2ca0fae47bfa7c3a197c22ba17b64223598594c38a6ce59273e5390c176
+            scaladoc/maven/com.vladsch.flexmark/flexmark-util/pom/0.64.8 0.64.8 SHA-256/838120f6a4e8cd0b9bec18867029d78f114d577cdcbcea6946beb97ec98ce7f8
+            scaladoc/maven/com.vladsch.flexmark/flexmark/pom/0.64.8 0.64.8 SHA-256/c303bb71ca39b528806a79f8ef02da4a94f1925b75d41877a2344db1bc225a92
+            scaladoc/maven/io.netty/netty-bom/pom/4.2.12.Final 4.2.12.Final SHA-256/4b1eac8791c931a33d9e2fb8c083432552cf87469db419b7d2434178e34f070c
             scaladoc/maven/nl.big-o/liqp 0.9.2.3 SHA-256/1f7dc450a0e116dcf9be7f7285f531bd59c6f9a88a85377bb0f716678e2d838a
+            scaladoc/maven/nl.big-o/liqp/pom/0.9.2.3 0.9.2.3 SHA-256/70e319ddcae46d968a8c03aa257bd644e9bb8a08dad8d61f545c24a7a29da9d8
             scaladoc/maven/org.jetbrains/annotations 24.0.1 SHA-256/61666dbce7e42e6c85b43c04fcfb8293a21dcb55b3c80e869270ce42c01a6b35
+            scaladoc/maven/org.jetbrains/annotations/pom/24.0.1 24.0.1 SHA-256/99bede29c0331c1952eee04bf9978de535a90c97e2defffa5e009335171925b0
             scaladoc/maven/org.jsoup/jsoup 1.22.2 SHA-256/596785996d3c6df16f544c232d10a9a1d88783b2a4740cf5251cb616f2be704d
+            scaladoc/maven/org.jsoup/jsoup/pom/1.22.2 1.22.2 SHA-256/54fab990a0ef56297088c252213fa83394fafcefa516059044c09e3a8e05e552
+            scaladoc/maven/org.junit/junit-bom/pom/6.0.3 6.0.3 SHA-256/a655b6a5dc00d1bebc91fb2b15c0c7e8aeac9d6bdcf879595505370e27530287
             scaladoc/maven/org.nibor.autolink/autolink 0.6.0 SHA-256/a80be030f6386f18111cad9161c0b6983157352a1b59a59e6002172f0d321c04
+            scaladoc/maven/org.nibor.autolink/autolink/pom/0.6.0 0.6.0 SHA-256/916755647a34ccb367e11834d28380198c834adfcf660e0d983e375b8f5c28f2
             scaladoc/maven/org.ow2.asm/asm 9.10.1 SHA-256/ed825d10ab1399c8c0cb669e688cf0c8c82629b4c8399b58352b68e92ca10fcb
             scaladoc/maven/org.ow2.asm/asm-analysis 9.10.1 SHA-256/dede75a21306b65974ecd8f87114ff6970f09fb794157a4ca09ab25c888c2bfc
+            scaladoc/maven/org.ow2.asm/asm-analysis/pom/9.10.1 9.10.1 SHA-256/534fbb85f643c2330691e92652ec40dd497b4f279ef13d829d85858905d33ba3
             scaladoc/maven/org.ow2.asm/asm-commons 9.10.1 SHA-256/6d0abefb7cbf972ea16edb37ec14835372505063a45f976ab7ea889ed9497895
+            scaladoc/maven/org.ow2.asm/asm-commons/pom/9.10.1 9.10.1 SHA-256/ceb2c43f3a273db88af8652d89ed6312f3e91a1a1e0ffc6f7823169278cf795c
             scaladoc/maven/org.ow2.asm/asm-tree 9.10.1 SHA-256/3dfb0d5b6a106cd40b5b250e39935fbf2f927f4477546a5369a3ac609cf0506b
+            scaladoc/maven/org.ow2.asm/asm-tree/pom/9.10.1 9.10.1 SHA-256/963eebdea6e2e1ff25c9068b64a238e1585c99f8acd455595ac159a7f52b6c41
             scaladoc/maven/org.ow2.asm/asm-util 9.10.1 SHA-256/1bb99d091fba2597dc6d51193e9bbcf0d8447e7ed96bd8f0198b18152f09655c
+            scaladoc/maven/org.ow2.asm/asm-util/pom/9.10.1 9.10.1 SHA-256/fcea2bad7868ed18949a2e71c40cf26de1516d16440e63f585c3e05d285c0d2b
+            scaladoc/maven/org.ow2.asm/asm/pom/9.10.1 9.10.1 SHA-256/e1b1c3832ca3ac0a9e563c405f4c760118b5556a4920daee14058886197e094d
+            scaladoc/maven/org.ow2/ow2/pom/1.5.1 1.5.1 SHA-256/321ddbb7ee6fe4f53dea6b4cd6db74154d6bfa42391c1f763b361b9f485acf05
             scaladoc/maven/org.scala-lang/scala-library 3.10.0 SHA-256/b47befb29e02bbc08a10bbd387b35cf80ff9bf04fda8fdf3dda6c8ad6895f325
+            scaladoc/maven/org.scala-lang/scala-library/pom/3.10.0 3.10.0 SHA-256/d0a2d6185a3e1d82bfce5fab23ffae2bb293c13961ac163797093a0530295b77
             scaladoc/maven/org.scala-lang/scala3-compiler_3 3.10.0 SHA-256/51e241938950723faebe420eb4d3bd4da3a1b686f6be574ad0ff4040a6b4bc1f
+            scaladoc/maven/org.scala-lang/scala3-compiler_3/pom/3.10.0 3.10.0 SHA-256/9bc0cfe42589b7e500bcb7b6b2e19d74f7b0f8d348f324337f39dec96aac164c
             scaladoc/maven/org.scala-lang/scala3-interfaces 3.10.0 SHA-256/2293237c57462efcc200e1cf9ec7b5764c17458b3886689cc16c5ec9a5552ddf
+            scaladoc/maven/org.scala-lang/scala3-interfaces/pom/3.10.0 3.10.0 SHA-256/f0d8c805eb64e12e413b0cee1ccd0f7304d4194e49d4b87850e54033f5f1c527
             scaladoc/maven/org.scala-lang/scala3-library_3 3.10.0 SHA-256/4daaede24ddfeea082bbed096ba0c492d99e8428632e9fd3c38f82cf7aad4b63
+            scaladoc/maven/org.scala-lang/scala3-library_3/pom/3.10.0 3.10.0 SHA-256/759d3716f18aa412f3c88fc40d3df1a2cf80d18620500476f0a65d52d852e1e8
             scaladoc/maven/org.scala-lang/scala3-tasty-inspector_3 3.10.0 SHA-256/96a9e772a6d3f5c7e76f8fba9f6745cf6d68478c8c9346109b287de8cf957a12
+            scaladoc/maven/org.scala-lang/scala3-tasty-inspector_3/pom/3.10.0 3.10.0 SHA-256/42b215b0b41ecb18c579af5966f321564572515016bd51f31d343a6ce5b8b39d
             scaladoc/maven/org.scala-lang/scaladoc_3 3.10.0 SHA-256/2f1a34c894696858c0ccc97a4ea0d6400efb7a6ba6171281c50813c956a851af
+            scaladoc/maven/org.scala-lang/scaladoc_3/pom/3.10.0 3.10.0 SHA-256/e40da22f3804e3e357ec815a97293f2bd139ca6c2627a8e88773595e7aaff9cb
             scaladoc/maven/org.scala-lang/tasty-core_3 3.10.0 SHA-256/cd8088db4457e84610cfdf0381e8c2f92f409fb565ad5d792a3bdc7d37526058
+            scaladoc/maven/org.scala-lang/tasty-core_3/pom/3.10.0 3.10.0 SHA-256/d9b9cdd228583317c20fb33612669e5b8d3cf6ce8ab25fd4bd1d8c690de87227
             scaladoc/maven/org.scala-sbt/compiler-interface 1.12.0 SHA-256/92f487a505eafdd0a033e4ff4f38a81509a655c76257c64e6808dd873cc145c3
+            scaladoc/maven/org.scala-sbt/compiler-interface/pom/1.12.0 1.12.0 SHA-256/b5cfd5574ad88819d64e3d4b50f909d399bb836ba56883d37ef13d9d13b6c214
             scaladoc/maven/org.scala-sbt/util-interface 1.11.5 SHA-256/1fc950a9e1a35385e79316e23c120d4fd184f6a7af0274e00a703b0dc76376af
+            scaladoc/maven/org.scala-sbt/util-interface/pom/1.11.5 1.11.5 SHA-256/0dfcedd4814f3b87a2bc3f60e8103757b3f5424c5c72ddf910fb2be6ee00e259
             scaladoc/maven/org.snakeyaml/snakeyaml-engine 3.0.1 SHA-256/0b638c8806112215e02e58e95cbd9e9a69d4bd540991f47553d053919994cc94
+            scaladoc/maven/org.snakeyaml/snakeyaml-engine/pom/3.0.1 3.0.1 SHA-256/03559cfc71af8ef4af83385d25d93bf38dfc7a43169b83defc70acdfde14b6d9
+            scaladoc/maven/org.sonatype.oss/oss-parent/pom/7 7 SHA-256/b51f8867c92b6a722499557fc3a1fdea77bdf9ef574722fe90ce436a29559454
             scaladoc/maven/tools.jackson.core/jackson-core 3.2.1 SHA-256/2688aaa60b207403287e16a71fb5644bf2f9cfc464cc601ae95c6c86a5af1f94
+            scaladoc/maven/tools.jackson.core/jackson-core/pom/3.2.1 3.2.1 SHA-256/f927d4f4d318643eb8fc201636d6abda994fc1225f55d9dac17b7273adf789aa
             scaladoc/maven/tools.jackson.core/jackson-databind 3.2.1 SHA-256/8d005c5626b1839e2eea6bd33a437287e7a24d54e1bb3746b8f861193262b519
+            scaladoc/maven/tools.jackson.core/jackson-databind/pom/3.2.1 3.2.1 SHA-256/b50ec5330e84fb64ba53bc260b65b0e0bf26bc0f06a2daa33c6f778d40f7f9ae
             scaladoc/maven/tools.jackson.dataformat/jackson-dataformat-yaml 3.2.1 SHA-256/b6a748ca9aab640f647079b6bfa53f16a5b65b815a19581c4afe0601e754854e
+            scaladoc/maven/tools.jackson.dataformat/jackson-dataformat-yaml/pom/3.2.1 3.2.1 SHA-256/5d1b5ed385a40708e47ebf9c8e631c13f1f42b72293f775edd2a0e31dc8aa3d8
+            scaladoc/maven/tools.jackson.dataformat/jackson-dataformats-text/pom/3.2.1 3.2.1 SHA-256/821f2779afd9ba4416ed5cdc7b5ce6c461df9875282e0f6c475164c1d3f3ae55
+            scaladoc/maven/tools.jackson/jackson-base/pom/3.2.1 3.2.1 SHA-256/0b0406e39eb815ae61542e9422d7754d2105439adca6a32166aed73a26ea07f3
+            scaladoc/maven/tools.jackson/jackson-bom/pom/3.2.1 3.2.1 SHA-256/65e3edbe23705040cf52ae9c5d9f16bfe680f59781b7ed1d4e2c1f3a52e1ab8f
             scaladoc/maven/ua.co.k/strftime4j 1.0.6 SHA-256/d37cabad2f97a746fa811f04c01c9e4b5f6636fff05e294f4e5324c051dd7495
+            scaladoc/maven/ua.co.k/strftime4j/pom/1.0.6 1.0.6 SHA-256/36a278683e868937f17b451943122e1239bbc1a9863e5cd3e1089ef94640fd87
             """;
 
     private ScalaPins() {
