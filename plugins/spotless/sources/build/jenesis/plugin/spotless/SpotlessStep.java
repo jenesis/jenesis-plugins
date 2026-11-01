@@ -185,6 +185,121 @@ public sealed interface SpotlessStep extends Serializable {
         }
     }
 
+    record PrinceOfSpace(String version,
+                         String wrapStyle,
+                         String indentStyle,
+                         Integer indentSize,
+                         Integer lineLength,
+                         Boolean closingParenOnNewLine,
+                         Boolean trailingCommas,
+                         Integer javaLanguageLevel) implements SpotlessStep {
+
+        @Override
+        public String name() {
+            return "princeOfSpace";
+        }
+
+        @Override
+        public SequencedMap<String, String> options() {
+            return SpotlessStep.options("version", version,
+                    "wrapStyle", wrapStyle,
+                    "indentStyle", indentStyle,
+                    "indentSize", indentSize,
+                    "lineLength", lineLength,
+                    "closingParenOnNewLine", closingParenOnNewLine,
+                    "trailingCommas", trailingCommas,
+                    "javaLanguageLevel", javaLanguageLevel);
+        }
+
+        @Override
+        public String artifact() {
+            return "io.github.agustafson.princeofspace/prince-of-space-core";
+        }
+    }
+
+    record Ktfmt(String version,
+                 String style,
+                 Integer maxWidth,
+                 Integer blockIndent,
+                 Integer continuationIndent,
+                 Boolean removeUnusedImports) implements SpotlessStep {
+
+        @Override
+        public String name() {
+            return "ktfmt";
+        }
+
+        @Override
+        public SequencedMap<String, String> options() {
+            return SpotlessStep.options("version", version,
+                    "style", style,
+                    "maxWidth", maxWidth,
+                    "blockIndent", blockIndent,
+                    "continuationIndent", continuationIndent,
+                    "removeUnusedImports", removeUnusedImports);
+        }
+
+        @Override
+        public String artifact() {
+            return "org.jetbrains.kotlinx/ktfmt";
+        }
+    }
+
+    record Ktlint(String version, TreeMap<String, String> editorConfig) implements SpotlessStep {
+
+        @Override
+        public String name() {
+            return "ktlint";
+        }
+
+        @Override
+        public SequencedMap<String, String> options() {
+            SequencedMap<String, String> options = SpotlessStep.options("version", version);
+            editorConfig.forEach((key, value) -> options.put("editorconfig." + key, value));
+            return options;
+        }
+
+        @Override
+        public String artifact() {
+            return "com.pinterest.ktlint/ktlint-cli";
+        }
+    }
+
+    record Scalafmt(String version, String scalaMajorVersion, TreeMap<String, String> configuration)
+            implements SpotlessStep {
+
+        @Override
+        public String name() {
+            return "scalafmt";
+        }
+
+        @Override
+        public SequencedMap<String, String> options() {
+            SequencedMap<String, String> options = SpotlessStep.options("version", version,
+                    "scalaMajorVersion", scalaMajorVersion);
+            configuration.forEach((key, value) -> options.put("configuration." + key, value));
+            return options;
+        }
+
+        @Override
+        public String artifact() {
+            return "org.scalameta/scalafmt-core_" + (scalaMajorVersion == null ? "2.13" : scalaMajorVersion);
+        }
+    }
+
+    record LicenseHeader(String header, String delimiter) implements SpotlessStep {
+
+        @Override
+        public String name() {
+            return "licenseHeader";
+        }
+
+        @Override
+        public SequencedMap<String, String> options() {
+            return SpotlessStep.options("header", header, "delimiter", delimiter);
+        }
+    }
+
     record JacksonJson(String version) implements SpotlessStep {
 
         @Override
