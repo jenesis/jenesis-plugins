@@ -242,7 +242,9 @@ public class SpotlessModule implements BuildExecutorModule {
                 set.targets().forEach(target -> commands.add("--target=" + target));
                 for (SpotlessStep step : set.steps()) {
                     commands.add("--step=" + step.name());
-                    step.options().forEach((key, value) -> commands.add("--" + key + "=" + value));
+                    step.options().forEach((key, value) -> commands.add("--" + key + "=" + value.replace("\\", "\\\\")
+                            .replace("\n", "\\n")
+                            .replace("\r", "\\r")));
                 }
             }
             commands.add("--");

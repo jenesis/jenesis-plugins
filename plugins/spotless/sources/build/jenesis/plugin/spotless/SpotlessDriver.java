@@ -7,17 +7,22 @@ import com.diffplug.spotless.LineEnding;
 import com.diffplug.spotless.Provisioner;
 import com.diffplug.spotless.generic.EndWithNewlineStep;
 import com.diffplug.spotless.generic.IndentStep;
+import com.diffplug.spotless.generic.LicenseHeaderStep;
 import com.diffplug.spotless.generic.ReplaceRegexStep;
 import com.diffplug.spotless.generic.TrimTrailingWhitespaceStep;
 import com.diffplug.spotless.java.FormatAnnotationsStep;
 import com.diffplug.spotless.java.GoogleJavaFormatStep;
 import com.diffplug.spotless.java.ImportOrderStep;
 import com.diffplug.spotless.java.PalantirJavaFormatStep;
+import com.diffplug.spotless.java.PrinceOfSpaceStep;
 import com.diffplug.spotless.java.RemoveUnusedImportsStep;
 import com.diffplug.spotless.json.JacksonJsonConfig;
+import com.diffplug.spotless.kotlin.KtLintStep;
+import com.diffplug.spotless.kotlin.KtfmtStep;
 import com.diffplug.spotless.json.JacksonJsonStep;
 import com.diffplug.spotless.markdown.FlexmarkConfig;
 import com.diffplug.spotless.markdown.FlexmarkStep;
+import com.diffplug.spotless.scala.ScalaFmtStep;
 import com.diffplug.spotless.yaml.JacksonYamlConfig;
 import com.diffplug.spotless.yaml.JacksonYamlStep;
 
@@ -59,7 +64,17 @@ public class SpotlessDriver {
                 options = new LinkedHashMap<>();
                 steps.get(set).add(Map.entry(argument.substring(split + 1), options));
             } else if (argument.startsWith("--") && options != null && split > 2) {
-                options.put(argument.substring(2, split), argument.substring(split + 1));
+                StringBuilder value = new StringBuilder();
+                for (int index = split + 1; index < argument.length(); index++) {
+                    char character = argument.charAt(index);
+                    if (character == '\\' && index + 1 < argument.length()) {
+                        char escaped = argument.charAt(++index);
+                        value.append(escaped == 'n' ? '\n' : escaped == 'r' ? '\r' : escaped);
+                    } else {
+                        value.append(character);
+                    }
+                }
+                options.put(argument.substring(2, split), value.toString());
             } else {
                 System.err.println("Unexpected argument " + argument);
                 return 2;
@@ -112,6 +127,84 @@ public class SpotlessDriver {
                                     : PalantirJavaFormatStep.defaultFormatJavadoc(),
                             provisioner);
                     case "removeUnusedImports" -> RemoveUnusedImportsStep.create(provisioner);
+                    case "princeOfSpace" -> {
+                        PrinceOfSpaceStep.Options settings = new PrinceOfSpaceStep.Options();
+                        if (values.containsKey("wrapStyle")) {
+                            settings.setWrapStyle(values.get("wrapStyle"));
+                        }
+                        if (values.containsKey("indentStyle")) {
+                            settings.setIndentStyle(values.get("indentStyle"));
+                        }
+                        if (values.containsKey("indentSize")) {
+                            settings.setIndentSize(Integer.parseInt(values.get("indentSize")));
+                        }
+                        if (values.containsKey("lineLength")) {
+                            settings.setLineLength(Integer.parseInt(values.get("lineLength")));
+                        }
+                        if (values.containsKey("closingParenOnNewLine")) {
+                            settings.setClosingParenOnNewLine(Boolean.parseBoolean(values.get("closingParenOnNewLine")));
+                        }
+                        if (values.containsKey("trailingCommas")) {
+                            settings.setTrailingCommas(Boolean.parseBoolean(values.get("trailingCommas")));
+                        }
+                        if (values.containsKey("javaLanguageLevel")) {
+                            settings.setJavaLanguageLevel(Integer.parseInt(values.get("javaLanguageLevel")));
+                        }
+                        yield PrinceOfSpaceStep.create(values.getOrDefault("version", PrinceOfSpaceStep.defaultVersion()),
+                                provisioner,
+                                settings);
+                    }
+                    case "ktfmt" -> {
+                        KtfmtStep.KtfmtFormattingOptions settings = new KtfmtStep.KtfmtFormattingOptions();
+                        if (values.containsKey("maxWidth")) {
+                            settings.setMaxWidth(Integer.parseInt(values.get("maxWidth")));
+                        }
+                        if (values.containsKey("blockIndent")) {
+                            settings.setBlockIndent(Integer.parseInt(values.get("blockIndent")));
+                        }
+                        if (values.containsKey("continuationIndent")) {
+                            settings.setContinuationIndent(Integer.parseInt(values.get("continuationIndent")));
+                        }
+                        if (values.containsKey("removeUnusedImports")) {
+                            settings.setRemoveUnusedImports(Boolean.parseBoolean(values.get("removeUnusedImports")));
+                        }
+                        yield KtfmtStep.create(values.getOrDefault("version", KtfmtStep.defaultVersion()),
+                                provisioner,
+                                values.containsKey("style") ? KtfmtStep.Style.valueOf(values.get("style")) : null,
+                                settings);
+                    }
+                    case "ktlint" -> {
+                        Map<String, Object> overrides = new TreeMap<>();
+                        values.forEach((key, value) -> {
+                            if (key.startsWith("editorconfig.")) {
+                                overrides.put(key.substring("editorconfig.".length()), value);
+                            }
+                        });
+                        yield KtLintStep.create(values.getOrDefault("version", KtLintStep.defaultVersion()),
+                                provisioner,
+                                null,
+                                overrides,
+                                List.of());
+                    }
+                    case "scalafmt" -> {
+                        String version = values.getOrDefault("version", ScalaFmtStep.defaultVersion());
+                        List<String> lines = new ArrayList<>(List.of("version = \"" + version + "\""));
+                        values.entrySet().stream()
+                                .filter(value -> value.getKey().startsWith("configuration."))
+                                .map(value -> value.getKey().substring("configuration.".length()) + " = " + value.getValue())
+                                .sorted()
+                                .forEach(lines::add);
+                        Path configuration = Files.createTempFile("scalafmt", ".conf");
+                        configuration.toFile().deleteOnExit();
+                        Files.write(configuration, lines);
+                        yield ScalaFmtStep.create(version,
+                                values.getOrDefault("scalaMajorVersion", ScalaFmtStep.defaultScalaMajorVersion()),
+                                provisioner,
+                                configuration.toFile());
+                    }
+                    case "licenseHeader" -> LicenseHeaderStep.headerDelimiter(values.get("header"),
+                                    values.getOrDefault("delimiter", LicenseHeaderStep.DEFAULT_JAVA_HEADER_DELIMITER))
+                            .build();
                     case "jacksonJson" -> JacksonJsonStep.create(new JacksonJsonConfig(),
                             values.getOrDefault("version", JacksonJsonStep.defaultVersion()),
                             provisioner);
@@ -144,8 +237,11 @@ public class SpotlessDriver {
                     try {
                         formatted = entry.getValue().compute(formatted, path.toFile());
                     } catch (RuntimeException exception) {
-                        System.err.println(file + " cannot be formatted by the steps of " + entry.getKey() + ": "
-                                + exception.getMessage());
+                        Throwable cause = exception;
+                        while (cause.getCause() != null) {
+                            cause = cause.getCause();
+                        }
+                        System.err.println(file + " cannot be formatted by the steps of " + entry.getKey() + ": " + cause);
                         return 2;
                     }
                     applied = entry.getValue();

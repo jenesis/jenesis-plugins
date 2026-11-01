@@ -112,8 +112,9 @@ public class SpotlessFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("prettier")
                 .hasMessageContaining("[endWithNewline, flexmark, formatAnnotations, googleJavaFormat, importOrder,"
-                        + " jacksonJson, jacksonYaml, leadingSpacesToTabs, leadingTabsToSpaces, palantirJavaFormat,"
-                        + " removeUnusedImports, replaceRegex, trimTrailingWhitespace]");
+                        + " jacksonJson, jacksonYaml, ktfmt, ktlint, leadingSpacesToTabs, leadingTabsToSpaces,"
+                        + " licenseHeader, palantirJavaFormat, princeOfSpace, removeUnusedImports, replaceRegex, scalafmt,"
+                        + " trimTrailingWhitespace]");
     }
 
     @Test
@@ -179,6 +180,56 @@ public class SpotlessFactoryTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("misc.replaceRegex.regex=(unclosed")
                 .hasMessageContaining("no regular expression");
+    }
+
+    @Test
+    public void hands_any_other_option_of_ktlint_and_scalafmt_down_to_the_tool() {
+        SequencedMap<String, String> values = new LinkedHashMap<>();
+        values.put("kotlin.target", "*.kt");
+        values.put("kotlin.steps", "ktlint");
+        values.put("kotlin.ktlint.ktlint_code_style", "intellij_idea");
+        values.put("kotlin.ktlint.indent_size", "2");
+        values.put("scala.target", "*.scala");
+        values.put("scala.steps", "scalafmt");
+        values.put("scala.scalafmt.version", "3.11.5");
+        values.put("scala.scalafmt.align.preset", "more");
+
+        assertThat(create(values)).isNotNull();
+    }
+
+    @Test
+    public void refuses_scalafmt_without_the_version_its_configuration_names() {
+        SequencedMap<String, String> values = new LinkedHashMap<>();
+        values.put("scala.target", "*.scala");
+        values.put("scala.steps", "scalafmt");
+        values.put("scala.scalafmt.maxColumn", "100");
+
+        assertThatThrownBy(() -> create(values))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("scala.scalafmt.version=<version>");
+    }
+
+    @Test
+    public void refuses_a_license_header_step_without_its_header() {
+        SequencedMap<String, String> values = new LinkedHashMap<>();
+        values.put("java.target", "*.java");
+        values.put("java.steps", "licenseHeader");
+
+        assertThatThrownBy(() -> create(values))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("java.licenseHeader.header=");
+    }
+
+    @Test
+    public void refuses_a_dotted_option_of_a_step_with_named_options() {
+        SequencedMap<String, String> values = new LinkedHashMap<>();
+        values.put("kotlin.target", "*.kt");
+        values.put("kotlin.steps", "ktfmt");
+        values.put("kotlin.ktfmt.style.extra", "GOOGLE");
+
+        assertThatThrownBy(() -> create(values))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("ktfmt takes no option style.extra");
     }
 
     private Path execute(SequencedMap<String, String> values) throws IOException {
