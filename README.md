@@ -47,6 +47,7 @@ setting that switches it off.
 | [`palantir`](plugins/palantir/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with Palantir Java Format. |
 | [`pitest`](plugins/pitest/) | Runs PIT mutation testing over the code a test module tests, reporting which mutants its tests kill. |
 | [`pmd`](plugins/pmd/) | Checks the Java sources of a module with PMD. |
+| [`princeofspace`](plugins/princeofspace/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Prince of Space formatter. |
 | [`protoc`](plugins/protoc/) | Generates Java sources from Protocol Buffers definitions (`.proto`). |
 | [`revapi`](plugins/revapi/) | Analyses the API of a module against a released baseline with revapi. |
 | [`scala`](plugins/scala/) | Compiles the Scala sources of a module with the Scala 3 compiler before javac, jointly with its Java sources, and documents them with Scaladoc. |
