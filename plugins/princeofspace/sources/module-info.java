@@ -7,11 +7,11 @@
  *
  * @jenesis.release 25
  * @jenesis.alias io.princeofspace io.github.agustafson.princeofspace/prince-of-space-core
- * @jenesis.pin build.jenesis 0.18.0 SHA-256/35a94fc0761110ebcd2fa51b2226a3e7e0a942b14cd69d67cc584bf5f3519f70
- * @jenesis.pin build.jenesis/build.jenesis 0.18.0 SHA-256/35a94fc0761110ebcd2fa51b2226a3e7e0a942b14cd69d67cc584bf5f3519f70
+ * @jenesis.pin build.jenesis 0.18.1 SHA-256/ec0151718921a0755d2461aec78cc58ef0e4bbaa4d69fc056507b28e3a98a5ac
+ * @jenesis.pin build.jenesis/build.jenesis 0.18.1 SHA-256/ec0151718921a0755d2461aec78cc58ef0e4bbaa4d69fc056507b28e3a98a5ac
  * @jenesis.pin com.github.javaparser/javaparser-core 3.28.2 SHA-256/b5499a3b1c40b16c0671fabe478c9aafeab38160c6fde74a6c13f42d86716ecd
  * @jenesis.pin io.github.agustafson.princeofspace/prince-of-space-core 2.3.0 SHA-256/cd74d0ff8e8fa1553dcbefa9fe07709a417a7b2b371d2b13083778c41132066e
- * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.0 SHA-256/1b46b6334674d86f9ab07933724988c5c4033216b7029534124bff2a0390f5bb
+ * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.1 SHA-256/047a160f2aca68c669157aad74a27a28c3c7c1acf696dd672e163706e8f477e0
  * @jenesis.pin maven/com.github.javaparser/javaparser-core/pom 3.28.2 SHA-256/87d2b333dfec96896d5a49e80a95b92ef572f610e848276b45eaa061e05b4132
  * @jenesis.pin maven/com.github.javaparser/javaparser-parent/pom 3.28.2 SHA-256/0358ce75bca1a54c141e16b7f1621e973fa177ddf64fe02b0f38df23ad400543
  * @jenesis.pin maven/io.github.agustafson.princeofspace/prince-of-space-core/pom 2.3.0 SHA-256/22bb5e09b8bdde300bc59f4e85904d9977593f452065c526ca0bcbc20758f409
