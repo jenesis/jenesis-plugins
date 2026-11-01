@@ -4,18 +4,13 @@ Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of 
 [Prince of Space](https://github.com/agustafson/prince-of-space) formatter.
 
 ```properties
-# jenesis.plugins.properties
-princeofspace+format=build.jenesis.plugin.princeofspace
-```
-
-```properties
-# build.jenesis/plugin-princeofspace.properties
+# build.jenesis/princeofspace.properties
 wrap-style=wide
 line-length=100
 ```
 
-A project names the plugin in its `jenesis.plugins.properties`, and the build runs it in every module where a
-configuration folder holds a `plugin-princeofspace.properties`. The lines of that file are its values:
+The build discovers the plugin by itself in every module where a configuration folder holds a `princeofspace.properties`,
+and resolves it there as `build.jenesis.plugin.princeofspace`. The lines of the file are its values:
 
 | Value | Meaning |
 |---|---|
@@ -27,9 +22,10 @@ configuration folder holds a `plugin-princeofspace.properties`. The lines of tha
 | `trailing-commas` | adds trailing commas to multi-line enums and array literals, `false` by default |
 | `java-version` | the Java language level the sources are parsed at, `17` by default |
 
-Any other value is refused, and an empty file formats with the defaults. The formatter,
-`io.github.agustafson.princeofspace:prince-of-space-core`, resolves in `plugin.princeofspace:tool/…`.
+Any other value is refused, and an empty file formats with the defaults. A build that finds the properties of a second
+Java formatter fails, naming both. The formatter, `io.github.agustafson.princeofspace:prince-of-space-core`, resolves in
+`princeofspace:tool/…`.
 
 It reads no file.
 
-`-Djenesis.plugin.princeofspace=false` switches it off.
+`-Djenesis.format.princeofspace=false` switches it off.
