@@ -54,6 +54,7 @@ setting that switches it off.
 | [`scalafmt`](plugins/scalafmt/) | Checks the layout of the Scala sources of a module with scalafmt (`@check`), or verifies and rewrites it (`@format`). |
 | [`scalastyle`](plugins/scalastyle/) | Checks the Scala sources of a module with Scalastyle. |
 | [`spotbugs`](plugins/spotbugs/) | Analyses the compiled classes of a module with SpotBugs. |
+| [`spotless`](plugins/spotless/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the files of a module that each set of files selects, with the Spotless steps the set names. |
 | [`wsimport`](plugins/wsimport/) | Generates a web service client from WSDL descriptions. |
 | [`xjc`](plugins/xjc/) | Generates Java sources from XML schemas. |
 
