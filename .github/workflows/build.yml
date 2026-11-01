@@ -15,8 +15,12 @@ permissions:
 # Fetch Maven Central from its Google Cloud mirror, which spares the runners Central's rate limit,
 # and from Central itself for what the mirror has not synced yet: a remote is asked only where
 # the one before it answers 404.
+# The module build.jenesis is read from Central itself: the plugins pin a build.jenesis that the mirror
+# and the module index can serve hours after its release, and the module index redirects to one
+# remote alone.
 env:
   MAVEN_REPOSITORY_URI: https://maven-central.storage-download.googleapis.com/maven2/,https://repo1.maven.org/maven2/
+  JENESIS_REPOSITORY_URI: maven:2:https://repo1.maven.org/maven2/|build.jenesis,https://repo.jenesis.build/
 
 jobs:
   plugins:
