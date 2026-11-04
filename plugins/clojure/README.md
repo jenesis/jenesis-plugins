@@ -16,6 +16,10 @@ The module declares its own Clojure, as every Clojure project does, and the plug
 match the Clojure they run on; without `org.clojure:clojure` on its compile class path, the build fails naming it. A
 `pom.xml` module keeps its namespaces in `src/main/clojure`, which `jenesis.maven.sources=clojure` adds to its sources.
 
+The plugin the build discovers takes the defaults below. A build that sets a value declares the plugin, as above,
+and writes the value into its `plugin-clojure.properties`, switching the discovered one off with
+`-Djenesis.language.clojure=false` in its `jenesis.properties`:
+
 | Value | Default | Effect |
 |---|---|---|
 | `aot` | `true` | Compile every namespace with `clojure.lang.Compile`; `false` ships the sources alone, as a library that is loaded from source does. |
