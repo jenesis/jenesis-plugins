@@ -27,6 +27,7 @@ setting that switches it off.
 | [`asyncprofiler`](plugins/asyncprofiler/) | Profiles a module's tests with async-profiler, attached as an agent to the JVM the tests run in, and writes what it sampled to the reports of the test step. |
 | [`avro`](plugins/avro/) | Generates Java sources from Avro schemas (`.avsc`) and protocols (`.avpr`). |
 | [`checkstyle`](plugins/checkstyle/) | Checks the Java sources of a module with Checkstyle. |
+| [`clojure`](plugins/clojure/) | Compiles the Clojure namespaces of a module ahead of time with the Clojure the module depends on, after javac, and ships their sources beside the classes. |
 | [`codenarc`](plugins/codenarc/) | Checks the Groovy sources of a module with CodeNarc. |
 | [`detekt`](plugins/detekt/) | Checks the Kotlin sources of a module with detekt. |
 | [`eclipse`](plugins/eclipse/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with the Eclipse formatter. |
