@@ -148,6 +148,7 @@ public class PiTestModuleTest {
     public void mutate_step_extracts_the_first_party_jar_and_leaves_a_library_on_the_class_path()
             throws IOException {
         Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("apptest/AppTest.class");
         jar(project.resolve("app.jar"), "app/App.class");
         jar(project.resolve("library.jar"), "library/Library.class");
         SequencedProperties index = new SequencedProperties();
@@ -180,9 +181,92 @@ public class PiTestModuleTest {
     }
 
     @Test
+    public void mutate_step_keeps_the_classes_of_the_tests_off_the_mutable_code_path() throws IOException {
+        Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("app/AppTest.class");
+        jar(project.resolve("app.jar"), "app/App.class");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/runtime/maven/org.example/app", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "pitest",
+                new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity())),
+                "project");
+        executor.execute("pitest/mutate");
+
+        Path mutate = root.resolve("pitest").resolve("mutate").resolve("supplement");
+        assertThat(mutate.resolve("code").resolve("app").resolve("AppTest.class"))
+                .as("a test is never mutated, even in the package of the code it tests")
+                .doesNotExist();
+        assertThat(mutate.resolve("tests").resolve("app").resolve("AppTest.class"))
+                .as("the tests reach PIT beside the code they test")
+                .exists();
+        String command = Files.readString(mutate.resolve("command"));
+        assertThat(command.substring(command.indexOf("--classPath"), command.indexOf("--sourceDirs")))
+                .as("the tests stay on the class path")
+                .contains("supplement" + File.separator + "code")
+                .contains("supplement" + File.separator + "tests");
+        assertThat(command.substring(command.indexOf("--mutableCodePaths"), command.indexOf("--timestampedReports")))
+                .as("only the code under test is mutable")
+                .contains("supplement" + File.separator + "code")
+                .doesNotContain("supplement" + File.separator + "tests");
+    }
+
+    @Test
+    public void mutate_step_selects_the_packages_of_the_code_under_test_where_no_classes_are_named()
+            throws IOException {
+        Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("apptest/AppTest.class");
+        jar(project.resolve("app.jar"), "app/App.class", "app/internal/Helper.class", "Main.class");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/runtime/maven/org.example/app", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "pitest",
+                new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity())),
+                "project");
+        executor.execute("pitest/mutate");
+
+        assertThat(Files.readString(root.resolve("pitest").resolve("mutate").resolve("supplement").resolve("command")))
+                .as("PIT refuses *, which would select PIT itself, so the default names what the tests test")
+                .contains("Main,app.*,app.internal.*");
+    }
+
+    @Test
+    public void mutate_step_fails_when_mutations_are_required_and_the_tests_require_no_module_of_the_project()
+            throws IOException {
+        Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("apptest/AppTest.class");
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "pitest",
+                new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity()))
+                        .failWhenNoMutations(true),
+                "project");
+
+        assertThatThrownBy(() -> executor.execute("pitest/mutate"))
+                .hasStackTraceContaining("PIT finds no class to mutate under failWhenNoMutations");
+    }
+
+    @Test
     public void mutate_step_hands_pit_the_typed_selection_of_classes_tests_formats_and_mutators()
             throws IOException {
         Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("apptest/AppTest.class");
         jar(project.resolve("app.jar"), "app/App.class");
         SequencedProperties index = new SequencedProperties();
         index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
@@ -197,7 +281,7 @@ public class PiTestModuleTest {
                 "pitest",
                 new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity()))
                         .targetClasses(List.of("app.*", "lib.*"))
-                        .targetTests(List.of("app.*"))
+                        .targetTests(List.of("apptest.*"))
                         .outputFormats(List.of(PiTestModule.OutputFormat.XML, PiTestModule.OutputFormat.HTML))
                         .mutators(List.of("STRONGER", "REMOVE_CONDITIONALS"))
                         .failWhenNoMutations(true),
@@ -214,6 +298,7 @@ public class PiTestModuleTest {
     @Test
     public void mutate_step_runs_nothing_when_no_class_matches_the_target_tests() throws IOException {
         Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("apptest/AppTest.class");
         jar(project.resolve("app.jar"), "app/App.class");
         SequencedProperties index = new SequencedProperties();
         index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
@@ -258,12 +343,20 @@ public class PiTestModuleTest {
                 .hasMessageContaining("such as DEFAULTS");
     }
 
-    private static void jar(Path jar, String entry) throws IOException {
+    private static void jar(Path jar, String... entries) throws IOException {
         try (JarOutputStream stream = new JarOutputStream(Files.newOutputStream(jar))) {
-            stream.putNextEntry(new JarEntry(entry));
-            stream.write(new byte[] {1, 2, 3});
-            stream.closeEntry();
+            for (String entry : entries) {
+                stream.putNextEntry(new JarEntry(entry));
+                stream.write(new byte[] {1, 2, 3});
+                stream.closeEntry();
+            }
         }
+    }
+
+    private void test(String entry) throws IOException {
+        Path file = project.resolve(BuildStep.CLASSES).resolve(entry);
+        Files.createDirectories(file.getParent());
+        Files.write(file, new byte[] {1, 2, 3});
     }
 
     private Path cli() throws IOException {

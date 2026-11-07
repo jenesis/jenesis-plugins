@@ -13,13 +13,11 @@ public class PiTestExampleTest {
     private Path folder;
 
     @Test
-    public void mutates_the_code_a_test_module_tests_and_reports_the_mutants_its_tests_kill() throws IOException {
+    public void mutates_the_code_a_test_module_tests_but_not_the_tests_and_reports_the_mutants_they_kill()
+            throws IOException {
         ExampleProject project = ExampleProject.of(folder, PiTestFactory.class)
                 .write("jenesis.plugins.properties", "pitest+observed=build.jenesis.plugin.pitest\n")
-                .write("build.jenesis/plugin-pitest.properties", """
-                        targetClasses=example.Calculator
-                        targetTests=example.test.*
-                        """)
+                .write("build.jenesis/plugin-pitest.properties", "outputFormats=XML\n")
                 .write("sources/module-info.java", "module example { exports example; }\n")
                 .write("sources/example/Calculator.java", """
                         package example;
@@ -57,6 +55,7 @@ public class PiTestExampleTest {
                 .as("the plugin runs PIT over the tested code through the build that loads it")
                 .content()
                 .contains("<mutatedClass>example.Calculator</mutatedClass>")
-                .contains("status='KILLED'");
+                .contains("status='KILLED'")
+                .doesNotContain("<mutatedClass>example.test.");
     }
 }

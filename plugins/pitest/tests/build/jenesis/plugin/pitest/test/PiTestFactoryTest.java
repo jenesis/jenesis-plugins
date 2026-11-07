@@ -47,6 +47,8 @@ public class PiTestFactoryTest {
     @Test
     public void hands_pit_every_value_it_takes_reading_a_format_whatever_its_case() throws IOException {
         Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        Files.write(Files.createDirectories(project.resolve(BuildStep.CLASSES).resolve("app")).resolve("AppTest.class"),
+                new byte[] {1, 2, 3});
         try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(project.resolve("app.jar")))) {
             jar.putNextEntry(new JarEntry("app/App.class"));
             jar.write(new byte[] {1, 2, 3});
