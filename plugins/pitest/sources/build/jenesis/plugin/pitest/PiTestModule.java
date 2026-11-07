@@ -354,7 +354,10 @@ public class PiTestModule implements BuildExecutorModule {
                                                      SequencedMap<String, BuildStepArgument> arguments,
                                                      SequencedMap<String, SequencedMap<String, String>> properties)
                 throws IOException {
-            List<String> tools = new ArrayList<>(), external = new ArrayList<>(), sources = new ArrayList<>();
+            List<String> tools = new ArrayList<>(),
+                    tested = new ArrayList<>(),
+                    external = new ArrayList<>(),
+                    sources = new ArrayList<>();
             Set<String> expanded = new HashSet<>();
             Path code = Files.createDirectories(context.supplement().resolve("code")).toAbsolutePath(),
                     tests = Files.createDirectories(context.supplement().resolve("tests")).toAbsolutePath();
@@ -372,6 +375,7 @@ public class PiTestModule implements BuildExecutorModule {
                 for (Map.Entry<String, Path> entry : mutable.entrySet()) {
                     if (expanded.add(entry.getKey())) {
                         extract(entry.getValue(), code);
+                        tested.add(entry.getValue().toString());
                     }
                 }
                 for (Path jar : Dependencies.select(argument.folder(), group, "runtime")) {
@@ -416,6 +420,7 @@ public class PiTestModule implements BuildExecutorModule {
             List<String> classPath = new ArrayList<>();
             classPath.add(code.toString());
             classPath.add(tests.toString());
+            classPath.addAll(tested);
             classPath.addAll(new LinkedHashSet<>(external));
             List<String> commands = new ArrayList<>(List.of(
                     "-cp",
@@ -496,7 +501,21 @@ public class PiTestModule implements BuildExecutorModule {
 
         private static boolean matches(SequencedSet<String> names, List<String> globs) {
             for (String glob : globs) {
-                Pattern pattern = Pattern.compile(glob.replace(".", "\\.").replace("*", ".*"));
+                StringBuilder regex = new StringBuilder();
+                if (glob.startsWith("~")) {
+                    regex.append(glob.substring(1));
+                } else {
+                    for (char character : glob.replace("**.", "\u0000").toCharArray()) {
+                        switch (character) {
+                            case '\u0000' -> regex.append("(?:.*\\.)*");
+                            case '*' -> regex.append(".*");
+                            case '?' -> regex.append('.');
+                            case '.', '$', '\\', '(', ')', '[', ']' -> regex.append('\\').append(character);
+                            default -> regex.append(character);
+                        }
+                    }
+                }
+                Pattern pattern = Pattern.compile(regex.toString().replace("+", "\\+"));
                 for (String name : names) {
                     if (pattern.matcher(name).matches()) {
                         return true;

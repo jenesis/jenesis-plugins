@@ -3,6 +3,7 @@ package build.jenesis.plugin.pitest.test;
 import module java.base;
 import module java.compiler;
 import module org.junit.jupiter.api;
+import module org.junit.jupiter.params;
 import build.jenesis.BuildExecutor;
 import build.jenesis.BuildExecutorCache;
 import build.jenesis.BuildExecutorCallback;
@@ -177,7 +178,9 @@ public class PiTestModuleTest {
                 .doesNotExist();
         assertThat(Files.readString(mutate.resolve("command")))
                 .as("a library stays on the class path so the mutated code still resolves")
-                .contains(project.resolve("library.jar").toString());
+                .contains(project.resolve("library.jar").toString())
+                .as("the jar of the code under test follows its classes, so that its resources resolve")
+                .contains(project.resolve("app.jar").toString());
     }
 
     @Test
@@ -293,6 +296,33 @@ public class PiTestModuleTest {
                 .contains("XML,HTML")
                 .contains("STRONGER,REMOVE_CONDITIONALS")
                 .contains("--failWhenNoMutations");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"apptest.AppTes?", "**.AppTest", "~apptest\\.App.*", "apptest.*"})
+    public void mutate_step_reads_the_target_tests_as_pit_reads_a_glob(String glob) throws IOException {
+        Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        test("apptest/AppTest.class");
+        jar(project.resolve("app.jar"), "app/App.class");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/runtime/maven/org.example/app", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "pitest",
+                new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity()))
+                        .targetTests(List.of(glob)),
+                "project");
+        executor.execute("pitest/mutate");
+
+        assertThat(root.resolve("pitest").resolve("mutate").resolve("supplement").resolve("command"))
+                .as("a glob PIT selects the tests by also starts PIT")
+                .exists();
     }
 
     @Test

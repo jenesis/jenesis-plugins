@@ -58,4 +58,52 @@ public class PiTestExampleTest {
                 .contains("status='KILLED'")
                 .doesNotContain("<mutatedClass>example.test.");
     }
+
+    @Test
+    public void runs_the_tests_against_the_mutants_with_the_resources_of_the_tested_code() throws IOException {
+        ExampleProject project = ExampleProject.of(folder, PiTestFactory.class)
+                .write("jenesis.plugins.properties", "pitest+observed=build.jenesis.plugin.pitest\n")
+                .write("build.jenesis/plugin-pitest.properties", "outputFormats=XML\n")
+                .write("sources/module-info.java", "module example { exports example; opens example; }\n")
+                .write("sources/example/factor.txt", "3\n")
+                .write("sources/example/Multiplier.java", """
+                        package example;
+                        public class Multiplier {
+                            public int times(int value) throws java.io.IOException {
+                                try (var in = Multiplier.class.getResourceAsStream("factor.txt")) {
+                                    return value * Integer.parseInt(new String(in.readAllBytes()).trim());
+                                }
+                            }
+                        }
+                        """)
+                .write("tests/module-info.java", """
+                        /**
+                         * @jenesis.test example
+                         */
+                        module example.test {
+                            requires example;
+                            requires org.junit.jupiter;
+                        }
+                        """)
+                .write("tests/example/test/MultiplierTest.java", """
+                        package example.test;
+                        import example.Multiplier;
+                        import org.junit.jupiter.api.Test;
+                        import static org.junit.jupiter.api.Assertions.assertEquals;
+                        public class MultiplierTest {
+                            @Test
+                            public void multiplies() throws Exception {
+                                assertEquals(6, new Multiplier().times(2));
+                            }
+                        }
+                        """);
+
+        project.make();
+
+        assertThat(project.find("mutations.xml"))
+                .as("the tests pass without mutation, as they find the resources of the code they test")
+                .content()
+                .contains("<mutatedClass>example.Multiplier</mutatedClass>")
+                .contains("status='KILLED'");
+    }
 }
