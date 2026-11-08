@@ -361,6 +361,13 @@ public class PiTestModule implements BuildExecutorModule {
             Set<String> expanded = new HashSet<>();
             Path code = Files.createDirectories(context.supplement().resolve("code")).toAbsolutePath(),
                     tests = Files.createDirectories(context.supplement().resolve("tests")).toAbsolutePath();
+            String subject = null;
+            for (BuildStepArgument argument : arguments.values()) {
+                Path module = argument.folder().resolve(BuildStep.MODULE);
+                if (subject == null && !argument.removed() && Files.isRegularFile(module)) {
+                    subject = SequencedProperties.ofFiles(module).value("test");
+                }
+            }
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
@@ -371,7 +378,15 @@ public class PiTestModule implements BuildExecutorModule {
                 for (Path jar : Dependencies.select(argument.folder(), tool, "classpath")) {
                     external.add(jar.toString());
                 }
-                SequencedMap<String, Path> mutable = Dependencies.internal(argument.folder());
+                SequencedMap<String, Path> mutable = new LinkedHashMap<>();
+                for (Map.Entry<String, Path> entry : Dependencies.internal(argument.folder()).entrySet()) {
+                    String[] segments = entry.getKey().split("/");
+                    if (subject == null
+                            || segments[0].equals("module") && segments[1].equals(subject)
+                            || segments[0].equals("maven") && segments.length > 3 && segments[2].equals(subject)) {
+                        mutable.put(entry.getKey(), entry.getValue());
+                    }
+                }
                 for (Map.Entry<String, Path> entry : mutable.entrySet()) {
                     if (expanded.add(entry.getKey())) {
                         extract(entry.getValue(), code);
@@ -403,7 +418,7 @@ public class PiTestModule implements BuildExecutorModule {
             if (mutated.isEmpty()) {
                 if (failWhenNoMutations) {
                     throw new IllegalStateException("PIT finds no class to mutate under failWhenNoMutations, as the"
-                            + " tests require no module of the project");
+                            + " tests require no module of the project" + (subject == null ? "" : " named " + subject));
                 }
                 return CompletableFuture.completedStage(null);
             }

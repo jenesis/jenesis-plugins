@@ -106,4 +106,58 @@ public class PiTestExampleTest {
                 .contains("<mutatedClass>example.Multiplier</mutatedClass>")
                 .contains("status='KILLED'");
     }
+
+    @Test
+    public void mutates_the_module_the_tests_test_but_not_a_module_of_the_project_it_requires() throws IOException {
+        ExampleProject project = ExampleProject.of(folder, PiTestFactory.class)
+                .write("jenesis.plugins.properties", "pitest+observed=build.jenesis.plugin.pitest\n")
+                .write("build.jenesis/plugin-pitest.properties", "outputFormats=XML\n")
+                .write("lib/sources/module-info.java", "module example.lib { exports example.lib; }\n")
+                .write("lib/sources/example/lib/Adder.java", """
+                        package example.lib;
+                        public class Adder {
+                            public static int add(int left, int right) {
+                                return left + right;
+                            }
+                        }
+                        """)
+                .write("sources/module-info.java", "module example { requires example.lib; exports example; }\n")
+                .write("sources/example/Calculator.java", """
+                        package example;
+                        public class Calculator {
+                            public int add(int left, int right) {
+                                return example.lib.Adder.add(left, right);
+                            }
+                        }
+                        """)
+                .write("tests/module-info.java", """
+                        /**
+                         * @jenesis.test example
+                         */
+                        module example.test {
+                            requires example;
+                            requires org.junit.jupiter;
+                        }
+                        """)
+                .write("tests/example/test/CalculatorTest.java", """
+                        package example.test;
+                        import example.Calculator;
+                        import org.junit.jupiter.api.Test;
+                        import static org.junit.jupiter.api.Assertions.assertEquals;
+                        public class CalculatorTest {
+                            @Test
+                            public void adds() {
+                                assertEquals(5, new Calculator().add(2, 3));
+                            }
+                        }
+                        """);
+
+        project.make();
+
+        assertThat(project.find("mutations.xml"))
+                .as("the module named by @jenesis.test is mutated, the library it requires is not")
+                .content()
+                .contains("<mutatedClass>example.Calculator</mutatedClass>")
+                .doesNotContain("<mutatedClass>example.lib.");
+    }
 }

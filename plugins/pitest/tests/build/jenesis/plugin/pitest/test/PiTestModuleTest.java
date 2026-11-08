@@ -222,6 +222,45 @@ public class PiTestModuleTest {
     }
 
     @Test
+    public void mutate_step_mutates_only_the_module_the_tests_test_and_leaves_its_dependencies_on_the_class_path()
+            throws IOException {
+        Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        Files.writeString(project.resolve(BuildStep.MODULE), "test=app\n");
+        test("apptest/AppTest.class");
+        jar(project.resolve("app.jar"), "app/App.class");
+        jar(project.resolve("helper.jar"), "helper/Helper.class");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
+        index.setProperty("main/runtime/maven/org.example/helper/1.0", "helper.jar");
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/runtime/maven/org.example/app", "1.0\t\tfalse\ttrue");
+        graph.setProperty("vertex/main/runtime/maven/org.example/helper", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "pitest",
+                new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity())),
+                "project");
+        executor.execute("pitest/mutate");
+
+        Path mutate = root.resolve("pitest").resolve("mutate").resolve("supplement");
+        assertThat(mutate.resolve("code").resolve("app").resolve("App.class"))
+                .as("the module the tests name is mutated")
+                .exists();
+        assertThat(mutate.resolve("code").resolve("helper"))
+                .as("a module of the project the tested one requires is not")
+                .doesNotExist();
+        assertThat(Files.readString(mutate.resolve("command")))
+                .as("it stays on the class path, and the default selects the tested packages alone")
+                .contains(project.resolve("helper.jar").toString())
+                .contains("app.*")
+                .doesNotContain("helper.*");
+    }
+
+    @Test
     public void mutate_step_selects_the_packages_of_the_code_under_test_where_no_classes_are_named()
             throws IOException {
         Files.createDirectory(project.resolve(BuildStep.SOURCES));

@@ -14,7 +14,7 @@ The build discovers the plugin by itself in every test module where a configurat
 
 | Value | Meaning |
 |---|---|
-| `targetClasses` | comma-separated globs of the classes to mutate; by default, every package of the code the tests test |
+| `targetClasses` | comma-separated globs of the classes to mutate; by default, every package of the module the tests test |
 | `targetTests` | comma-separated globs of the tests to run against the mutants; `*` by default |
 | `outputFormats` | comma-separated report formats: `XML` (the default), `HTML`, `CSV` |
 | `mutators` | comma-separated mutators or mutator groups of PIT, such as `STRONGER` |
@@ -22,8 +22,10 @@ The build discovers the plugin by itself in every test module where a configurat
 
 Any other value is refused.
 
-PIT mutates only the code the tests test, the modules of the project the test module requires, and never the
-tests themselves, whatever the globs select. PIT refuses `*` for `targetClasses`, as it would select PIT itself.
+PIT mutates only the module the tests name by `@jenesis.test`, or the artifact a Maven layout's tests belong to, and
+never the tests themselves, whatever the globs select; the other modules of the project the tests require stay on
+the class path. A test module that names no tested module has every module of the project it requires mutated.
+PIT refuses `*` for `targetClasses`, as it would select PIT itself.
 
 It reads no file. PIT runs the tests with the JUnit Platform launcher of the version the test module pins for
 `org.junit.platform/junit-platform-engine` or `junit-platform-commons`, or else of the version its tests resolved.
