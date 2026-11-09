@@ -117,6 +117,6 @@ Classes named `*RunTest` download and run the real tool, so they need the networ
 A release is a manual run of the release workflow from the Actions tab: its optional `sha` input names the
 commit, its optional `tag` input the version (`vX.Y.Z`; default: the next minor of the latest tag), and its
 optional `plugin` input what is released - `all`, the default, releases every plugin and the harness under the
-tag `vX.Y.Z`, while the name of a folder under `plugins/`, or `harness`, releases that one alone under the tag
-`<name>-vX.Y.Z`. Every release takes a version of its own, so a plugin released alone never shares a version
-with a different build of itself.
+tag `vX.Y.Z`, while the names of folders under `plugins/`, or `harness`, separated by commas, release those alone,
+in one deployment to Maven Central, each under the tag `<name>-vX.Y.Z`. Every release takes a version of its own,
+so a plugin released alone never shares a version with a different build of itself.
