@@ -1,8 +1,8 @@
 /**
  * @jenesis.release 25
  * @jenesis.test build.jenesis.plugin.xjc
- * @jenesis.pin build.jenesis 0.18.1 SHA-256/ec0151718921a0755d2461aec78cc58ef0e4bbaa4d69fc056507b28e3a98a5ac
- * @jenesis.pin build.jenesis/build.jenesis 0.18.1 SHA-256/ec0151718921a0755d2461aec78cc58ef0e4bbaa4d69fc056507b28e3a98a5ac
+ * @jenesis.pin build.jenesis 0.18.2
+ * @jenesis.pin build.jenesis/build.jenesis 0.18.2
  * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.1 SHA-256/047a160f2aca68c669157aad74a27a28c3c7c1acf696dd672e163706e8f477e0
  * @jenesis.pin maven/net.bytebuddy/byte-buddy-parent/pom 1.18.3 SHA-256/90ea531731508eea75ff9295141c508d7f9a53d1a05f45b80f8f4999521426ef
  * @jenesis.pin maven/net.bytebuddy/byte-buddy/pom 1.18.3 SHA-256/7157b622a0d6885cb5526a10f1220ddf090dbb52ca2fe38c32cc69c4f1530788
