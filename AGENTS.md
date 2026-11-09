@@ -88,7 +88,7 @@ rule there applies here as well; this file adds what is particular to the plugin
 ## Releasing and the build tool
 
 A release is a manual run of the release workflow from the Actions tab, so any commit is releasable; it releases
-every plugin and the harness, or the one its `plugin` input names, and nothing in `jreleaser.yml` names a plugin,
+every plugin and the harness, or those its `plugin` input names, separated by commas, in one deployment, and nothing in `jreleaser.yml` names a plugin,
 so a new folder under `plugins/` is released without a change there. The build tool pin is moved by checking out the new commit in
 `build/.upstream`, building, and committing the submodule pointer; the plugins' `build.jenesis` pin is moved by
 `pin` once the release they need is published.

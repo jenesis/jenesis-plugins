@@ -25,6 +25,7 @@ release:
     skipRelease: false
     skipTag: false
     tagName: '{{Env.RELEASE_TAG}}'
+    releaseName: '{{Env.RELEASE_NAME}}'
     previousTagName: '{{Env.RELEASE_PREVIOUS_TAG}}'
 
 checksum:
