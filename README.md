@@ -44,6 +44,7 @@ setting that switches it off.
 | [`ktlint`](plugins/ktlint/) | Checks the Kotlin sources of a module with ktlint (`@check`), or verifies and rewrites their layout (`@format`). |
 | [`mavenplugin`](plugins/mavenplugin/) | Writes the descriptor of a Maven plugin into a module's jar, with the generator of Maven's own plugin tools, so that Jenesis builds Maven plugins. |
 | [`openapi`](plugins/openapi/) | Generates Java sources from an OpenAPI specification. |
+| [`openjavaformat`](plugins/openjavaformat/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with Open Java Format. |
 | [`openrewrite`](plugins/openrewrite/) | Verifies, or with `-Djenesis.format.rewrite=true` applies, the OpenRewrite recipes a project declares to the Java sources of a module. |
 | [`palantir`](plugins/palantir/) | Verifies, or with `-Djenesis.format.rewrite=true` rewrites, the Java sources of a module with Palantir Java Format. |
 | [`pitest`](plugins/pitest/) | Runs PIT mutation testing over the code a test module tests, reporting which mutants its tests kill. |
