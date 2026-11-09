@@ -15,8 +15,6 @@ public class ClojureExampleTest {
     @Test
     public void compiles_the_clojure_namespaces_of_a_module_beside_its_java_sources() throws IOException {
         ExampleProject project = ExampleProject.of(folder, ClojureFactory.class)
-                .write("jenesis.plugins.properties", "clojure+language=build.jenesis.plugin.clojure\n")
-                .write("build.jenesis/plugin-clojure.properties", "")
                 .write("jenesis.properties", "jenesis.maven.sources=clojure\n")
                 .write("pom.xml", """
                         <?xml version="1.0" encoding="UTF-8"?>
