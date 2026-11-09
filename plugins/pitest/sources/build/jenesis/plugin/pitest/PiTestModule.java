@@ -362,6 +362,7 @@ public class PiTestModule implements BuildExecutorModule {
             Path code = Files.createDirectories(context.supplement().resolve("code")).toAbsolutePath(),
                     tests = Files.createDirectories(context.supplement().resolve("tests")).toAbsolutePath();
             String subject = null;
+            boolean internal = false;
             for (BuildStepArgument argument : arguments.values()) {
                 Path module = argument.folder().resolve(BuildStep.MODULE);
                 if (subject == null && !argument.removed() && Files.isRegularFile(module)) {
@@ -380,6 +381,7 @@ public class PiTestModule implements BuildExecutorModule {
                 }
                 SequencedMap<String, Path> mutable = new LinkedHashMap<>();
                 for (Map.Entry<String, Path> entry : Dependencies.internal(argument.folder()).entrySet()) {
+                    internal = true;
                     String[] segments = entry.getKey().split("/");
                     if (subject == null
                             || segments[0].equals("module") && segments[1].equals(subject)
@@ -413,6 +415,10 @@ public class PiTestModule implements BuildExecutorModule {
             SequencedSet<String> testable = classes(tests);
             if (testable.isEmpty() || sources.isEmpty() || !matches(testable, targetTests)) {
                 return CompletableFuture.completedStage(null);
+            }
+            if (internal && expanded.isEmpty() && subject != null) {
+                throw new IllegalStateException("The tests name " + subject + " as the module they test, but require"
+                        + " no module of the project by that name");
             }
             SequencedSet<String> mutated = classes(code);
             if (mutated.isEmpty()) {

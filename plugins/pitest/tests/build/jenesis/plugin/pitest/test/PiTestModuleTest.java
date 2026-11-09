@@ -261,6 +261,30 @@ public class PiTestModuleTest {
     }
 
     @Test
+    public void mutate_step_refuses_tests_that_name_a_module_of_the_project_they_do_not_require() throws IOException {
+        Files.createDirectory(project.resolve(BuildStep.SOURCES));
+        Files.writeString(project.resolve(BuildStep.MODULE), "test=other\n");
+        test("apptest/AppTest.class");
+        jar(project.resolve("app.jar"), "app/App.class");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/runtime/maven/org.example/app/1.0", "app.jar");
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/runtime/maven/org.example/app", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "pitest",
+                new PiTestModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity())),
+                "project");
+
+        assertThatThrownBy(() -> executor.execute("pitest/mutate"))
+                .hasStackTraceContaining("The tests name other as the module they test");
+    }
+
+    @Test
     public void mutate_step_selects_the_packages_of_the_code_under_test_where_no_classes_are_named()
             throws IOException {
         Files.createDirectory(project.resolve(BuildStep.SOURCES));
