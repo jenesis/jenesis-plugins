@@ -1,9 +1,9 @@
 /**
  * @jenesis.release 25
  * @jenesis.test build.jenesis.plugin.scalastyle
- * @jenesis.pin build.jenesis 0.18.2
- * @jenesis.pin build.jenesis/build.jenesis 0.18.2
- * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.1 SHA-256/047a160f2aca68c669157aad74a27a28c3c7c1acf696dd672e163706e8f477e0
+ * @jenesis.pin build.jenesis 0.18.2 SHA-256/18494e5406c1a6da0718318cc4037b98ba2c28ce1b1b250580e1b33afd6db7a9
+ * @jenesis.pin build.jenesis/build.jenesis 0.18.2 SHA-256/18494e5406c1a6da0718318cc4037b98ba2c28ce1b1b250580e1b33afd6db7a9
+ * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.2 SHA-256/87abf28d19723e17aa24fa0f87aef0a82b9b0e0174cc0d9747a483a6927308a9
  * @jenesis.pin maven/net.bytebuddy/byte-buddy-parent/pom 1.18.3 SHA-256/90ea531731508eea75ff9295141c508d7f9a53d1a05f45b80f8f4999521426ef
  * @jenesis.pin maven/net.bytebuddy/byte-buddy/pom 1.18.3 SHA-256/7157b622a0d6885cb5526a10f1220ddf090dbb52ca2fe38c32cc69c4f1530788
  * @jenesis.pin maven/org.apiguardian/apiguardian-api/pom 1.1.2 SHA-256/32355081d109095c3d5d374d5a43b4f4c1b75d549e983ef50723e2772e5302a0

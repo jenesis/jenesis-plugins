@@ -5,8 +5,8 @@
  * build that loads the plugin and running it in a JVM of its own.
  *
  * @jenesis.release 25
- * @jenesis.pin build.jenesis 0.18.2
- * @jenesis.pin build.jenesis/build.jenesis 0.18.2
+ * @jenesis.pin build.jenesis 0.18.2 SHA-256/18494e5406c1a6da0718318cc4037b98ba2c28ce1b1b250580e1b33afd6db7a9
+ * @jenesis.pin build.jenesis/build.jenesis 0.18.2 SHA-256/18494e5406c1a6da0718318cc4037b98ba2c28ce1b1b250580e1b33afd6db7a9
  * @jenesis.pin com.sun.istack/istack-commons-runtime 4.1.2 SHA-256/7fd6792361f4dd00f8c56af4a20cecc0066deea4a8f3dec38348af23fc2296ee
  * @jenesis.pin com.sun.istack/istack-commons-tools 4.1.2 SHA-256/85b4fe7ad6fdfc64a586133f039d3de7b51db2c8111a1aa98a267891e27f386f
  * @jenesis.pin com.sun.xml.bind.external/relaxng-datatype 4.0.9 SHA-256/89933721c2dc654049ebea84a33e2f3d36e918e5871ccb6f08df1960779c5cb9
@@ -14,7 +14,7 @@
  * @jenesis.pin com.sun.xml.dtd-parser/dtd-parser 1.5.1 SHA-256/fd07c1b528e8649e956bd4c759a63badb79e8076260b5c23bdf37f2b11d06711
  * @jenesis.pin jakarta.activation/jakarta.activation-api 2.1.4 SHA-256/c9db52100ce6c8aac95cc39075f95720d2e561b11f8051b81c121ad4effd7004
  * @jenesis.pin jakarta.xml.bind/jakarta.xml.bind-api 4.0.5 SHA-256/5e489b6c874c4119e003ff1403db523ee3a8959ec499f3de29e77245efccf216
- * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.1 SHA-256/047a160f2aca68c669157aad74a27a28c3c7c1acf696dd672e163706e8f477e0
+ * @jenesis.pin maven/build.jenesis/build.jenesis/pom 0.18.2 SHA-256/87abf28d19723e17aa24fa0f87aef0a82b9b0e0174cc0d9747a483a6927308a9
  * @jenesis.pin maven/com.sun.istack/istack-commons-runtime/pom 4.1.2 SHA-256/1222a290beddb6f6e92bc999bcebc3696fcd6d72215856d224727a7bc2dc3aca
  * @jenesis.pin maven/com.sun.istack/istack-commons-tools/pom 4.1.2 SHA-256/fb9633448c942248dc9b131f94a4404dfbdde87de1b45370cdfc9230ea0606ca
  * @jenesis.pin maven/com.sun.istack/istack-commons/pom 4.1.2 SHA-256/d8883eb70364701dae0e37449c88fd9275117ac3d86040e89f1be3e9d47e9c9d
