@@ -244,6 +244,14 @@ public class JaCoCoModule implements BuildExecutorModule {
             SequencedSet<String> covering = new LinkedHashSet<>();
             SequencedMap<String, Path> covered = new LinkedHashMap<>();
             Path data = null;
+            String subject = null;
+            boolean internal = false;
+            for (BuildStepArgument argument : arguments.values()) {
+                Path module = argument.folder().resolve(BuildStep.MODULE);
+                if (subject == null && !argument.removed() && Files.isRegularFile(module)) {
+                    subject = SequencedProperties.ofFiles(module).value("test");
+                }
+            }
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
@@ -260,10 +268,22 @@ public class JaCoCoModule implements BuildExecutorModule {
                 if (classes && Files.isDirectory(compiled)) {
                     covering.add(compiled.toString());
                 }
-                if (classes && Files.isDirectory(source)) {
+                if (Files.isDirectory(source)) {
                     sources.add(source.toString());
                 }
-                Dependencies.internal(argument.folder()).forEach(covered::putIfAbsent);
+                for (Map.Entry<String, Path> entry : Dependencies.internal(argument.folder()).entrySet()) {
+                    internal = true;
+                    String[] segments = entry.getKey().split("/");
+                    if (subject == null
+                            || segments[0].equals("module") && segments[1].equals(subject)
+                            || segments[0].equals("maven") && segments.length > 3 && segments[2].equals(subject)) {
+                        covered.putIfAbsent(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+            if (data != null && internal && covered.isEmpty() && subject != null) {
+                throw new IllegalStateException("The tests name " + subject + " as the module they test, but require"
+                        + " no module of the project by that name");
             }
             for (Path jar : covered.values()) {
                 covering.add(jar.toString());
