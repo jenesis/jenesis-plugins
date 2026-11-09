@@ -59,4 +59,58 @@ public class JaCoCoExampleTest {
                 .contains("name=\"example/Calculator\"")
                 .contains("name=\"add\"");
     }
+
+    @Test
+    public void reports_the_coverage_of_the_module_the_tests_test_but_not_of_a_module_it_requires() throws IOException {
+        ExampleProject project = ExampleProject.of(folder, JaCoCoFactory.class)
+                .write("jenesis.plugins.properties", "jacoco+observe=build.jenesis.plugin.jacoco\n")
+                .write("build.jenesis/plugin-jacoco.properties", "minimum.line=0.5\n")
+                .write("lib/sources/module-info.java", "module example.lib { exports example.lib; }\n")
+                .write("lib/sources/example/lib/Adder.java", """
+                        package example.lib;
+                        public class Adder {
+                            public static int add(int left, int right) {
+                                return left + right;
+                            }
+                        }
+                        """)
+                .write("sources/module-info.java", "module example { requires example.lib; exports example; }\n")
+                .write("sources/example/Calculator.java", """
+                        package example;
+                        public class Calculator {
+                            public int add(int left, int right) {
+                                return example.lib.Adder.add(left, right);
+                            }
+                        }
+                        """)
+                .write("tests/module-info.java", """
+                        /**
+                         * @jenesis.test example
+                         */
+                        module example.test {
+                            requires example;
+                            requires org.junit.jupiter.api;
+                        }
+                        """)
+                .write("tests/example/test/CalculatorTest.java", """
+                        package example.test;
+                        import example.Calculator;
+                        import org.junit.jupiter.api.Test;
+                        import static org.junit.jupiter.api.Assertions.assertEquals;
+                        class CalculatorTest {
+                            @Test
+                            void adds() {
+                                assertEquals(3, new Calculator().add(1, 2));
+                            }
+                        }
+                        """);
+
+        project.make();
+
+        assertThat(project.find("jacoco.xml"))
+                .as("the module named by @jenesis.test is reported, the library it requires is not")
+                .content()
+                .contains("name=\"example/Calculator\"")
+                .doesNotContain("name=\"example/lib/Adder\"");
+    }
 }

@@ -87,7 +87,8 @@ public class JaCoCoModuleTest {
     }
 
     @Test
-    public void report_leaves_out_the_classes_and_sources_it_is_handed_as_they_are_the_tests() throws IOException {
+    public void report_leaves_out_the_classes_it_is_handed_as_they_are_the_tests_but_reads_every_source_folder()
+            throws IOException {
         Path resolved = Files.createDirectory(project.resolve(Dependencies.RESOLVED));
         Path first = Files.write(resolved.resolve("maven%2Forg.example%2Flibrary%2F1.0.jar"), new byte[0]);
         Files.write(project.resolve("jacoco.exec"), new byte[0]);
@@ -116,7 +117,67 @@ public class JaCoCoModuleTest {
                 .contains("--classfiles " + shell(first.toString()))
                 .as("the compiled tests are not counted as covered code")
                 .doesNotContain(project.resolve(BuildStep.CLASSES).toString())
-                .doesNotContain(project.resolve(BuildStep.SOURCES).toString());
+                .as("a source folder shows the code it holds, and the tests' own match no covered class")
+                .contains("--sourcefiles " + shell(project.resolve(BuildStep.SOURCES).toString()));
+    }
+
+    @Test
+    public void report_covers_only_the_module_the_tests_name_and_none_it_requires() throws IOException {
+        Path resolved = Files.createDirectory(project.resolve(Dependencies.RESOLVED));
+        Path tested = Files.write(resolved.resolve("maven%2Forg.example%2Flibrary%2F1.0.jar"), new byte[0]);
+        Path required = Files.write(resolved.resolve("maven%2Forg.example%2Fhelper%2F1.0.jar"), new byte[0]);
+        Files.write(project.resolve("jacoco.exec"), new byte[0]);
+        Files.writeString(project.resolve(BuildStep.MODULE), "test=library\n");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/compile/maven/org.example/library/1.0",
+                Dependencies.RESOLVED + tested.getFileName());
+        index.setProperty("main/compile/maven/org.example/helper/1.0",
+                Dependencies.RESOLVED + required.getFileName());
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/compile/maven/org.example/library", "1.0\t\tfalse\ttrue");
+        graph.setProperty("vertex/main/compile/maven/org.example/helper", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "jacoco",
+                new JaCoCoModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity())),
+                "project");
+        executor.execute("jacoco/report");
+
+        assertThat(root.resolve("jacoco").resolve("report").resolve("supplement").resolve("command"))
+                .content()
+                .as("the module the tests name by @jenesis.test is the code they cover")
+                .contains("--classfiles " + shell(tested.toString()))
+                .as("a module of the project it requires is not")
+                .doesNotContain(required.toString());
+    }
+
+    @Test
+    public void report_refuses_tests_that_name_a_module_of_the_project_they_do_not_require() throws IOException {
+        Path resolved = Files.createDirectory(project.resolve(Dependencies.RESOLVED));
+        Path first = Files.write(resolved.resolve("maven%2Forg.example%2Flibrary%2F1.0.jar"), new byte[0]);
+        Files.write(project.resolve("jacoco.exec"), new byte[0]);
+        Files.writeString(project.resolve(BuildStep.MODULE), "test=other\n");
+        SequencedProperties index = new SequencedProperties();
+        index.setProperty("main/compile/maven/org.example/library/1.0",
+                Dependencies.RESOLVED + first.getFileName());
+        index.store(project.resolve(BuildStep.DEPENDENCIES));
+        SequencedProperties graph = new SequencedProperties();
+        graph.setProperty("vertex/main/compile/maven/org.example/library", "1.0\t\tfalse\ttrue");
+        graph.store(project.resolve(Dependencies.GRAPH));
+
+        BuildExecutor executor = newExecutor();
+        executor.addSource("project", project);
+        executor.addModule(
+                "jacoco",
+                new JaCoCoModule(Map.of("maven", serving(cli())), Map.of("maven", Resolver.identity())),
+                "project");
+
+        assertThatThrownBy(() -> executor.execute("jacoco/report"))
+                .hasStackTraceContaining("The tests name other as the module they test");
     }
 
     private Path cli() throws IOException {
