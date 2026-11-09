@@ -40,7 +40,7 @@ public class PiTestModule implements BuildExecutorModule {
              null,
              "pitest",
              "main",
-             List.of("*"),
+             List.of(),
              List.of("*"),
              List.of(OutputFormat.XML),
              List.of(),
@@ -55,7 +55,7 @@ public class PiTestModule implements BuildExecutorModule {
                 Pinning.ofEnvironment(environment),
                 "pitest",
                 "main",
-                List.of("*"),
+                List.of(),
                 List.of("*"),
                 List.of(OutputFormat.XML),
                 List.of(),
@@ -354,10 +354,21 @@ public class PiTestModule implements BuildExecutorModule {
                                                      SequencedMap<String, BuildStepArgument> arguments,
                                                      SequencedMap<String, SequencedMap<String, String>> properties)
                 throws IOException {
-            List<String> tools = new ArrayList<>(), external = new ArrayList<>(), sources = new ArrayList<>();
-            SequencedSet<String> candidates = new LinkedHashSet<>();
+            List<String> tools = new ArrayList<>(),
+                    tested = new ArrayList<>(),
+                    external = new ArrayList<>(),
+                    sources = new ArrayList<>();
             Set<String> expanded = new HashSet<>();
-            Path code = Files.createDirectories(context.supplement().resolve("code")).toAbsolutePath();
+            Path code = Files.createDirectories(context.supplement().resolve("code")).toAbsolutePath(),
+                    tests = Files.createDirectories(context.supplement().resolve("tests")).toAbsolutePath();
+            String subject = null;
+            boolean internal = false;
+            for (BuildStepArgument argument : arguments.values()) {
+                Path module = argument.folder().resolve(BuildStep.MODULE);
+                if (subject == null && !argument.removed() && Files.isRegularFile(module)) {
+                    subject = SequencedProperties.ofFiles(module).value("test");
+                }
+            }
             for (BuildStepArgument argument : arguments.values()) {
                 if (argument.removed()) {
                     continue;
@@ -368,10 +379,20 @@ public class PiTestModule implements BuildExecutorModule {
                 for (Path jar : Dependencies.select(argument.folder(), tool, "classpath")) {
                     external.add(jar.toString());
                 }
-                SequencedMap<String, Path> mutable = Dependencies.internal(argument.folder());
+                SequencedMap<String, Path> mutable = new LinkedHashMap<>();
+                for (Map.Entry<String, Path> entry : Dependencies.internal(argument.folder()).entrySet()) {
+                    internal = true;
+                    String[] segments = entry.getKey().split("/");
+                    if (subject == null
+                            || segments[0].equals("module") && segments[1].equals(subject)
+                            || segments[0].equals("maven") && segments.length > 3 && segments[2].equals(subject)) {
+                        mutable.put(entry.getKey(), entry.getValue());
+                    }
+                }
                 for (Map.Entry<String, Path> entry : mutable.entrySet()) {
                     if (expanded.add(entry.getKey())) {
                         extract(entry.getValue(), code);
+                        tested.add(entry.getValue().toString());
                     }
                 }
                 for (Path jar : Dependencies.select(argument.folder(), group, "runtime")) {
@@ -381,7 +402,7 @@ public class PiTestModule implements BuildExecutorModule {
                 }
                 Path classes = argument.folder().resolve(BuildStep.CLASSES);
                 if (Files.isDirectory(classes)) {
-                    copy(classes, code);
+                    copy(classes, tests);
                 }
                 Path source = argument.folder().resolve(BuildStep.SOURCES);
                 if (Files.isDirectory(source)) {
@@ -391,25 +412,36 @@ public class PiTestModule implements BuildExecutorModule {
             if (tools.isEmpty()) {
                 throw new IllegalStateException("No PIT jars resolved upstream of the PIT mutation step");
             }
-            Files.walkFileTree(code, new SimpleFileVisitor<>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-                    String name = code.relativize(file).toString();
-                    if (name.endsWith(".class") && !name.equals("module-info.class")) {
-                        candidates.add(name.substring(0, name.length() - 6).replace(File.separatorChar, '.'));
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-            if (candidates.isEmpty() || sources.isEmpty()) {
+            SequencedSet<String> testable = classes(tests);
+            if (testable.isEmpty() || sources.isEmpty() || !matches(testable, targetTests)) {
                 return CompletableFuture.completedStage(null);
             }
-            if (!matches(candidates, targetTests)) {
+            if (internal && expanded.isEmpty() && subject != null) {
+                throw new IllegalStateException("The tests name " + subject + " as the module they test, but require"
+                        + " no module of the project by that name");
+            }
+            SequencedSet<String> mutated = classes(code);
+            if (mutated.isEmpty()) {
+                if (failWhenNoMutations) {
+                    throw new IllegalStateException("PIT finds no class to mutate under failWhenNoMutations, as the"
+                            + " tests require no module of the project" + (subject == null ? "" : " named " + subject));
+                }
                 return CompletableFuture.completedStage(null);
+            }
+            List<String> selected = targetClasses;
+            if (selected.isEmpty()) {
+                SequencedSet<String> packages = new TreeSet<>();
+                for (String name : mutated) {
+                    int dot = name.lastIndexOf('.');
+                    packages.add(dot < 0 ? name : name.substring(0, dot) + ".*");
+                }
+                selected = List.copyOf(packages);
             }
             Path report = Files.createDirectories(context.next().resolve(BuildStep.REPORTS + "pitest"));
             List<String> classPath = new ArrayList<>();
             classPath.add(code.toString());
+            classPath.add(tests.toString());
+            classPath.addAll(tested);
             classPath.addAll(new LinkedHashSet<>(external));
             List<String> commands = new ArrayList<>(List.of(
                     "-cp",
@@ -422,7 +454,7 @@ public class PiTestModule implements BuildExecutorModule {
                     "--sourceDirs",
                     String.join(",", sources),
                     "--targetClasses",
-                    String.join(",", targetClasses),
+                    String.join(",", selected),
                     "--targetTests",
                     String.join(",", targetTests),
                     "--outputFormats",
@@ -438,6 +470,21 @@ public class PiTestModule implements BuildExecutorModule {
                 commands.add(String.join(",", mutators));
             }
             return CompletableFuture.completedStage(commands);
+        }
+
+        private static SequencedSet<String> classes(Path folder) throws IOException {
+            SequencedSet<String> names = new TreeSet<>();
+            Files.walkFileTree(folder, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    String name = folder.relativize(file).toString();
+                    if (name.endsWith(".class") && !name.equals("module-info.class")) {
+                        names.add(name.substring(0, name.length() - 6).replace(File.separatorChar, '.'));
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+            return names;
         }
 
         private static void extract(Path jar, Path code) throws IOException {
@@ -475,7 +522,21 @@ public class PiTestModule implements BuildExecutorModule {
 
         private static boolean matches(SequencedSet<String> names, List<String> globs) {
             for (String glob : globs) {
-                Pattern pattern = Pattern.compile(glob.replace(".", "\\.").replace("*", ".*"));
+                StringBuilder regex = new StringBuilder();
+                if (glob.startsWith("~")) {
+                    regex.append(glob.substring(1));
+                } else {
+                    for (char character : glob.replace("**.", "\u0000").toCharArray()) {
+                        switch (character) {
+                            case '\u0000' -> regex.append("(?:.*\\.)*");
+                            case '*' -> regex.append(".*");
+                            case '?' -> regex.append('.');
+                            case '.', '$', '\\', '(', ')', '[', ']' -> regex.append('\\').append(character);
+                            default -> regex.append(character);
+                        }
+                    }
+                }
+                Pattern pattern = Pattern.compile(regex.toString().replace("+", "\\+"));
                 for (String name : names) {
                     if (pattern.matcher(name).matches()) {
                         return true;
