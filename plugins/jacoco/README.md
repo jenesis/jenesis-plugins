@@ -28,4 +28,4 @@ It reads nothing a project binds: the agent joins the JVM the tests run in, and 
 The report's tool resolves in the tool group of the plugin, `jacoco:tool/…`, and the agent the tests run with in
 `jacoco:agent/…`, at the release of JaCoCo the tool group pins.
 
-`-Djenesis.observe.jacoco=false` switches it off.
+`-Djenesis.jacoco.observe=false` switches it off.

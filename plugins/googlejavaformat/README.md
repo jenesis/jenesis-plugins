@@ -24,4 +24,4 @@ Java formatter fails, naming both.
 
 It reads no file.
 
-`-Djenesis.format.googlejavaformat=false` switches it off.
+`-Djenesis.googlejavaformat.format=false` switches it off.

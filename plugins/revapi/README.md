@@ -21,5 +21,5 @@ Any other value is refused.
 
 It reads the `revapi.json` that `configuration` names, if it names one, which the build binds.
 
-`-Djenesis.artifact.revapi=false` switches it off, and `-Djenesis.strict.revapi=true` fails the build on its findings rather
+`-Djenesis.revapi.artifact=false` switches it off, and `-Djenesis.revapi.strict=true` fails the build on its findings rather
 than reporting them, as for every checker of the build.

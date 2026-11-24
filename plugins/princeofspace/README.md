@@ -28,4 +28,4 @@ Java formatter fails, naming both. The formatter, `io.github.agustafson.princeof
 
 It reads no file.
 
-`-Djenesis.format.princeofspace=false` switches it off.
+`-Djenesis.princeofspace.format=false` switches it off.

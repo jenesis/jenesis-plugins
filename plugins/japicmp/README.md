@@ -23,4 +23,4 @@ The build discovers the plugin by itself in every module but a test module where
 
 Any other value is refused.
 
-`-Djenesis.artifact.japicmp=false` switches it off.
+`-Djenesis.japicmp.artifact=false` switches it off.

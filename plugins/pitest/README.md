@@ -30,4 +30,4 @@ PIT refuses `*` for `targetClasses`, as it would select PIT itself.
 It reads no file. PIT runs the tests with the JUnit Platform launcher of the version the test module pins for
 `org.junit.platform/junit-platform-engine` or `junit-platform-commons`, or else of the version its tests resolved.
 
-`-Djenesis.observe.pitest=false` switches it off.
+`-Djenesis.pitest.observe=false` switches it off.

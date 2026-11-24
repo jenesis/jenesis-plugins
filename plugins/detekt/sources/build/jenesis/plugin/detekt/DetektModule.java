@@ -24,7 +24,7 @@ public class DetektModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String STRICT = "strict.detekt";
+    static final String STRICT = "detekt.strict";
     private static final String REPORT = BuildStep.REPORTS + "detekt/detekt-report.xml";
     private static final String MAVEN_GROUP = "io.gitlab.arturbosch.detekt", MAVEN_ARTIFACT = "detekt-cli";
 

@@ -21,4 +21,4 @@ Any other value is refused.
 It reads the schemas (`.xsd`), bindings (`.xjb`) and catalog below an `xjc/` folder of what it is handed; the file
 binds them with an `@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
 
-`-Djenesis.generate.xjc=false` switches it off.
+`-Djenesis.xjc.generate=false` switches it off.

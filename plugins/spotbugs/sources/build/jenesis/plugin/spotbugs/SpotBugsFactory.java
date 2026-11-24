@@ -20,7 +20,7 @@ public class SpotBugsFactory implements BuildModuleFactory {
         if (!properties.isEmpty()) {
             throw new IllegalArgumentException("The SpotBugs plugin takes no values, but was handed "
                     + properties.sequencedKeySet()
-                    + " - remove them, as SpotBugs reads jenesis.strict.spotbugs alone");
+                    + " - remove them, as SpotBugs reads jenesis.spotbugs.strict alone");
         }
         return SpotBugsModule.ofEnvironment(environment, repositories, resolvers).permits(permits).tool(group + ":tool");
     }

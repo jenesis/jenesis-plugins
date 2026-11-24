@@ -22,7 +22,7 @@ public class AsyncProfilerFactory implements ObservabilityFactory {
                 && Set.of("amd64", "x86_64", "aarch64").contains(architecture))) {
             throw new IllegalStateException("async-profiler ships its library for Linux on x64 and arm64 and for"
                     + " macOS, not for " + system + " on " + architecture + " - switch the plugin off with"
-                    + " -Djenesis.observe.asyncprofiler=false where it cannot run");
+                    + " -Djenesis.asyncprofiler.observe=false where it cannot run");
         }
         SequencedMap<String, String> options = new LinkedHashMap<>();
         properties.forEach((key, value) -> {

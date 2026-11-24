@@ -24,7 +24,7 @@ public class KtlintModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String STRICT = "strict.ktlint";
+    static final String STRICT = "ktlint.strict";
     private static final String REPORT = BuildStep.REPORTS + "ktlint/ktlint-report.xml";
     private static final String MAVEN_GROUP = "com.pinterest.ktlint", MAVEN_ARTIFACT = "ktlint-cli";
 

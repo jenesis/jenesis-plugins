@@ -40,7 +40,7 @@ java -Djenesis.release.publish=true -Djenesis.project.version=1.2.3 build/jenesi
 ```
 
 It reads the JReleaser configuration that `configuration` names, which the build binds. Every `release` and every `pin`
-runs it, dry unless the command line publishes, and `-Djenesis.release.jreleaser=false` switches it off.
+runs it, dry unless the command line publishes, and `-Djenesis.jreleaser.release=false` switches it off.
 
 JReleaser runs in the project's root with the version the build resolved, `-Djenesis.project.version` included. Every
 value of the project's resolved metadata and the folder of every staged tree are template properties of the

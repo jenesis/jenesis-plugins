@@ -5,7 +5,7 @@ them with Groovydoc.
 
 The build discovers the plugin by itself in every module that holds a `.groovy` source, and resolves it there as
 `build.jenesis.plugin.groovy`; no file switches it on, and a build compiles no Groovy without it:
-`-Djenesis.language.groovy=false` leaves it out, so a module holding a `.groovy` source then fails the build. It takes
+`-Djenesis.groovy.language=false` leaves it out, so a module holding a `.groovy` source then fails the build. It takes
 no values.
 
 It reads nothing a project binds: groovyc compiles the module's `.groovy` sources, and Groovydoc documents them, and

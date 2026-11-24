@@ -202,7 +202,7 @@ public class CheckstyleModuleRunTest {
         executor.addSource("project", project);
         executor.addModule(
                 "checkstyle",
-                CheckstyleModule.ofEnvironment(new Environment(Map.of("strict.checkstyle", "true")),
+                CheckstyleModule.ofEnvironment(new Environment(Map.of("checkstyle.strict", "true")),
                         Map.of("maven", MavenDefaultRepository.ofEnvironment(Environment.NONE)),
                         Map.of("maven", MavenPomResolver.ofEnvironment(Environment.NONE))).pinning(Pinning.STRICT),
                 "project");
@@ -210,7 +210,7 @@ public class CheckstyleModuleRunTest {
         assertThatThrownBy(executor::execute)
                 .rootCause()
                 .hasMessageContaining("checkstyle found 1 finding")
-                .hasMessageContaining("jenesis.strict.checkstyle is true");
+                .hasMessageContaining("jenesis.checkstyle.strict is true");
     }
 
     @Test

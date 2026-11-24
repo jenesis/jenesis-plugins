@@ -17,4 +17,4 @@ Java formatter fails, naming both.
 It reads the profile that `configuration` names, handed to the Eclipse formatter as `eclipse-formatter.xml` whatever its
 name, which the build binds.
 
-`-Djenesis.format.eclipse=false` switches it off.
+`-Djenesis.eclipse.format=false` switches it off.

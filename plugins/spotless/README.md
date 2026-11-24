@@ -61,4 +61,4 @@ Eclipse's p2 repositories rather than from Maven, are not offered.
 
 It reads no file but those its sets select.
 
-`-Djenesis.format.spotless=false` switches it off.
+`-Djenesis.spotless.format=false` switches it off.
