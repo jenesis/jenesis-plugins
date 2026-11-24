@@ -208,7 +208,7 @@ public class ScalaCompilerModule implements BuildExecutorModule {
                 requires.setProperty(zinc + "/runtime/maven/" + ZINC_GROUP + "/" + ZINC_ARTIFACT + "/RELEASE", "");
             }
             requires.store(context.next().resolve(REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 

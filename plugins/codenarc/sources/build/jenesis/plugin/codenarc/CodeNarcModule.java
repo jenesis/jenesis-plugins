@@ -125,7 +125,7 @@ public class CodeNarcModule implements BuildExecutorModule {
             requires.setProperty(tool + "/runtime/maven/org.apache.groovy/groovy/RELEASE", "");
             requires.setProperty(tool + "/runtime/maven/org.slf4j/slf4j-simple/RELEASE", "");
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 

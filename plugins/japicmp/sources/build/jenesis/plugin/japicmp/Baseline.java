@@ -26,7 +26,7 @@ record Baseline(String tool, String baseline, List<String> runtime, String confi
         SequencedProperties exclusions = new SequencedProperties();
         exclusions.setProperty(coordinate, "*/*");
         exclusions.store(context.next().resolve(BuildStep.EXCLUSIONS));
-        return CompletableFuture.completedStage(new BuildStepResult(true));
+        return CompletableFuture.completedStage(new BuildStepResult());
     }
 
     private String qualified(String baseline) {

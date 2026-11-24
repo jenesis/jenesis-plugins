@@ -161,7 +161,7 @@ public class SpotlessModule implements BuildExecutorModule {
                 requires.setProperty(group + "/runtime/maven/" + coordinate, "");
             }
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 

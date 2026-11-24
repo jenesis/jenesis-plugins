@@ -103,7 +103,7 @@ public class GradlePluginModule implements BuildExecutorModule {
                     }
                 }
             }
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
 
         private static void write(Path marker, String id, String group, String artifact, String version, Path pom)

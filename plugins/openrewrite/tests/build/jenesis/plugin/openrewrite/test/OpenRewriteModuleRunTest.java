@@ -7,6 +7,7 @@ import build.jenesis.BuildExecutorCache;
 import build.jenesis.BuildExecutorCallback;
 import build.jenesis.BuildStep;
 import build.jenesis.BuildStepHashFunction;
+import build.jenesis.BuildStepResult;
 import build.jenesis.Environment;
 import build.jenesis.HashDigestFunction;
 import build.jenesis.Pinning;
@@ -174,6 +175,28 @@ public class OpenRewriteModuleRunTest {
     }
 
     @Test
+    public void caches_a_verification_and_keeps_a_rewrite_out_of_the_build_cache() throws IOException {
+        sample(UNUSED);
+        Stored applied = new Stored(new ArrayList<>()), verified = new Stored(new ArrayList<>());
+
+        newExecutor(false, List.of("org.openrewrite.java.RemoveUnusedImports"), applied)
+                .execute(Runnable::run, "openrewrite")
+                .toCompletableFuture()
+                .join();
+        newExecutor(true, List.of("org.openrewrite.java.RemoveUnusedImports"), verified)
+                .execute(Runnable::run, "openrewrite")
+                .toCompletableFuture()
+                .join();
+
+        assertThat(applied.identities())
+                .as("a run that rewrites the sources acts beyond its output, so no cache stands in for it")
+                .doesNotContain("openrewrite/rewrite");
+        assertThat(verified.identities())
+                .as("a run that verifies writes its output alone")
+                .contains("openrewrite/rewrite");
+    }
+
+    @Test
     public void runs_a_recipe_that_the_project_declares_in_its_rewrite_yml() throws IOException {
         Path sample = sample(UNUSED);
         Files.writeString(project.resolve(OpenRewriteModule.CONFIGURATION), """
@@ -229,12 +252,16 @@ public class OpenRewriteModuleRunTest {
     }
 
     private BuildExecutor newExecutor(boolean verify, List<String> recipes) throws IOException {
+        return newExecutor(verify, recipes, BuildExecutorCache.nop());
+    }
+
+    private BuildExecutor newExecutor(boolean verify, List<String> recipes, BuildExecutorCache cache) throws IOException {
         BuildExecutor executor = BuildExecutor.of(root,
                 Duration.ZERO,
                 new HashDigestFunction("MD5"),
                 BuildStepHashFunction.ofSerializationDigest("MD5"),
                 BuildExecutorCallback.nop(),
-                BuildExecutorCache.nop(),
+                cache,
                 false,
                 false,
                 0);
@@ -248,5 +275,33 @@ public class OpenRewriteModuleRunTest {
                         .verify(verify),
                 "project");
         return executor;
+    }
+
+    private record Stored(List<String> identities) implements BuildExecutorCache {
+
+        @Override
+        public Optional<BuildStepResult> fetch(Executor executor,
+                                               String identity,
+                                               byte[] step,
+                                               SequencedMap<String, Map<Path, byte[]>> inputs,
+                                               Path target) {
+            return Optional.empty();
+        }
+
+        @Override
+        public void store(Executor executor,
+                          String identity,
+                          byte[] step,
+                          SequencedMap<String, Map<Path, byte[]>> inputs,
+                          Path output,
+                          String digest,
+                          Map<Path, byte[]> checksums) {
+            identities.add(identity);
+        }
+
+        @Override
+        public boolean stores() {
+            return true;
+        }
     }
 }

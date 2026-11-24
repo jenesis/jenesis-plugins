@@ -160,7 +160,7 @@ public class JReleaserModule implements BuildExecutorModule {
             SequencedProperties requires = new SequencedProperties();
             requires.setProperty(tool + "/runtime/maven/" + MAVEN_GROUP + "/" + MAVEN_ARTIFACT + "/RELEASE", "");
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 
@@ -320,7 +320,7 @@ public class JReleaserModule implements BuildExecutorModule {
                 throw new IllegalStateException("JReleaser " + command + " failed with exit code " + code
                         + " - its log is " + NAME + "/trace.log in the output of the step");
             }
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult().cached(false));
         }
 
         private static String template(String key) {

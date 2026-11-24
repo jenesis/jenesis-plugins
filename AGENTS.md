@@ -66,6 +66,9 @@ rule there applies here as well; this file adds what is particular to the plugin
   caches - keeps it in `context.persistent()` and never in its output, which every dependent would be handed. It
   starts from an empty folder whenever the build hands no previous output, clears it when the configuration it
   recorded there no longer matches, and writes the same output from an empty folder as from a full one.
+- A step whose effect lies outside its output - a formatter rewriting the sources, a releaser - returns
+  `new BuildStepResult().cached(false)`, so that no build cache stands in for it. A step extending `FormatBuildStep`
+  inherits that for a rewriting run; a step that only verifies or reports writes its output alone and is cached.
 
 - Every plugin folder carries a short `README.md`: one sentence on what it does, the file that activates it with an
   example, a table of the values it takes, the file it reads, and the setting that switches it off. The root
