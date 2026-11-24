@@ -26,5 +26,5 @@ At least one of `bundled` and `signatures` is required, and any other value is r
 
 It reads the signatures files that `signatures` names, which the build binds.
 
-`-Djenesis.validate.forbiddenapis=false` switches it off, and `-Djenesis.strict.forbiddenapis=true` fails the build on its findings rather
+`-Djenesis.forbiddenapis.validate=false` switches it off, and `-Djenesis.forbiddenapis.strict=true` fails the build on its findings rather
 than reporting them, as for every checker of the build.

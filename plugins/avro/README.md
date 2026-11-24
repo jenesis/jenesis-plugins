@@ -19,4 +19,4 @@ Any other value is refused.
 It reads the schemas and protocols below an `avro/` folder of what it is handed; the file binds them with an
 `@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
 
-`-Djenesis.generate.avro=false` switches it off.
+`-Djenesis.avro.generate=false` switches it off.

@@ -36,4 +36,4 @@ as the class path its type-aware recipes read.
 A verifying build fails where a recipe would change a file and prints the change as a diff. A recipe that would add,
 delete or move a file fails the build in both modes, as the build applies changes to existing files only.
 
-`-Djenesis.format.openrewrite=false` switches it off.
+`-Djenesis.openrewrite.format=false` switches it off.

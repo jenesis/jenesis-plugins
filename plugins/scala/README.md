@@ -4,7 +4,7 @@ Compiles the Scala sources of a module with the Scala 3 compiler before javac, j
 documents them with Scaladoc.
 
 The build discovers the plugin by itself in every module that holds a `.scala` source, and resolves it there as
-`build.jenesis.plugin.scala`; no file switches it on, and `-Djenesis.language.scala=false` leaves it out, so a module
+`build.jenesis.plugin.scala`; no file switches it on, and `-Djenesis.scala.language=false` leaves it out, so a module
 holding a `.scala` source then fails the build. It takes no values.
 
 | Setting | Meaning |

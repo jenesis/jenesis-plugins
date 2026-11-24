@@ -27,4 +27,4 @@ one and the classes of the module's dependencies whose bytes changed, so a proce
 reaches and KSP keeps what the others generated. A change to the processors, their options or KSP itself processes
 the module from scratch. Under the build daemon, KSP runs in a JVM the build keeps warm for the next module.
 
-`-Djenesis.generate.ksp=false` switches it off.
+`-Djenesis.ksp.generate=false` switches it off.

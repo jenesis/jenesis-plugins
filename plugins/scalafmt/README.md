@@ -25,6 +25,6 @@ Its other lines are the plugin's values; it takes none.
 It reads the file that `configuration` names, handed to scalafmt as `.scalafmt.conf` whatever its name, which the build
 binds for both.
 
-`-Djenesis.check.scalafmt=false` switches the check off and `-Djenesis.format.scalafmt=false` the formatting, and
-`-Djenesis.strict.scalafmt=true` fails the build on its findings rather than reporting them, as for every checker of the
+`-Djenesis.scalafmt.check=false` switches the check off and `-Djenesis.scalafmt.format=false` the formatting, and
+`-Djenesis.scalafmt.strict=true` fails the build on its findings rather than reporting them, as for every checker of the
 build.

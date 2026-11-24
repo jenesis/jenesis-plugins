@@ -28,4 +28,4 @@ It reads nothing a project binds. The agent the tests run with, `tools.profiler:
 `asyncprofiler:agent/…`, and the tests' JVM is granted native access for it. async-profiler ships its library for
 Linux on x64 and arm64 and for macOS; elsewhere the plugin fails the build.
 
-`-Djenesis.observe.asyncprofiler=false` switches it off.
+`-Djenesis.asyncprofiler.observe=false` switches it off.

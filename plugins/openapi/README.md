@@ -23,4 +23,4 @@ Any other value is refused.
 It reads the specification named `openapi.*` in an `openapi/` folder of what it is handed; the file binds it with an
 `@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
 
-`-Djenesis.generate.openapi=false` switches it off.
+`-Djenesis.openapi.generate=false` switches it off.

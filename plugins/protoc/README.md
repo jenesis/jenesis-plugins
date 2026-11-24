@@ -21,4 +21,4 @@ Any other value is refused.
 It reads the definitions below a `protoc/` folder of what it is handed; the file binds them with an
 `@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
 
-`-Djenesis.generate.protoc=false` switches it off.
+`-Djenesis.protoc.generate=false` switches it off.

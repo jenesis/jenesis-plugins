@@ -4,7 +4,7 @@ Compiles the Clojure namespaces of a module ahead of time, after javac and again
 Clojure the module depends on, and ships their sources beside the classes.
 
 The build discovers the plugin by itself in every module that holds a `.clj` source, and resolves it there as
-`build.jenesis.plugin.clojure`; `-Djenesis.language.clojure=false` leaves it out, so a module holding a `.clj` source
+`build.jenesis.plugin.clojure`; `-Djenesis.clojure.language=false` leaves it out, so a module holding a `.clj` source
 then fails the build. A build whose Jenesis does not discover it yet names it in `jenesis.plugins.properties` for the
 hook point `language`, beside an empty `plugin-clojure.properties` in its configuration folder:
 
@@ -18,7 +18,7 @@ match the Clojure they run on; without `org.clojure:clojure` on its compile clas
 
 The plugin the build discovers takes the defaults below. A build that sets a value declares the plugin, as above,
 and writes the value into its `plugin-clojure.properties`, switching the discovered one off with
-`-Djenesis.language.clojure=false` in its `jenesis.properties`:
+`-Djenesis.clojure.language=false` in its `jenesis.properties`:
 
 | Value | Default | Effect |
 |---|---|---|

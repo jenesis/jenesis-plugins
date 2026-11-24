@@ -27,4 +27,4 @@ Any other value is refused. A dependency resolved for compiling alone is provide
 descriptor's dependencies; the release of `maven-plugin-api` names the Maven version the plugin requires, and the
 classes the Java version.
 
-`-Djenesis.artifact.mavenplugin=false` switches it off.
+`-Djenesis.mavenplugin.artifact=false` switches it off.

@@ -27,4 +27,4 @@ ID in a namespace Gradle reserves (`org.gradle`, `com.gradleware`), a descriptor
 class its jar does not hold, and an ID two jars declare each fail the build. Publishing to the Gradle Plugin Portal,
 which takes its own credentials, is left to the portal's own tooling.
 
-`-Djenesis.artifact.gradleplugin=false` switches it off.
+`-Djenesis.gradleplugin.artifact=false` switches it off.

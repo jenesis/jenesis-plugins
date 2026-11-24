@@ -21,4 +21,4 @@ Any other value is refused.
 It reads the `.g4` grammars below an `antlr/` folder of what it is handed; the file binds them with an
 `@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
 
-`-Djenesis.generate.antlr=false` switches it off.
+`-Djenesis.antlr.generate=false` switches it off.

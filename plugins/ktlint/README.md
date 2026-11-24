@@ -26,6 +26,6 @@ Its other lines are the plugin's values; it takes none.
 It reads the file that `configuration` names, handed to ktlint as `.editorconfig` whatever its name, which the build
 binds for both.
 
-`-Djenesis.check.ktlint=false` switches the check off and `-Djenesis.format.ktlint=false` the formatting, and
-`-Djenesis.strict.ktlint=true` fails the build on its findings rather than reporting them, as for every checker of the
+`-Djenesis.ktlint.check=false` switches the check off and `-Djenesis.ktlint.format=false` the formatting, and
+`-Djenesis.ktlint.strict=true` fails the build on its findings rather than reporting them, as for every checker of the
 build.

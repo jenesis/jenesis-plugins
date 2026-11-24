@@ -20,4 +20,4 @@ Java formatter fails, naming both.
 
 It reads no file.
 
-`-Djenesis.format.palantir=false` switches it off.
+`-Djenesis.palantir.format=false` switches it off.

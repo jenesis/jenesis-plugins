@@ -24,7 +24,7 @@ public class ScalafmtModule implements BuildExecutorModule {
 
     public static final String CHECK = "check";
     private static final String REQUIRED = "required", DEPENDENCIES = "dependencies";
-    static final String STRICT = "strict.scalafmt";
+    static final String STRICT = "scalafmt.strict";
     private static final String MAVEN_GROUP = "org.scalameta", MAVEN_ARTIFACT = "scalafmt-cli_2.13";
     private static final int TEST_ERROR = 1;
 

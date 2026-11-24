@@ -18,6 +18,6 @@ resolves it there as `build.jenesis.plugin.ktfmt`. The lines of the file are its
 Any other value is refused, and an empty file formats with the defaults.
 
 It reads no file. A `ktfmt.properties` beside an `.editorconfig` is refused, as ktlint formats there, unless
-`-Djenesis.format.ktlint=false` switches ktlint's formatting off.
+`-Djenesis.ktlint.format=false` switches ktlint's formatting off.
 
-`-Djenesis.format.ktfmt=false` switches it off.
+`-Djenesis.ktfmt.format=false` switches it off.

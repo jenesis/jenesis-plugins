@@ -22,4 +22,4 @@ Any other value is refused.
 It reads the descriptions below a `wsimport/` folder of what it is handed; the file binds them with an
 `@<input>[/<target>]=<path>` line, its path resolved against the module's own folder.
 
-`-Djenesis.generate.wsimport=false` switches it off.
+`-Djenesis.wsimport.generate=false` switches it off.
