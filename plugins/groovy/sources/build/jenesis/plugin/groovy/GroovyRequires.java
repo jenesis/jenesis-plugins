@@ -38,6 +38,6 @@ record GroovyRequires(Set<String> prefixes,
         SequencedProperties requires = new SequencedProperties();
         requires.setProperty(tool + "/runtime/" + coordinate, "");
         requires.store(context.next().resolve(BuildStep.REQUIRES));
-        return CompletableFuture.completedStage(new BuildStepResult(true));
+        return CompletableFuture.completedStage(new BuildStepResult());
     }
 }

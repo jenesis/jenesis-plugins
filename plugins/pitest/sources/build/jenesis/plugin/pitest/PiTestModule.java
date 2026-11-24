@@ -284,7 +284,7 @@ public class PiTestModule implements BuildExecutorModule {
                 requires.setProperty(tool + "/classpath/maven/org.junit.platform/junit-platform-launcher/" + launcher, "");
             }
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
 
         private static String junitPlatformVersion(SequencedMap<String, BuildStepArgument> arguments) throws IOException {

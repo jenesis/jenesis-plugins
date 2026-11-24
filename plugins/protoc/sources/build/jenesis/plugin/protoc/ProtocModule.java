@@ -189,7 +189,7 @@ public class ProtocModule implements BuildExecutorModule {
                     + "/exe/" + classifier
                     + "/RELEASE", ""));
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 

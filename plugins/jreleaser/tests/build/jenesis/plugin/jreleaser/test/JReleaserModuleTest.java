@@ -3,8 +3,13 @@ package build.jenesis.plugin.jreleaser.test;
 import module java.base;
 import module org.junit.jupiter.api;
 import build.jenesis.BuildExecutor;
+import build.jenesis.BuildExecutorCache;
+import build.jenesis.BuildExecutorCallback;
 import build.jenesis.BuildExecutorException;
 import build.jenesis.BuildStep;
+import build.jenesis.BuildStepHashFunction;
+import build.jenesis.BuildStepResult;
+import build.jenesis.HashDigestFunction;
 import build.jenesis.Resolver;
 import build.jenesis.SequencedProperties;
 import build.jenesis.plugin.jreleaser.JReleaserModule;
@@ -94,6 +99,29 @@ public class JReleaserModuleTest {
     }
 
     @Test
+    public void keeps_a_release_out_of_the_build_cache() throws IOException {
+        Stored cache = new Stored(new ArrayList<>());
+        BuildExecutor executor = BuildExecutor.of(root,
+                Duration.ZERO,
+                new HashDigestFunction("MD5"),
+                BuildStepHashFunction.ofSerializationDigest("MD5"),
+                BuildExecutorCallback.nop(),
+                cache,
+                false,
+                false,
+                0);
+        executor.addSource("project", FakeTool.project(project, root, "1.2.3"));
+        executor.addModule("jreleaser", new JReleaserModule(Map.of("maven", FakeTool.of(tool).repository()),
+                Map.of("maven", Resolver.identity())), "project");
+        executor.execute(Runnable::run, "jreleaser/release").toCompletableFuture().join();
+
+        assertThat(cache.identities())
+                .as("what resolves the tool is cached, while the release, which acts beyond its output, is not")
+                .contains("jreleaser/required")
+                .doesNotContain("jreleaser/release");
+    }
+
+    @Test
     public void fails_when_jreleaser_fails() throws IOException {
         assertThatThrownBy(() -> release(new JReleaserModule(Map.of("maven", FakeTool.of(tool).repository()),
                 Map.of("maven", Resolver.identity())).command("fail"), "1.2.3"))
@@ -135,5 +163,33 @@ public class JReleaserModuleTest {
         executor.addModule("jreleaser", module, "project");
         executor.execute("jreleaser/release");
         return root.resolve("jreleaser/release/output");
+    }
+
+    private record Stored(List<String> identities) implements BuildExecutorCache {
+
+        @Override
+        public Optional<BuildStepResult> fetch(Executor executor,
+                                               String identity,
+                                               byte[] step,
+                                               SequencedMap<String, Map<Path, byte[]>> inputs,
+                                               Path target) {
+            return Optional.empty();
+        }
+
+        @Override
+        public void store(Executor executor,
+                          String identity,
+                          byte[] step,
+                          SequencedMap<String, Map<Path, byte[]>> inputs,
+                          Path output,
+                          String digest,
+                          Map<Path, byte[]> checksums) {
+            identities.add(identity);
+        }
+
+        @Override
+        public boolean stores() {
+            return true;
+        }
     }
 }

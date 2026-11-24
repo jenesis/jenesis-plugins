@@ -159,7 +159,7 @@ public class ScalaDocumentationModule implements BuildExecutorModule {
                 requires.setProperty(tool + "/runtime/" + selectedPrefix + "/com.fasterxml.jackson.core/jackson-annotations/2.21", "");
             }
             requires.store(context.next().resolve(REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 

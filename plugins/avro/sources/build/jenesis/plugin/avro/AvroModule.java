@@ -121,7 +121,7 @@ public class AvroModule implements BuildExecutorModule {
             SequencedProperties exclusions = new SequencedProperties();
             exclusions.setProperty(coordinate, SHADED);
             exclusions.store(context.next().resolve(BuildStep.EXCLUSIONS));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 

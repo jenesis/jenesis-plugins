@@ -131,7 +131,7 @@ public class OpenRewriteModule implements BuildExecutorModule {
             requires.setProperty(tool + "/runtime/maven/" + MAVEN_GROUP + "/" + MAVEN_ARTIFACT + "/RELEASE", "");
             requires.setProperty(tool + "/runtime/maven/" + LOGGING_GROUP + "/" + LOGGING_ARTIFACT + "/RELEASE", "");
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 
@@ -215,6 +215,14 @@ public class OpenRewriteModule implements BuildExecutorModule {
             commands.add(verify ? "--verify" : "--apply");
             commands.addAll(roots);
             return CompletableFuture.completedStage(commands);
+        }
+
+        @Override
+        public CompletionStage<BuildStepResult> apply(Executor executor,
+                                                      BuildStepContext context,
+                                                      SequencedMap<String, BuildStepArgument> arguments)
+                throws IOException {
+            return super.apply(executor, context, arguments).thenApply(result -> result.cached(verify));
         }
     }
 }

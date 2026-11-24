@@ -154,7 +154,7 @@ public class JaCoCoModule implements BuildExecutorModule {
             SequencedProperties requires = new SequencedProperties();
             requires.setProperty(tool + "/runtime/maven/org.jacoco/org.jacoco.cli/RELEASE", "");
             requires.store(context.next().resolve(BuildStep.REQUIRES));
-            return CompletableFuture.completedStage(new BuildStepResult(true));
+            return CompletableFuture.completedStage(new BuildStepResult());
         }
     }
 
